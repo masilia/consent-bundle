@@ -24,12 +24,18 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
   const [activeTab, setActiveTab] = useState<string>('overview');
 
   useEffect(() => {
-    if (policy) {
+    if (policy && policy.categories && policy.categories.length > 0) {
       // Initialize with current preferences or defaults
       const currentPrefs = getPreferences();
       const initial: Record<string, boolean> = {};
       
       policy.categories.forEach((category) => {
+        // Ensure category has valid identifier
+        if (!category.identifier) {
+          console.warn('Category missing identifier:', category);
+          return;
+        }
+        
         if (currentPrefs) {
           initial[category.identifier] = currentPrefs.categories[category.identifier] ?? category.defaultEnabled;
         } else {
@@ -39,8 +45,8 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
       
       setSelectedCategories(initial);
       
-      // Set first category as active tab if not overview
-      if (policy.categories.length > 0 && activeTab === 'overview') {
+      // Ensure activeTab is always valid
+      if (activeTab !== 'overview' && !policy.categories.find(c => c.identifier === activeTab)) {
         setActiveTab('overview');
       }
     }
@@ -140,19 +146,21 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
           >
             Overview
           </button>
-          {policy.categories.map((category) => (
-            <button
-              key={category.id}
-              type="button"
-              role="tab"
-              aria-selected={activeTab === category.identifier}
-              aria-controls={`${category.identifier}-panel`}
-              className={`masilia-consent-modal__tab ${activeTab === category.identifier ? 'masilia-consent-modal__tab--active' : ''}`}
-              onClick={() => setActiveTab(category.identifier)}
-            >
-              {category.name}
-            </button>
-          ))}
+          {policy.categories
+            .filter(category => category.identifier) // Only render categories with valid identifiers
+            .map((category) => (
+              <button
+                key={category.id}
+                type="button"
+                role="tab"
+                aria-selected={activeTab === category.identifier}
+                aria-controls={`${category.identifier}-panel`}
+                className={`masilia-consent-modal__tab ${activeTab === category.identifier ? 'masilia-consent-modal__tab--active' : ''}`}
+                onClick={() => setActiveTab(category.identifier)}
+              >
+                {category.name}
+              </button>
+            ))}
         </div>
 
         {/* Content */}
@@ -166,14 +174,16 @@ export const PreferencesModal: React.FC<PreferencesModalProps> = ({
               </p>
 
               <div className="masilia-consent-modal__categories">
-                {policy.categories.map((category) => (
-                  <CategoryToggle
-                    key={category.id}
-                    category={category}
-                    checked={selectedCategories[category.identifier] ?? false}
-                    onToggle={() => handleToggle(category.identifier, category.required)}
-                  />
-                ))}
+                {policy.categories
+                  .filter(category => category.identifier) // Only render categories with valid identifiers
+                  .map((category) => (
+                    <CategoryToggle
+                      key={category.id}
+                      category={category}
+                      checked={selectedCategories[category.identifier] ?? false}
+                      onToggle={() => handleToggle(category.identifier, category.required)}
+                    />
+                  ))}
               </div>
             </div>
           ) : (

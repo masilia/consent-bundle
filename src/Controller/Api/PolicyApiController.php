@@ -44,7 +44,8 @@ class PolicyApiController extends AbstractController
             }
 
             $categories[] = [
-                'id' => $category->getIdentifier(),
+                'id' => $category->getId(),
+                'identifier' => $category->getIdentifier(),
                 'name' => $category->getName(),
                 'description' => $category->getDescription(),
                 'required' => $category->isRequired(),
