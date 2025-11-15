@@ -1,0 +1,11 @@
+# API Routes
+masilia_consent_api:
+    resource: '../../Controller/Api/'
+    type: annotation
+    prefix: /api/consent
+
+# Admin Routes
+masilia_consent_admin:
+    resource: '../../Controller/Admin/'
+    type: annotation
+    prefix: /admin/consent

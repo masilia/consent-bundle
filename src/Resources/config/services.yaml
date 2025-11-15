@@ -1,0 +1,33 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    # Repositories
+    Masilia\ConsentBundle\Repository\:
+        resource: '../../Repository/*'
+        tags: ['doctrine.repository_service']
+
+    # Services with explicit configuration
+    Masilia\ConsentBundle\Service\ConsentStorageHandler:
+        arguments:
+            $storageConfig: '%masilia_consent.storage%'
+
+    Masilia\ConsentBundle\Service\ConsentManager:
+        arguments:
+            $loggingConfig: '%masilia_consent.logging%'
+
+    Masilia\ConsentBundle\Service\:
+        resource: '../../Service/*'
+        exclude: '../../Service/{ConsentManager.php,ConsentStorageHandler.php}'
+
+    # Controllers
+    Masilia\ConsentBundle\Controller\:
+        resource: '../../Controller/*'
+        tags: ['controller.service_arguments']
+
+    # Commands
+    Masilia\ConsentBundle\Command\:
+        resource: '../../Command/*'
+        tags: ['console.command']

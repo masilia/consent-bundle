@@ -1,0 +1,30 @@
+{
+  "name": "@masilia/consent-bundle-react",
+  "version": "1.0.0",
+  "description": "React components for Masilia Consent Bundle",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "keywords": [
+    "react",
+    "consent",
+    "cookies",
+    "gdpr",
+    "privacy"
+  ],
+  "author": "Masilia Team",
+  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.0.0"
+  }
+}

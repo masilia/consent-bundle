@@ -1,0 +1,188 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Masilia\ConsentBundle\Entity;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Masilia\ConsentBundle\Repository\CookieCategoryRepository;
+
+#[ORM\Entity(repositoryClass: CookieCategoryRepository::class)]
+#[ORM\Table(name: 'masilia_cookie_category')]
+#[ORM\UniqueConstraint(name: 'unique_policy_identifier', columns: ['policy_id', 'identifier'])]
+#[ORM\HasLifecycleCallbacks]
+class CookieCategory
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
+
+    #[ORM\ManyToOne(targetEntity: CookiePolicy::class, inversedBy: 'categories')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ?CookiePolicy $policy = null;
+
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $identifier;
+
+    #[ORM\Column(type: 'string', length: 100)]
+    private string $name;
+
+    #[ORM\Column(type: 'text')]
+    private string $description;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $required = false;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $defaultEnabled = false;
+
+    #[ORM\Column(type: 'integer')]
+    private int $position = 0;
+
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $createdAt;
+
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $updatedAt;
+
+    #[ORM\OneToMany(targetEntity: Cookie::class, mappedBy: 'category', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => 'ASC'])]
+    private Collection $cookies;
+
+    public function __construct()
+    {
+        $this->cookies = new ArrayCollection();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getPolicy(): ?CookiePolicy
+    {
+        return $this->policy;
+    }
+
+    public function setPolicy(?CookiePolicy $policy): self
+    {
+        $this->policy = $policy;
+        return $this;
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier(string $identifier): self
+    {
+        $this->identifier = $identifier;
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function isRequired(): bool
+    {
+        return $this->required;
+    }
+
+    public function setRequired(bool $required): self
+    {
+        $this->required = $required;
+        return $this;
+    }
+
+    public function isDefaultEnabled(): bool
+    {
+        return $this->defaultEnabled;
+    }
+
+    public function setDefaultEnabled(bool $defaultEnabled): self
+    {
+        $this->defaultEnabled = $defaultEnabled;
+        return $this;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): \DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @return Collection<int, Cookie>
+     */
+    public function getCookies(): Collection
+    {
+        return $this->cookies;
+    }
+
+    public function addCookie(Cookie $cookie): self
+    {
+        if (!$this->cookies->contains($cookie)) {
+            $this->cookies->add($cookie);
+            $cookie->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCookie(Cookie $cookie): self
+    {
+        if ($this->cookies->removeElement($cookie)) {
+            if ($cookie->getCategory() === $this) {
+                $cookie->setCategory(null);
+            }
+        }
+
+        return $this;
+    }
+}

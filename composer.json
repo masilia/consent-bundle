@@ -1,0 +1,44 @@
+{
+    "name": "masilia/consent-bundle",
+    "description": "Modern Symfony bundle for cookie consent management with React frontend and Ibexa Admin integration",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Masilia Team",
+            "email": "dev@masilia.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.2",
+        "symfony/framework-bundle": "^5.4|^6.0|^7.0",
+        "symfony/http-foundation": "^5.4|^6.0|^7.0",
+        "symfony/dependency-injection": "^5.4|^6.0|^7.0",
+        "symfony/config": "^5.4|^6.0|^7.0",
+        "symfony/form": "^5.4|^6.0|^7.0",
+        "symfony/validator": "^5.4|^6.0|^7.0",
+        "symfony/serializer": "^5.4|^6.0|^7.0",
+        "doctrine/orm": "^2.14|^3.0",
+        "doctrine/doctrine-bundle": "^2.7",
+        "twig/twig": "^3.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.5|^10.0",
+        "symfony/phpunit-bridge": "^5.4|^6.0|^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Masilia\\ConsentBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Masilia\\ConsentBundle\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.0-dev"
+        }
+    }
+}

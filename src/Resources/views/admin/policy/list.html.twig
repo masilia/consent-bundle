@@ -1,0 +1,114 @@
+{% extends '@ibexadesign/ui/layout.html.twig' %}
+
+{% block title %}Cookie Policies{% endblock %}
+
+{% block content %}
+<div class="ibexa-main-container">
+    <div class="ibexa-content-container">
+        <section class="container mt-4">
+            <div class="ibexa-page-header">
+                <h1 class="ibexa-page-title">
+                    <svg class="ibexa-icon ibexa-icon--medium">
+                        <use xlink:href="{{ asset('bundles/ibexaadminui/img/ibexa-icons.svg') }}#cookie"></use>
+                    </svg>
+                    Cookie Policies
+                </h1>
+                <div class="ibexa-page-header-actions">
+                    <a href="{{ path('masilia_consent_admin_statistics_dashboard') }}" class="btn btn-secondary">
+                        <svg class="ibexa-icon ibexa-icon--small">
+                            <use xlink:href="{{ asset('bundles/ibexaadminui/img/ibexa-icons.svg') }}#view-list"></use>
+                        </svg>
+                        Statistics
+                    </a>
+                </div>
+            </div>
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+
+            <div class="ibexa-table-header">
+                <div class="ibexa-table-header__headline">{{ policies|length }} Policies</div>
+            </div>
+
+            <table class="table ibexa-table table-hover">
+                <thead>
+                    <tr>
+                        <th>Version</th>
+                        <th>Last Updated</th>
+                        <th>Cookie Prefix</th>
+                        <th>Expiration Days</th>
+                        <th>Categories</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for policy in policies %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}">
+                                <strong>{{ policy.version }}</strong>
+                            </a>
+                        </td>
+                        <td>{{ policy.lastUpdated|date('Y-m-d') }}</td>
+                        <td><code>{{ policy.cookiePrefix }}</code></td>
+                        <td>{{ policy.expirationDays }} days</td>
+                        <td>{{ policy.categories|length }}</td>
+                        <td>
+                            {% if policy.isActive %}
+                                <span class="badge bg-success">Active</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}" 
+                                   class="btn btn-sm btn-outline-primary">View</a>
+                                
+                                {% if not policy.isActive %}
+                                    <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}" style="display: inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-success">Activate</button>
+                                    </form>
+                                {% else %}
+                                    <form method="post" action="{{ path('masilia_consent_admin_policy_deactivate', {id: policy.id}) }}" style="display: inline;">
+                                        <button type="submit" class="btn btn-sm btn-outline-warning">Deactivate</button>
+                                    </form>
+                                {% endif %}
+                                
+                                {% if not policy.isActive %}
+                                    <form method="post" action="{{ path('masilia_consent_admin_policy_delete', {id: policy.id}) }}" 
+                                          style="display: inline;" 
+                                          onsubmit="return confirm('Are you sure you want to delete this policy?');">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ policy.id) }}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                                    </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">
+                            No policies found. Import a policy using the CLI command:
+                            <code>php bin/console masilia:consent:import path/to/cookies.json --activate</code>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+{% endblock %}

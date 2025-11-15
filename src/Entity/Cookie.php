@@ -1,0 +1,184 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Masilia\ConsentBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Masilia\ConsentBundle\Repository\CookieRepository;
+
+#[ORM\Entity(repositoryClass: CookieRepository::class)]
+#[ORM\Table(name: 'masilia_cookie')]
+#[ORM\HasLifecycleCallbacks]
+class Cookie
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
+
+    #[ORM\ManyToOne(targetEntity: CookieCategory::class, inversedBy: 'cookies')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private ?CookieCategory $category = null;
+
+    #[ORM\Column(type: 'string', length: 100)]
+    private string $name;
+
+    #[ORM\Column(type: 'text')]
+    private string $purpose;
+
+    #[ORM\Column(type: 'string', length: 100)]
+    private string $provider;
+
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $expiry;
+
+    #[ORM\Column(type: 'string', length: 500, nullable: true)]
+    private ?string $scriptSrc = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $scriptAsync = false;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $initCode = null;
+
+    #[ORM\Column(type: 'integer')]
+    private int $position = 0;
+
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $createdAt;
+
+    #[ORM\Column(type: 'datetime')]
+    private \DateTimeInterface $updatedAt;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getCategory(): ?CookieCategory
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?CookieCategory $category): self
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function getPurpose(): string
+    {
+        return $this->purpose;
+    }
+
+    public function setPurpose(string $purpose): self
+    {
+        $this->purpose = $purpose;
+        return $this;
+    }
+
+    public function getProvider(): string
+    {
+        return $this->provider;
+    }
+
+    public function setProvider(string $provider): self
+    {
+        $this->provider = $provider;
+        return $this;
+    }
+
+    public function getExpiry(): string
+    {
+        return $this->expiry;
+    }
+
+    public function setExpiry(string $expiry): self
+    {
+        $this->expiry = $expiry;
+        return $this;
+    }
+
+    public function getScriptSrc(): ?string
+    {
+        return $this->scriptSrc;
+    }
+
+    public function setScriptSrc(?string $scriptSrc): self
+    {
+        $this->scriptSrc = $scriptSrc;
+        return $this;
+    }
+
+    public function isScriptAsync(): bool
+    {
+        return $this->scriptAsync;
+    }
+
+    public function setScriptAsync(bool $scriptAsync): self
+    {
+        $this->scriptAsync = $scriptAsync;
+        return $this;
+    }
+
+    public function getInitCode(): ?string
+    {
+        return $this->initCode;
+    }
+
+    public function setInitCode(?string $initCode): self
+    {
+        $this->initCode = $initCode;
+        return $this;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): self
+    {
+        $this->position = $position;
+        return $this;
+    }
+
+    public function getCreatedAt(): \DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): \DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function hasScript(): bool
+    {
+        return $this->scriptSrc !== null || $this->initCode !== null;
+    }
+}
