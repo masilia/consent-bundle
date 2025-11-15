@@ -6,6 +6,7 @@ namespace Masilia\ConsentBundle\Controller\Admin;
 
 use Masilia\ConsentBundle\Entity\CookieCategory;
 use Masilia\ConsentBundle\Entity\CookiePolicy;
+use Masilia\ConsentBundle\Form\Type\CategoryType;
 use Masilia\ConsentBundle\Repository\CookieCategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,19 +43,20 @@ class CategoryAdminController extends AbstractController
     #[Route('/policy/{policyId}/create', name: 'create', methods: ['POST'], requirements: ['policyId' => '\d+'])]
     public function create(Request $request, CookiePolicy $policy): Response
     {
-        $data = $request->request->all('category');
-        
         $category = new CookieCategory();
         $category->setPolicy($policy);
-        $category->setIdentifier($data['identifier'] ?? '');
-        $category->setName($data['name'] ?? '');
-        $category->setDescription($data['description'] ?? '');
-        $category->setPosition((int)($data['position'] ?? 0));
-        $category->setRequired(isset($data['required']));
-        $category->setDefaultEnabled(isset($data['defaultEnabled']));
         
-        $this->categoryRepository->save($category, true);
-        $this->addFlash('success', sprintf('Category "%s" has been created.', $category->getName()));
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->categoryRepository->save($category, true);
+            $this->addFlash('success', sprintf('Category "%s" has been created.', $category->getName()));
+        } else {
+            foreach ($form->getErrors(true) as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+        }
 
         return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
     }
@@ -62,17 +64,17 @@ class CategoryAdminController extends AbstractController
     #[Route('/{id}/edit', name: 'edit', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function edit(Request $request, CookieCategory $category): Response
     {
-        $data = $request->request->all('category');
-        
-        $category->setIdentifier($data['identifier'] ?? $category->getIdentifier());
-        $category->setName($data['name'] ?? $category->getName());
-        $category->setDescription($data['description'] ?? $category->getDescription());
-        $category->setPosition((int)($data['position'] ?? $category->getPosition()));
-        $category->setRequired(isset($data['required']));
-        $category->setDefaultEnabled(isset($data['defaultEnabled']));
-        
-        $this->categoryRepository->save($category, true);
-        $this->addFlash('success', sprintf('Category "%s" has been updated.', $category->getName()));
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->categoryRepository->save($category, true);
+            $this->addFlash('success', sprintf('Category "%s" has been updated.', $category->getName()));
+        } else {
+            foreach ($form->getErrors(true) as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+        }
 
         return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $category->getPolicy()->getId()]);
     }

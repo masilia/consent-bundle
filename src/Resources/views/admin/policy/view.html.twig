@@ -269,41 +269,23 @@
         {% endif %}
 
         {# Add Category Modal #}
+        {% form_theme addCategoryForm '@ibexadesign/ui/form_fields.html.twig' %}
         {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
             id: 'add-category-modal',
             title: 'category.add.title'|trans|desc('Add Category'),
             size: 'large',
         } %}
             {% block body_content %}
-                <form id="add-category-form" method="post" action="{{ path('masilia_consent_admin_category_create', {policyId: policy.id}) }}">
+                {{ form_start(addCategoryForm, {'attr': {'id': 'add-category-form'}}) }}
                     <div class="ibexa-form-block">
-                        <div class="mb-3">
-                            <label for="category-identifier" class="form-label">{{ 'category.form.identifier'|trans|desc('Identifier') }}</label>
-                            <input type="text" class="form-control ibexa-input ibexa-input--text" id="category-identifier" name="category[identifier]" required pattern="[a-z_]+" placeholder="analytics">
-                            <small class="form-text text-muted">{{ 'category.form.identifier_help'|trans|desc('Lowercase letters and underscores only') }}</small>
-                        </div>
-                        <div class="mb-3">
-                            <label for="category-name" class="form-label">{{ 'category.form.name'|trans|desc('Name') }}</label>
-                            <input type="text" class="form-control ibexa-input ibexa-input--text" id="category-name" name="category[name]" required placeholder="Analytics">
-                        </div>
-                        <div class="mb-3">
-                            <label for="category-description" class="form-label">{{ 'category.form.description'|trans|desc('Description') }}</label>
-                            <textarea class="form-control ibexa-input ibexa-input--textarea" id="category-description" name="category[description]" rows="3" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="category-position" class="form-label">{{ 'category.form.position'|trans|desc('Position') }}</label>
-                            <input type="number" class="form-control ibexa-input ibexa-input--text" id="category-position" name="category[position]" value="0" min="0">
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input ibexa-input ibexa-input--checkbox" id="category-required" name="category[required]" value="1">
-                            <label class="form-check-label" for="category-required">{{ 'category.form.required'|trans|desc('Required') }}</label>
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input ibexa-input ibexa-input--checkbox" id="category-default-enabled" name="category[defaultEnabled]" value="1">
-                            <label class="form-check-label" for="category-default-enabled">{{ 'category.form.default_enabled'|trans|desc('Default Enabled') }}</label>
-                        </div>
+                        {{ form_row(addCategoryForm.identifier, { row_attr: { class: 'ibexa-form-field' } }) }}
+                        {{ form_row(addCategoryForm.name, { row_attr: { class: 'ibexa-form-field' } }) }}
+                        {{ form_row(addCategoryForm.description, { row_attr: { class: 'ibexa-form-field' } }) }}
+                        {{ form_row(addCategoryForm.position, { row_attr: { class: 'ibexa-form-field' } }) }}
+                        {{ form_row(addCategoryForm.required, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                        {{ form_row(addCategoryForm.defaultEnabled, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
                     </div>
-                </form>
+                {{ form_end(addCategoryForm) }}
             {% endblock %}
             {% block footer_content %}
                 <button type="submit" form="add-category-form" class="btn ibexa-btn ibexa-btn--primary">
@@ -321,40 +303,24 @@
         {# Edit & Delete Modals for Each Category #}
         {% for category in policy.categories %}
             {# Edit Category Modal #}
+            {% set editForm = editForms[category.id] %}
+            {% form_theme editForm '@ibexadesign/ui/form_fields.html.twig' %}
             {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
                 id: 'edit-category-' ~ category.id,
                 title: 'category.edit.title'|trans({'%name%': category.name})|desc('Edit Category: %name%'),
                 size: 'large',
             } %}
                 {% block body_content %}
-                    <form id="edit-category-form-{{ category.id }}" method="post" action="{{ path('masilia_consent_admin_category_edit', {id: category.id}) }}">
+                    {{ form_start(editForm, {'attr': {'id': 'edit-category-form-' ~ category.id}}) }}
                         <div class="ibexa-form-block">
-                            <div class="mb-3">
-                                <label for="edit-category-identifier-{{ category.id }}" class="form-label">{{ 'category.form.identifier'|trans|desc('Identifier') }}</label>
-                                <input type="text" class="form-control ibexa-input ibexa-input--text" id="edit-category-identifier-{{ category.id }}" name="category[identifier]" value="{{ category.identifier }}" required pattern="[a-z_]+">
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit-category-name-{{ category.id }}" class="form-label">{{ 'category.form.name'|trans|desc('Name') }}</label>
-                                <input type="text" class="form-control ibexa-input ibexa-input--text" id="edit-category-name-{{ category.id }}" name="category[name]" value="{{ category.name }}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit-category-description-{{ category.id }}" class="form-label">{{ 'category.form.description'|trans|desc('Description') }}</label>
-                                <textarea class="form-control ibexa-input ibexa-input--textarea" id="edit-category-description-{{ category.id }}" name="category[description]" rows="3" required>{{ category.description }}</textarea>
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit-category-position-{{ category.id }}" class="form-label">{{ 'category.form.position'|trans|desc('Position') }}</label>
-                                <input type="number" class="form-control ibexa-input ibexa-input--text" id="edit-category-position-{{ category.id }}" name="category[position]" value="{{ category.position }}" min="0">
-                            </div>
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input ibexa-input ibexa-input--checkbox" id="edit-category-required-{{ category.id }}" name="category[required]" value="1" {% if category.required %}checked{% endif %}>
-                                <label class="form-check-label" for="edit-category-required-{{ category.id }}">{{ 'category.form.required'|trans|desc('Required') }}</label>
-                            </div>
-                            <div class="mb-3 form-check">
-                                <input type="checkbox" class="form-check-input ibexa-input ibexa-input--checkbox" id="edit-category-default-enabled-{{ category.id }}" name="category[defaultEnabled]" value="1" {% if category.defaultEnabled %}checked{% endif %}>
-                                <label class="form-check-label" for="edit-category-default-enabled-{{ category.id }}">{{ 'category.form.default_enabled'|trans|desc('Default Enabled') }}</label>
-                            </div>
+                            {{ form_row(editForm.identifier, { row_attr: { class: 'ibexa-form-field' } }) }}
+                            {{ form_row(editForm.name, { row_attr: { class: 'ibexa-form-field' } }) }}
+                            {{ form_row(editForm.description, { row_attr: { class: 'ibexa-form-field' } }) }}
+                            {{ form_row(editForm.position, { row_attr: { class: 'ibexa-form-field' } }) }}
+                            {{ form_row(editForm.required, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                            {{ form_row(editForm.defaultEnabled, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
                         </div>
-                    </form>
+                    {{ form_end(editForm) }}
                 {% endblock %}
                 {% block footer_content %}
                     <button type="submit" form="edit-category-form-{{ category.id }}" class="btn ibexa-btn ibexa-btn--primary">

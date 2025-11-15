@@ -33,8 +33,25 @@ class PolicyAdminController extends AbstractController
     #[Route('/{id}', name: 'view', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function view(CookiePolicy $policy): Response
     {
+        // Create forms for add category
+        $newCategory = new \Masilia\ConsentBundle\Entity\CookieCategory();
+        $newCategory->setPolicy($policy);
+        $addCategoryForm = $this->createForm(\Masilia\ConsentBundle\Form\Type\CategoryType::class, $newCategory, [
+            'action' => $this->generateUrl('masilia_consent_admin_category_create', ['policyId' => $policy->getId()]),
+        ]);
+
+        // Create edit forms for each category
+        $editForms = [];
+        foreach ($policy->getCategories() as $category) {
+            $editForms[$category->getId()] = $this->createForm(\Masilia\ConsentBundle\Form\Type\CategoryType::class, $category, [
+                'action' => $this->generateUrl('masilia_consent_admin_category_edit', ['id' => $category->getId()]),
+            ])->createView();
+        }
+
         return $this->render('@MasiliaConsent/admin/policy/view.html.twig', [
             'policy' => $policy,
+            'addCategoryForm' => $addCategoryForm->createView(),
+            'editForms' => $editForms,
         ]);
     }
 

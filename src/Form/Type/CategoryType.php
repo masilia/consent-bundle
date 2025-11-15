@@ -7,7 +7,6 @@ namespace Masilia\ConsentBundle\Form\Type;
 use Masilia\ConsentBundle\Entity\CookieCategory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -104,20 +103,6 @@ class CategoryType extends AbstractType
                     new Assert\PositiveOrZero([
                         'message' => 'category.form.position_positive',
                     ]),
-                ],
-                'translation_domain' => 'masilia_consent',
-            ])
-            ->add('cookies', CollectionType::class, [
-                'entry_type' => CookieType::class,
-                'entry_options' => [
-                    'label' => false,
-                ],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'label' => 'category.form.cookies',
-                'attr' => [
-                    'class' => 'ibexa-collection',
                 ],
                 'translation_domain' => 'masilia_consent',
             ]);
