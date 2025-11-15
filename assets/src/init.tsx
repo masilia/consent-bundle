@@ -1,6 +1,10 @@
 import { createRoot } from 'react-dom/client';
 import { ConsentBanner, ConsentBannerProps } from './components/ConsentBanner';
 
+// Store root instance to prevent multiple createRoot calls
+let rootInstance: ReturnType<typeof createRoot> | null = null;
+let containerInstance: HTMLElement | null = null;
+
 /**
  * Initialize the Masilia Consent Banner
  * 
@@ -17,15 +21,26 @@ export function initConsentBanner(options: Partial<ConsentBannerProps> = {}): ()
     document.body.appendChild(container);
   }
 
-  // Create root and render
-  const root = createRoot(container);
-  root.render(<ConsentBanner {...options} />);
+  // Reuse existing root or create new one
+  if (containerInstance === container && rootInstance) {
+    // Update existing root
+    rootInstance.render(<ConsentBanner {...options} />);
+  } else {
+    // Create new root
+    rootInstance = createRoot(container);
+    containerInstance = container;
+    rootInstance.render(<ConsentBanner {...options} />);
+  }
 
   // Return cleanup function
   return () => {
-    root.unmount();
-    if (container && container.parentNode) {
-      container.parentNode.removeChild(container);
+    if (rootInstance) {
+      rootInstance.unmount();
+      rootInstance = null;
+    }
+    if (containerInstance && containerInstance.parentNode) {
+      containerInstance.parentNode.removeChild(containerInstance);
+      containerInstance = null;
     }
   };
 }
