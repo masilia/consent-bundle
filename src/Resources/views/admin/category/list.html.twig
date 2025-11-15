@@ -1,0 +1,129 @@
+{% extends '@ibexadesign/ui/layout.html.twig' %}
+
+{% from '@ibexadesign/ui/component/macros.html.twig' import results_headline %}
+
+{% trans_default_domain 'masilia_consent' %}
+
+{% block body_class %}ibexa-consent-category-list-view{% endblock %}
+
+{% block breadcrumbs %}
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
+        { value: 'policy.list.title'|trans|desc('Cookie Policies'), url: path('masilia_consent_admin_policy_list') },
+        { value: 'category.list.title'|trans|desc('Categories') }
+    ]} %}
+{% endblock %}
+
+{% block title %}{{ 'category.list.title'|trans|desc('Categories') }}{% endblock %}
+
+{% block header %}
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
+        title: 'category.list.title'|trans({'%policy%': policy.version})|desc('Categories - Policy %policy%'),
+        icon_path: ibexa_icon_path('folder')
+    } %}
+{% endblock %}
+
+{% block context_menu %}
+    {% set menu_items %}
+        <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
+            <a
+                href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}"
+                class="btn ibexa-btn ibexa-btn--ghost"
+            >
+                <svg class="ibexa-icon ibexa-icon--small">
+                    <use xlink:href="{{ ibexa_icon_path('back') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'category.back_to_policy'|trans|desc('Back to policy') }}
+                </span>
+            </a>
+        </li>
+    {% endset %}
+
+    {{ include('@ibexadesign/ui/component/context_menu/context_menu.html.twig', {
+        menu_items: menu_items,
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <section class="container ibexa-container">
+        {% set body_rows = [] %}
+        {% for category in categories %}
+            {% set body_row_cols = [] %}
+
+            {% set col_raw %}
+                <a href="{{ path('masilia_consent_admin_category_view', {id: category.id}) }}">
+                    <strong>{{ category.name }}</strong>
+                </a>
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                content: col_raw,
+                raw: true,
+            }]) %}
+
+            {% set body_row_cols = body_row_cols|merge([
+                { content: '<code>' ~ category.identifier ~ '</code>', raw: true },
+                { content: category.description },
+                { content: category.cookies|length },
+            ]) %}
+
+            {% set col_raw %}
+                {% if category.required %}
+                    <span class="badge bg-warning">{{ 'category.required'|trans|desc('Required') }}</span>
+                {% else %}
+                    <span class="badge bg-secondary">{{ 'category.optional'|trans|desc('Optional') }}</span>
+                {% endif %}
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                content: col_raw,
+                raw: true,
+            }]) %}
+
+            {% set col_raw %}
+                {% if category.defaultEnabled %}
+                    <span class="badge bg-success">{{ 'category.enabled'|trans|desc('Enabled') }}</span>
+                {% else %}
+                    <span class="badge bg-secondary">{{ 'category.disabled'|trans|desc('Disabled') }}</span>
+                {% endif %}
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                content: col_raw,
+                raw: true,
+            }]) %}
+
+            {% set col_raw %}
+                <a
+                    title="{{ 'category.view'|trans|desc('View') }}"
+                    href="{{ path('masilia_consent_admin_category_view', {id: category.id}) }}"
+                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                >
+                    <svg class="ibexa-icon ibexa-icon--small">
+                        <use xlink:href="{{ ibexa_icon_path('view') }}"></use>
+                    </svg>
+                </a>
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                has_action_btns: true,
+                content: col_raw,
+                raw: true,
+            }]) %}
+
+            {% set body_rows = body_rows|merge([{ cols: body_row_cols }]) %}
+        {% endfor %}
+
+        {% include '@ibexadesign/ui/component/table/table.html.twig' with {
+            headline: results_headline(categories|length),
+            head_cols: [
+                { content: 'category.name'|trans|desc('Name') },
+                { content: 'category.identifier'|trans|desc('Identifier') },
+                { content: 'category.description'|trans|desc('Description') },
+                { content: 'category.cookies'|trans|desc('Cookies') },
+                { content: 'category.required'|trans|desc('Required') },
+                { content: 'category.default_enabled'|trans|desc('Default Enabled') },
+                { },
+            ],
+            body_rows,
+            empty_table_info_text: 'category.list.no_categories'|trans|desc('No categories found'),
+        } %}
+    </section>
+{% endblock %}

@@ -1,174 +1,248 @@
 {% extends '@ibexadesign/ui/layout.html.twig' %}
 
-{% block title %}Policy {{ policy.version }}{% endblock %}
+{% trans_default_domain 'masilia_consent' %}
+
+{% block body_class %}ibexa-consent-policy-view{% endblock %}
+
+{% block breadcrumbs %}
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
+        { value: 'policy.list.title'|trans|desc('Cookie Policies'), url: path('masilia_consent_admin_policy_list') },
+        { value: policy.version }
+    ]} %}
+{% endblock %}
+
+{% block title %}{{ 'policy.view.title'|trans({'%version%': policy.version})|desc('Policy %version%') }}{% endblock %}
+
+{% block header %}
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
+        title: 'policy.view.title'|trans({'%version%': policy.version})|desc('Cookie Policy - Version %version%'),
+        icon_path: ibexa_icon_path('cookie')
+    } %}
+{% endblock %}
+
+{% block context_menu %}
+    {% set menu_items %}
+        <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
+            <a
+                href="{{ path('masilia_consent_admin_policy_list') }}"
+                class="btn ibexa-btn ibexa-btn--ghost"
+            >
+                <svg class="ibexa-icon ibexa-icon--small">
+                    <use xlink:href="{{ ibexa_icon_path('back') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'policy.back_to_list'|trans|desc('Back to list') }}
+                </span>
+            </a>
+        </li>
+        {% if not policy.isActive %}
+            <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
+                <button
+                    type="button"
+                    class="btn ibexa-btn ibexa-btn--primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#activate-policy"
+                >
+                    <svg class="ibexa-icon ibexa-icon--small">
+                        <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
+                    </svg>
+                    <span class="ibexa-btn__label">
+                        {{ 'policy.activate'|trans|desc('Activate') }}
+                    </span>
+                </button>
+            </li>
+        {% endif %}
+    {% endset %}
+
+    {{ include('@ibexadesign/ui/component/context_menu/context_menu.html.twig', {
+        menu_items: menu_items,
+    }) }}
+{% endblock %}
 
 {% block content %}
-<div class="ibexa-main-container">
-    <div class="ibexa-content-container">
-        <section class="container mt-4">
-            <div class="ibexa-page-header">
-                <h1 class="ibexa-page-title">
-                    Policy Version {{ policy.version }}
-                    {% if policy.isActive %}
-                        <span class="badge bg-success ms-2">Active</span>
-                    {% endif %}
-                </h1>
-                <div class="ibexa-page-header-actions">
-                    <a href="{{ path('masilia_consent_admin_policy_list') }}" class="btn btn-secondary">
-                        Back to List
-                    </a>
-                </div>
+    <section class="container ibexa-container">
+        {# Policy Information Card #}
+        <div class="card ibexa-card ibexa-card--light mb-4">
+            <div class="card-header ibexa-card__header">
+                <h3 class="ibexa-card__title">
+                    {{ 'policy.information'|trans|desc('Policy Information') }}
+                </h3>
             </div>
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5 class="mb-0">Policy Information</h5>
-                        </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-4">Version:</dt>
-                                <dd class="col-sm-8">{{ policy.version }}</dd>
-
-                                <dt class="col-sm-4">Last Updated:</dt>
-                                <dd class="col-sm-8">{{ policy.lastUpdated|date('Y-m-d H:i:s') }}</dd>
-
-                                <dt class="col-sm-4">Cookie Prefix:</dt>
-                                <dd class="col-sm-8"><code>{{ policy.cookiePrefix }}</code></dd>
-
-                                <dt class="col-sm-4">Expiration:</dt>
-                                <dd class="col-sm-8">{{ policy.expirationDays }} days</dd>
-
-                                <dt class="col-sm-4">Status:</dt>
-                                <dd class="col-sm-8">
+            <div class="card-body ibexa-card__body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="ibexa-details">
+                            <div class="ibexa-details__item">
+                                <dt class="ibexa-details__item-label">{{ 'policy.version'|trans|desc('Version') }}</dt>
+                                <dd class="ibexa-details__item-value">
+                                    <strong>{{ policy.version }}</strong>
                                     {% if policy.isActive %}
-                                        <span class="badge bg-success">Active</span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">Inactive</span>
+                                        <span class="badge bg-success ms-2">{{ 'policy.status.active'|trans|desc('Active') }}</span>
                                     {% endif %}
                                 </dd>
-
-                                <dt class="col-sm-4">Created:</dt>
-                                <dd class="col-sm-8">{{ policy.createdAt|date('Y-m-d H:i:s') }}</dd>
-                            </dl>
-                        </div>
+                            </div>
+                            <div class="ibexa-details__item">
+                                <dt class="ibexa-details__item-label">{{ 'policy.last_updated'|trans|desc('Last Updated') }}</dt>
+                                <dd class="ibexa-details__item-value">{{ policy.lastUpdated|date('Y-m-d H:i:s') }}</dd>
+                            </div>
+                        </dl>
                     </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <h5 class="mb-0">Statistics</h5>
-                        </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-6">Categories:</dt>
-                                <dd class="col-sm-6">{{ policy.categories|length }}</dd>
-
-                                <dt class="col-sm-6">Total Cookies:</dt>
-                                <dd class="col-sm-6">
-                                    {% set totalCookies = 0 %}
-                                    {% for category in policy.categories %}
-                                        {% set totalCookies = totalCookies + category.cookies|length %}
-                                    {% endfor %}
-                                    {{ totalCookies }}
-                                </dd>
-
-                                <dt class="col-sm-6">Third-Party Services:</dt>
-                                <dd class="col-sm-6">{{ policy.thirdPartyServices|length }}</dd>
-                            </dl>
-                        </div>
+                    <div class="col-md-6">
+                        <dl class="ibexa-details">
+                            <div class="ibexa-details__item">
+                                <dt class="ibexa-details__item-label">{{ 'policy.cookie_prefix'|trans|desc('Cookie Prefix') }}</dt>
+                                <dd class="ibexa-details__item-value"><code>{{ policy.cookiePrefix }}</code></dd>
+                            </div>
+                            <div class="ibexa-details__item">
+                                <dt class="ibexa-details__item-label">{{ 'policy.expiration_days'|trans|desc('Expiration Days') }}</dt>
+                                <dd class="ibexa-details__item-value">{{ policy.expirationDays }} {{ 'policy.days'|trans|desc('days') }}</dd>
+                            </div>
+                        </dl>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Categories</h5>
-                </div>
-                <div class="card-body">
-                    {% for category in policy.categories %}
-                    <div class="mb-4 pb-3 border-bottom">
-                        <h6>
-                            {{ category.name }}
-                            {% if category.required %}
-                                <span class="badge bg-danger">Required</span>
-                            {% endif %}
-                            {% if category.defaultEnabled %}
-                                <span class="badge bg-info">Default Enabled</span>
-                            {% endif %}
-                        </h6>
-                        <p class="text-muted">{{ category.description }}</p>
-                        
-                        <h6 class="mt-3">Cookies ({{ category.cookies|length }})</h6>
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Provider</th>
-                                    <th>Expiry</th>
-                                    <th>Script</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for cookie in category.cookies %}
-                                <tr>
-                                    <td><code>{{ cookie.name }}</code></td>
-                                    <td>{{ cookie.provider }}</td>
-                                    <td>{{ cookie.expiry }}</td>
-                                    <td>
-                                        {% if cookie.hasScript %}
-                                            <span class="badge bg-warning">Yes</span>
-                                        {% else %}
-                                            <span class="text-muted">No</span>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% endfor %}
-                </div>
+        {# Categories Section #}
+        <div class="card ibexa-card ibexa-card--light mb-4">
+            <div class="card-header ibexa-card__header">
+                <h3 class="ibexa-card__title">
+                    {{ 'policy.categories'|trans|desc('Categories') }} ({{ policy.categories|length }})
+                </h3>
             </div>
-
-            {% if policy.thirdPartyServices|length > 0 %}
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h5 class="mb-0">Third-Party Services</h5>
-                </div>
-                <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Config Key</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for service in policy.thirdPartyServices %}
-                            <tr>
-                                <td>{{ service.name }}</td>
-                                <td><span class="badge bg-secondary">{{ service.category }}</span></td>
-                                <td><code>{{ service.configKey }}</code></td>
-                                <td>
-                                    {% if service.enabled %}
-                                        <span class="badge bg-success">Enabled</span>
-                                    {% else %}
-                                        <span class="badge bg-secondary">Disabled</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
+            <div class="card-body ibexa-card__body">
+                {% for category in policy.categories %}
+                    <div class="ibexa-card ibexa-card--light mb-3">
+                        <div class="card-header ibexa-card__header">
+                            <h4 class="ibexa-card__title">
+                                {{ category.name }}
+                                {% if category.required %}
+                                    <span class="badge bg-warning">{{ 'category.required'|trans|desc('Required') }}</span>
+                                {% endif %}
+                                {% if category.defaultEnabled %}
+                                    <span class="badge bg-info">{{ 'category.default_enabled'|trans|desc('Default Enabled') }}</span>
+                                {% endif %}
+                            </h4>
+                        </div>
+                        <div class="card-body ibexa-card__body">
+                            <p class="text-muted">{{ category.description }}</p>
+                            
+                            <h5 class="mt-3 mb-2">{{ 'category.cookies'|trans({'%count%': category.cookies|length})|desc('Cookies (%count%)') }}</h5>
+                            
+                            {% set cookie_body_rows = [] %}
+                            {% for cookie in category.cookies %}
+                                {% set cookie_row_cols = [
+                                    { content: '<code>' ~ cookie.name ~ '</code>', raw: true },
+                                    { content: cookie.provider },
+                                    { content: cookie.purpose },
+                                    { content: cookie.expiry },
+                                ] %}
+                                {% set cookie_body_rows = cookie_body_rows|merge([{ cols: cookie_row_cols }]) %}
                             {% endfor %}
-                        </tbody>
-                    </table>
+
+                            {% include '@ibexadesign/ui/component/table/table.html.twig' with {
+                                head_cols: [
+                                    { content: 'cookie.name'|trans|desc('Name') },
+                                    { content: 'cookie.provider'|trans|desc('Provider') },
+                                    { content: 'cookie.purpose'|trans|desc('Purpose') },
+                                    { content: 'cookie.expiry'|trans|desc('Expiry') },
+                                ],
+                                body_rows: cookie_body_rows,
+                                table_class: 'ibexa-table--sm',
+                            } %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {# Third-Party Services Section #}
+        {% if policy.thirdPartyServices|length > 0 %}
+            <div class="card ibexa-card ibexa-card--light mb-4">
+                <div class="card-header ibexa-card__header">
+                    <h3 class="ibexa-card__title">
+                        {{ 'policy.third_party_services'|trans|desc('Third-Party Services') }} ({{ policy.thirdPartyServices|length }})
+                    </h3>
+                </div>
+                <div class="card-body ibexa-card__body">
+                    {% set service_body_rows = [] %}
+                    {% for service in policy.thirdPartyServices %}
+                        {% set service_row_cols = [] %}
+                        
+                        {% set service_row_cols = service_row_cols|merge([
+                            { content: service.name },
+                            { content: '<span class="badge bg-secondary">' ~ service.category ~ '</span>', raw: true },
+                            { content: service.description },
+                        ]) %}
+
+                        {% set col_raw %}
+                            <a href="{{ service.privacyPolicyUrl }}" target="_blank" class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small">
+                                <svg class="ibexa-icon ibexa-icon--small">
+                                    <use xlink:href="{{ ibexa_icon_path('open-newtab') }}"></use>
+                                </svg>
+                                {{ 'service.view_policy'|trans|desc('View Policy') }}
+                            </a>
+                        {% endset %}
+                        {% set service_row_cols = service_row_cols|merge([{
+                            content: col_raw,
+                            raw: true,
+                        }]) %}
+
+                        {% set col_raw %}
+                            {% if service.enabled %}
+                                <span class="badge bg-success">{{ 'service.enabled'|trans|desc('Enabled') }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ 'service.disabled'|trans|desc('Disabled') }}</span>
+                            {% endif %}
+                        {% endset %}
+                        {% set service_row_cols = service_row_cols|merge([{
+                            content: col_raw,
+                            raw: true,
+                        }]) %}
+
+                        {% set service_body_rows = service_body_rows|merge([{ cols: service_row_cols }]) %}
+                    {% endfor %}
+
+                    {% include '@ibexadesign/ui/component/table/table.html.twig' with {
+                        head_cols: [
+                            { content: 'service.name'|trans|desc('Name') },
+                            { content: 'service.category'|trans|desc('Category') },
+                            { content: 'service.description'|trans|desc('Description') },
+                            { content: 'service.privacy_policy'|trans|desc('Privacy Policy') },
+                            { content: 'service.status'|trans|desc('Status') },
+                        ],
+                        body_rows: service_body_rows,
+                    } %}
                 </div>
             </div>
-            {% endif %}
-        </section>
-    </div>
-</div>
+        {% endif %}
+
+        {# Activate Modal #}
+        {% if not policy.isActive %}
+            <div class="modal fade" id="activate-policy" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ 'policy.activate.confirm'|trans|desc('Activate Policy') }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            {{ 'policy.activate.message'|trans({'%version%': policy.version})|desc('Activate policy version %version%? This will deactivate all other policies.') }}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
+                                {{ 'policy.cancel'|trans|desc('Cancel') }}
+                            </button>
+                            <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}" class="d-inline">
+                                <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
+                                    {{ 'policy.activate'|trans|desc('Activate') }}
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </section>
 {% endblock %}

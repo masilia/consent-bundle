@@ -1,0 +1,213 @@
+{% extends '@ibexadesign/ui/layout.html.twig' %}
+
+{% trans_default_domain 'masilia_consent' %}
+
+{% block body_class %}ibexa-consent-category-view{% endblock %}
+
+{% block breadcrumbs %}
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
+        { value: 'policy.list.title'|trans|desc('Cookie Policies'), url: path('masilia_consent_admin_policy_list') },
+        { value: 'policy.view.title'|trans({'%version%': category.policy.version})|desc('Policy %version%'), url: path('masilia_consent_admin_policy_view', {id: category.policy.id}) },
+        { value: category.name }
+    ]} %}
+{% endblock %}
+
+{% block title %}{{ category.name }}{% endblock %}
+
+{% block header %}
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
+        title: category.name,
+        icon_path: ibexa_icon_path('folder')
+    } %}
+{% endblock %}
+
+{% block context_menu %}
+    {% set menu_items %}
+        <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
+            <a
+                href="{{ path('masilia_consent_admin_policy_view', {id: category.policy.id}) }}"
+                class="btn ibexa-btn ibexa-btn--ghost"
+            >
+                <svg class="ibexa-icon ibexa-icon--small">
+                    <use xlink:href="{{ ibexa_icon_path('back') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'category.back_to_policy'|trans|desc('Back to policy') }}
+                </span>
+            </a>
+        </li>
+    {% endset %}
+
+    {{ include('@ibexadesign/ui/component/context_menu/context_menu.html.twig', {
+        menu_items: menu_items,
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <section class="container ibexa-container">
+        {# Category Information Card #}
+        <div class="card ibexa-card ibexa-card--light mb-4">
+            <div class="card-header ibexa-card__header">
+                <h3 class="ibexa-card__title">
+                    {{ 'category.information'|trans|desc('Category Information') }}
+                </h3>
+            </div>
+            <div class="card-body ibexa-card__body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="ibexa-details">
+                            <div class="ibexa-details__item">
+                                <dt class="ibexa-details__item-label">{{ 'category.name'|trans|desc('Name') }}</dt>
+                                <dd class="ibexa-details__item-value"><strong>{{ category.name }}</strong></dd>
+                            </div>
+                            <div class="ibexa-details__item">
+                                <dt class="ibexa-details__item-label">{{ 'category.identifier'|trans|desc('Identifier') }}</dt>
+                                <dd class="ibexa-details__item-value"><code>{{ category.identifier }}</code></dd>
+                            </div>
+                            <div class="ibexa-details__item">
+                                <dt class="ibexa-details__item-label">{{ 'category.description'|trans|desc('Description') }}</dt>
+                                <dd class="ibexa-details__item-value">{{ category.description }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="ibexa-details">
+                            <div class="ibexa-details__item">
+                                <dt class="ibexa-details__item-label">{{ 'category.required'|trans|desc('Required') }}</dt>
+                                <dd class="ibexa-details__item-value">
+                                    {% if category.required %}
+                                        <span class="badge bg-warning">{{ 'category.yes'|trans|desc('Yes') }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ 'category.no'|trans|desc('No') }}</span>
+                                    {% endif %}
+                                </dd>
+                            </div>
+                            <div class="ibexa-details__item">
+                                <dt class="ibexa-details__item-label">{{ 'category.default_enabled'|trans|desc('Default Enabled') }}</dt>
+                                <dd class="ibexa-details__item-value">
+                                    {% if category.defaultEnabled %}
+                                        <span class="badge bg-success">{{ 'category.yes'|trans|desc('Yes') }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ 'category.no'|trans|desc('No') }}</span>
+                                    {% endif %}
+                                </dd>
+                            </div>
+                            <div class="ibexa-details__item">
+                                <dt class="ibexa-details__item-label">{{ 'category.position'|trans|desc('Position') }}</dt>
+                                <dd class="ibexa-details__item-value">{{ category.position }}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Cookies Section #}
+        <div class="card ibexa-card ibexa-card--light mb-4">
+            <div class="card-header ibexa-card__header">
+                <h3 class="ibexa-card__title">
+                    {{ 'category.cookies'|trans({'%count%': category.cookies|length})|desc('Cookies (%count%)') }}
+                </h3>
+            </div>
+            <div class="card-body ibexa-card__body">
+                {% set cookie_body_rows = [] %}
+                {% for cookie in category.cookies %}
+                    {% set cookie_row_cols = [] %}
+
+                    {% set cookie_row_cols = cookie_row_cols|merge([
+                        { content: '<code>' ~ cookie.name ~ '</code>', raw: true },
+                        { content: cookie.provider },
+                        { content: cookie.purpose },
+                        { content: cookie.expiry },
+                    ]) %}
+
+                    {% set col_raw %}
+                        {% if cookie.hasScript %}
+                            <span class="badge bg-info" title="{{ 'cookie.has_script'|trans|desc('Has script injection') }}">
+                                <svg class="ibexa-icon ibexa-icon--small">
+                                    <use xlink:href="{{ ibexa_icon_path('code') }}"></use>
+                                </svg>
+                                {{ 'cookie.script'|trans|desc('Script') }}
+                            </span>
+                        {% endif %}
+                    {% endset %}
+                    {% set cookie_row_cols = cookie_row_cols|merge([{
+                        content: col_raw,
+                        raw: true,
+                    }]) %}
+
+                    {% set cookie_body_rows = cookie_body_rows|merge([{ cols: cookie_row_cols }]) %}
+                {% endfor %}
+
+                {% include '@ibexadesign/ui/component/table/table.html.twig' with {
+                    head_cols: [
+                        { content: 'cookie.name'|trans|desc('Name') },
+                        { content: 'cookie.provider'|trans|desc('Provider') },
+                        { content: 'cookie.purpose'|trans|desc('Purpose') },
+                        { content: 'cookie.expiry'|trans|desc('Expiry') },
+                        { content: 'cookie.features'|trans|desc('Features') },
+                    ],
+                    body_rows: cookie_body_rows,
+                    empty_table_info_text: 'category.no_cookies'|trans|desc('No cookies defined for this category'),
+                } %}
+            </div>
+        </div>
+
+        {# Cookie Details - Expandable Cards #}
+        {% if category.cookies|length > 0 %}
+            <div class="card ibexa-card ibexa-card--light mb-4">
+                <div class="card-header ibexa-card__header">
+                    <h3 class="ibexa-card__title">
+                        {{ 'category.cookie_details'|trans|desc('Cookie Details') }}
+                    </h3>
+                </div>
+                <div class="card-body ibexa-card__body">
+                    <div class="accordion" id="cookieDetailsAccordion">
+                        {% for cookie in category.cookies %}
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="heading-{{ cookie.id }}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ cookie.id }}">
+                                        <code>{{ cookie.name }}</code>
+                                        <span class="ms-2 text-muted">- {{ cookie.provider }}</span>
+                                    </button>
+                                </h2>
+                                <div id="collapse-{{ cookie.id }}" class="accordion-collapse collapse" data-bs-parent="#cookieDetailsAccordion">
+                                    <div class="accordion-body">
+                                        <dl class="row">
+                                            <dt class="col-sm-3">{{ 'cookie.purpose'|trans|desc('Purpose') }}</dt>
+                                            <dd class="col-sm-9">{{ cookie.purpose }}</dd>
+
+                                            <dt class="col-sm-3">{{ 'cookie.provider'|trans|desc('Provider') }}</dt>
+                                            <dd class="col-sm-9">{{ cookie.provider }}</dd>
+
+                                            <dt class="col-sm-3">{{ 'cookie.expiry'|trans|desc('Expiry') }}</dt>
+                                            <dd class="col-sm-9">{{ cookie.expiry }}</dd>
+
+                                            {% if cookie.scriptSrc %}
+                                                <dt class="col-sm-3">{{ 'cookie.script_src'|trans|desc('Script Source') }}</dt>
+                                                <dd class="col-sm-9">
+                                                    <code>{{ cookie.scriptSrc }}</code>
+                                                    {% if cookie.scriptAsync %}
+                                                        <span class="badge bg-info ms-2">{{ 'cookie.async'|trans|desc('Async') }}</span>
+                                                    {% endif %}
+                                                </dd>
+                                            {% endif %}
+
+                                            {% if cookie.initCode %}
+                                                <dt class="col-sm-3">{{ 'cookie.init_code'|trans|desc('Init Code') }}</dt>
+                                                <dd class="col-sm-9">
+                                                    <pre class="bg-light p-2 rounded"><code>{{ cookie.initCode }}</code></pre>
+                                                </dd>
+                                            {% endif %}
+                                        </dl>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </section>
+{% endblock %}

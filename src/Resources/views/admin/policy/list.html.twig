@@ -1,114 +1,254 @@
 {% extends '@ibexadesign/ui/layout.html.twig' %}
 
-{% block title %}Cookie Policies{% endblock %}
+{% from '@ibexadesign/ui/component/macros.html.twig' import results_headline %}
+
+{% trans_default_domain 'masilia_consent' %}
+
+{% block body_class %}ibexa-consent-policy-list-view{% endblock %}
+
+{% block breadcrumbs %}
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
+        { value: 'policy.list.title'|trans|desc('Cookie Policies') }
+    ]} %}
+{% endblock %}
+
+{% block title %}{{ 'policy.list.title'|trans|desc('Cookie Policies') }}{% endblock %}
+
+{% block header %}
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
+        title: 'policy.list.title'|trans|desc('Cookie Policies'),
+        icon_path: ibexa_icon_path('cookie')
+    } %}
+{% endblock %}
+
+{% block context_menu %}
+    {% set menu_items %}
+        <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
+            <a
+                href="{{ path('masilia_consent_admin_statistics_dashboard') }}"
+                class="btn ibexa-btn ibexa-btn--ghost"
+            >
+                <svg class="ibexa-icon ibexa-icon--small">
+                    <use xlink:href="{{ ibexa_icon_path('view-list') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'policy.statistics'|trans|desc('Statistics') }}
+                </span>
+            </a>
+        </li>
+    {% endset %}
+
+    {{ include('@ibexadesign/ui/component/context_menu/context_menu.html.twig', {
+        menu_items: menu_items,
+    }) }}
+{% endblock %}
 
 {% block content %}
-<div class="ibexa-main-container">
-    <div class="ibexa-content-container">
-        <section class="container mt-4">
-            <div class="ibexa-page-header">
-                <h1 class="ibexa-page-title">
-                    <svg class="ibexa-icon ibexa-icon--medium">
-                        <use xlink:href="{{ asset('bundles/ibexaadminui/img/ibexa-icons.svg') }}#cookie"></use>
+    <section class="container ibexa-container">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+
+        {% for message in app.flashes('error') %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+
+        {% set body_rows = [] %}
+        {% for policy in policies %}
+            {% set body_row_cols = [] %}
+
+            {% set col_raw %}
+                <a href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}">
+                    <strong>{{ policy.version }}</strong>
+                </a>
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                content: col_raw,
+                raw: true,
+            }]) %}
+
+            {% set body_row_cols = body_row_cols|merge([
+                { content: policy.lastUpdated|date('Y-m-d H:i') },
+                { content: '<code>' ~ policy.cookiePrefix ~ '</code>', raw: true },
+                { content: policy.expirationDays ~ ' days' },
+                { content: policy.categories|length },
+            ]) %}
+
+            {% set col_raw %}
+                {% if policy.isActive %}
+                    <span class="badge bg-success">{{ 'policy.status.active'|trans|desc('Active') }}</span>
+                {% else %}
+                    <span class="badge bg-secondary">{{ 'policy.status.inactive'|trans|desc('Inactive') }}</span>
+                {% endif %}
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                content: col_raw,
+                raw: true,
+            }]) %}
+
+            {% set col_raw %}
+                <a
+                    title="{{ 'policy.view'|trans|desc('View') }}"
+                    href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}"
+                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                >
+                    <svg class="ibexa-icon ibexa-icon--small">
+                        <use xlink:href="{{ ibexa_icon_path('view') }}"></use>
                     </svg>
-                    Cookie Policies
-                </h1>
-                <div class="ibexa-page-header-actions">
-                    <a href="{{ path('masilia_consent_admin_statistics_dashboard') }}" class="btn btn-secondary">
+                </a>
+                {% if not policy.isActive %}
+                    <button
+                        type="button"
+                        title="{{ 'policy.activate'|trans|desc('Activate') }}"
+                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                        data-bs-toggle="modal"
+                        data-bs-target="#activate-policy-{{ policy.id }}"
+                    >
                         <svg class="ibexa-icon ibexa-icon--small">
-                            <use xlink:href="{{ asset('bundles/ibexaadminui/img/ibexa-icons.svg') }}#view-list"></use>
+                            <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
                         </svg>
-                        Statistics
-                    </a>
-                </div>
-            </div>
+                    </button>
+                {% else %}
+                    <button
+                        type="button"
+                        title="{{ 'policy.deactivate'|trans|desc('Deactivate') }}"
+                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deactivate-policy-{{ policy.id }}"
+                    >
+                        <svg class="ibexa-icon ibexa-icon--small">
+                            <use xlink:href="{{ ibexa_icon_path('circle-close') }}"></use>
+                        </svg>
+                    </button>
+                {% endif %}
+                {% if not policy.isActive %}
+                    <button
+                        type="button"
+                        title="{{ 'policy.delete'|trans|desc('Delete') }}"
+                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                        data-bs-toggle="modal"
+                        data-bs-target="#delete-policy-{{ policy.id }}"
+                    >
+                        <svg class="ibexa-icon ibexa-icon--small ibexa-icon--trash">
+                            <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                        </svg>
+                    </button>
+                {% endif %}
+            {% endset %}
+            {% set body_row_cols = body_row_cols|merge([{
+                has_action_btns: true,
+                content: col_raw,
+                raw: true,
+            }]) %}
 
-            {% for message in app.flashes('success') %}
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
+            {% set body_rows = body_rows|merge([{ cols: body_row_cols }]) %}
+        {% endfor %}
 
-            {% for message in app.flashes('error') %}
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
+        {% include '@ibexadesign/ui/component/table/table.html.twig' with {
+            headline: results_headline(policies|length),
+            head_cols: [
+                { content: 'policy.version'|trans|desc('Version') },
+                { content: 'policy.last_updated'|trans|desc('Last Updated') },
+                { content: 'policy.cookie_prefix'|trans|desc('Cookie Prefix') },
+                { content: 'policy.expiration_days'|trans|desc('Expiration Days') },
+                { content: 'policy.categories'|trans|desc('Categories') },
+                { content: 'policy.status'|trans|desc('Status') },
+                { },
+            ],
+            body_rows,
+            empty_table_info_text: 'policy.list.no_policies'|trans|desc('No policies found. Import a policy using: php bin/console masilia:consent:import'),
+        } %}
 
-            <div class="ibexa-table-header">
-                <div class="ibexa-table-header__headline">{{ policies|length }} Policies</div>
-            </div>
-
-            <table class="table ibexa-table table-hover">
-                <thead>
-                    <tr>
-                        <th>Version</th>
-                        <th>Last Updated</th>
-                        <th>Cookie Prefix</th>
-                        <th>Expiration Days</th>
-                        <th>Categories</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for policy in policies %}
-                    <tr>
-                        <td>
-                            <a href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}">
-                                <strong>{{ policy.version }}</strong>
-                            </a>
-                        </td>
-                        <td>{{ policy.lastUpdated|date('Y-m-d') }}</td>
-                        <td><code>{{ policy.cookiePrefix }}</code></td>
-                        <td>{{ policy.expirationDays }} days</td>
-                        <td>{{ policy.categories|length }}</td>
-                        <td>
-                            {% if policy.isActive %}
-                                <span class="badge bg-success">Active</span>
-                            {% else %}
-                                <span class="badge bg-secondary">Inactive</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            <div class="btn-group btn-group-sm">
-                                <a href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}" 
-                                   class="btn btn-sm btn-outline-primary">View</a>
-                                
-                                {% if not policy.isActive %}
-                                    <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}" style="display: inline;">
-                                        <button type="submit" class="btn btn-sm btn-outline-success">Activate</button>
-                                    </form>
-                                {% else %}
-                                    <form method="post" action="{{ path('masilia_consent_admin_policy_deactivate', {id: policy.id}) }}" style="display: inline;">
-                                        <button type="submit" class="btn btn-sm btn-outline-warning">Deactivate</button>
-                                    </form>
-                                {% endif %}
-                                
-                                {% if not policy.isActive %}
-                                    <form method="post" action="{{ path('masilia_consent_admin_policy_delete', {id: policy.id}) }}" 
-                                          style="display: inline;" 
-                                          onsubmit="return confirm('Are you sure you want to delete this policy?');">
-                                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ policy.id) }}">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                                    </form>
-                                {% endif %}
+        {# Modals for activate/deactivate/delete #}
+        {% for policy in policies %}
+            {# Activate Modal #}
+            {% if not policy.isActive %}
+                <div class="modal fade" id="activate-policy-{{ policy.id }}" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{ 'policy.activate.confirm'|trans|desc('Activate Policy') }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="7" class="text-center text-muted">
-                            No policies found. Import a policy using the CLI command:
-                            <code>php bin/console masilia:consent:import path/to/cookies.json --activate</code>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
-    </div>
-</div>
+                            <div class="modal-body">
+                                {{ 'policy.activate.message'|trans({'%version%': policy.version})|desc('Activate policy version %version%? This will deactivate all other policies.') }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
+                                    {{ 'policy.cancel'|trans|desc('Cancel') }}
+                                </button>
+                                <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}" class="d-inline">
+                                    <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
+                                        {{ 'policy.activate'|trans|desc('Activate') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {# Deactivate Modal #}
+            {% if policy.isActive %}
+                <div class="modal fade" id="deactivate-policy-{{ policy.id }}" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{ 'policy.deactivate.confirm'|trans|desc('Deactivate Policy') }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{ 'policy.deactivate.message'|trans({'%version%': policy.version})|desc('Deactivate policy version %version%?') }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
+                                    {{ 'policy.cancel'|trans|desc('Cancel') }}
+                                </button>
+                                <form method="post" action="{{ path('masilia_consent_admin_policy_deactivate', {id: policy.id}) }}" class="d-inline">
+                                    <button type="submit" class="btn ibexa-btn ibexa-btn--warning">
+                                        {{ 'policy.deactivate'|trans|desc('Deactivate') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {# Delete Modal #}
+            {% if not policy.isActive %}
+                <div class="modal fade" id="delete-policy-{{ policy.id }}" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{ 'policy.delete.confirm'|trans|desc('Delete Policy') }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{ 'policy.delete.message'|trans({'%version%': policy.version})|desc('Delete policy version %version%? This action cannot be undone.') }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
+                                    {{ 'policy.cancel'|trans|desc('Cancel') }}
+                                </button>
+                                <form method="post" action="{{ path('masilia_consent_admin_policy_delete', {id: policy.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ policy.id) }}">
+                                    <button type="submit" class="btn ibexa-btn ibexa-btn--danger">
+                                        {{ 'policy.delete'|trans|desc('Delete') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </section>
 {% endblock %}

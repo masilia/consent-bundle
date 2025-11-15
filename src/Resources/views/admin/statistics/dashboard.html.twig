@@ -1,0 +1,242 @@
+{% extends '@ibexadesign/ui/layout.html.twig' %}
+
+{% trans_default_domain 'masilia_consent' %}
+
+{% block body_class %}ibexa-consent-statistics-view{% endblock %}
+
+{% block breadcrumbs %}
+    {% include '@ibexadesign/ui/breadcrumbs.html.twig' with { items: [
+        { value: 'breadcrumb.admin'|trans(domain='messages')|desc('Admin') },
+        { value: 'policy.list.title'|trans|desc('Cookie Policies'), url: path('masilia_consent_admin_policy_list') },
+        { value: 'statistics.title'|trans|desc('Statistics') }
+    ]} %}
+{% endblock %}
+
+{% block title %}{{ 'statistics.title'|trans|desc('Consent Statistics') }}{% endblock %}
+
+{% block header %}
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
+        title: 'statistics.title'|trans|desc('Consent Statistics'),
+        icon_path: ibexa_icon_path('view-list')
+    } %}
+{% endblock %}
+
+{% block context_menu %}
+    {% set menu_items %}
+        <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
+            <a
+                href="{{ path('masilia_consent_admin_policy_list') }}"
+                class="btn ibexa-btn ibexa-btn--ghost"
+            >
+                <svg class="ibexa-icon ibexa-icon--small">
+                    <use xlink:href="{{ ibexa_icon_path('back') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'statistics.back_to_policies'|trans|desc('Back to policies') }}
+                </span>
+            </a>
+        </li>
+    {% endset %}
+
+    {{ include('@ibexadesign/ui/component/context_menu/context_menu.html.twig', {
+        menu_items: menu_items,
+    }) }}
+{% endblock %}
+
+{% block content %}
+    <section class="container ibexa-container">
+        {# Date Range Info #}
+        <div class="alert alert-info mb-4">
+            <svg class="ibexa-icon ibexa-icon--small me-2">
+                <use xlink:href="{{ ibexa_icon_path('about-info') }}"></use>
+            </svg>
+            {{ 'statistics.date_range'|trans({
+                '%from%': dateRange.from|date('Y-m-d'),
+                '%to%': dateRange.to|date('Y-m-d')
+            })|desc('Showing statistics from %from% to %to%') }}
+        </div>
+
+        {# Overview Cards #}
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card ibexa-card ibexa-card--light">
+                    <div class="card-body ibexa-card__body text-center">
+                        <h5 class="text-muted mb-2">{{ 'statistics.total_consents'|trans|desc('Total Consents') }}</h5>
+                        <h2 class="display-4 mb-0">{{ totalConsents }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card ibexa-card ibexa-card--light">
+                    <div class="card-body ibexa-card__body text-center">
+                        <h5 class="text-muted mb-2">{{ 'statistics.categories_tracked'|trans|desc('Categories Tracked') }}</h5>
+                        <h2 class="display-4 mb-0">{{ categoryStats|length }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card ibexa-card ibexa-card--light">
+                    <div class="card-body ibexa-card__body text-center">
+                        <h5 class="text-muted mb-2">{{ 'statistics.period'|trans|desc('Period') }}</h5>
+                        <h2 class="display-4 mb-0">30</h2>
+                        <small class="text-muted">{{ 'statistics.days'|trans|desc('days') }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Category Statistics #}
+        <div class="card ibexa-card ibexa-card--light mb-4">
+            <div class="card-header ibexa-card__header">
+                <h3 class="ibexa-card__title">
+                    {{ 'statistics.by_category'|trans|desc('Consent by Category') }}
+                </h3>
+            </div>
+            <div class="card-body ibexa-card__body">
+                {% if categoryStats|length > 0 %}
+                    {% set stats_body_rows = [] %}
+                    {% for category, stats in categoryStats %}
+                        {% set total = stats.accepted + stats.rejected %}
+                        {% set acceptance_rate = total > 0 ? ((stats.accepted / total) * 100)|round(1) : 0 %}
+                        
+                        {% set stats_row_cols = [] %}
+
+                        {% set stats_row_cols = stats_row_cols|merge([
+                            { content: '<strong>' ~ category ~ '</strong>', raw: true },
+                            { content: stats.accepted },
+                            { content: stats.rejected },
+                            { content: total },
+                        ]) %}
+
+                        {% set col_raw %}
+                            <div class="progress" style="min-width: 150px;">
+                                <div class="progress-bar {% if acceptance_rate >= 70 %}bg-success{% elseif acceptance_rate >= 40 %}bg-warning{% else %}bg-danger{% endif %}" 
+                                     role="progressbar" 
+                                     style="width: {{ acceptance_rate }}%"
+                                     aria-valuenow="{{ acceptance_rate }}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                    {{ acceptance_rate }}%
+                                </div>
+                            </div>
+                        {% endset %}
+                        {% set stats_row_cols = stats_row_cols|merge([{
+                            content: col_raw,
+                            raw: true,
+                        }]) %}
+
+                        {% set stats_body_rows = stats_body_rows|merge([{ cols: stats_row_cols }]) %}
+                    {% endfor %}
+
+                    {% include '@ibexadesign/ui/component/table/table.html.twig' with {
+                        head_cols: [
+                            { content: 'statistics.category'|trans|desc('Category') },
+                            { content: 'statistics.accepted'|trans|desc('Accepted') },
+                            { content: 'statistics.rejected'|trans|desc('Rejected') },
+                            { content: 'statistics.total'|trans|desc('Total') },
+                            { content: 'statistics.acceptance_rate'|trans|desc('Acceptance Rate') },
+                        ],
+                        body_rows: stats_body_rows,
+                    } %}
+                {% else %}
+                    <div class="text-center text-muted py-5">
+                        <svg class="ibexa-icon ibexa-icon--large mb-3">
+                            <use xlink:href="{{ ibexa_icon_path('view-list') }}"></use>
+                        </svg>
+                        <p>{{ 'statistics.no_data'|trans|desc('No consent data available for the selected period') }}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Detailed Breakdown #}
+        {% if categoryStats|length > 0 %}
+            <div class="row">
+                {% for category, stats in categoryStats %}
+                    {% set total = stats.accepted + stats.rejected %}
+                    {% set acceptance_rate = total > 0 ? ((stats.accepted / total) * 100)|round(1) : 0 %}
+                    
+                    <div class="col-md-6 mb-4">
+                        <div class="card ibexa-card ibexa-card--light h-100">
+                            <div class="card-header ibexa-card__header">
+                                <h4 class="ibexa-card__title">{{ category }}</h4>
+                            </div>
+                            <div class="card-body ibexa-card__body">
+                                <div class="row text-center mb-3">
+                                    <div class="col-4">
+                                        <div class="text-success">
+                                            <h3>{{ stats.accepted }}</h3>
+                                            <small class="text-muted">{{ 'statistics.accepted'|trans|desc('Accepted') }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="text-danger">
+                                            <h3>{{ stats.rejected }}</h3>
+                                            <small class="text-muted">{{ 'statistics.rejected'|trans|desc('Rejected') }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="text-primary">
+                                            <h3>{{ total }}</h3>
+                                            <small class="text-muted">{{ 'statistics.total'|trans|desc('Total') }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="progress" style="height: 30px;">
+                                    <div class="progress-bar bg-success" 
+                                         role="progressbar" 
+                                         style="width: {{ acceptance_rate }}%"
+                                         title="{{ 'statistics.accepted'|trans|desc('Accepted') }}: {{ acceptance_rate }}%">
+                                        {% if acceptance_rate > 15 %}{{ acceptance_rate }}%{% endif %}
+                                    </div>
+                                    <div class="progress-bar bg-danger" 
+                                         role="progressbar" 
+                                         style="width: {{ (100 - acceptance_rate) }}%"
+                                         title="{{ 'statistics.rejected'|trans|desc('Rejected') }}: {{ (100 - acceptance_rate)|round(1) }}%">
+                                        {% if (100 - acceptance_rate) > 15 %}{{ (100 - acceptance_rate)|round(1) }}%{% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {# Export Options #}
+        <div class="card ibexa-card ibexa-card--light">
+            <div class="card-header ibexa-card__header">
+                <h3 class="ibexa-card__title">
+                    {{ 'statistics.export'|trans|desc('Export Data') }}
+                </h3>
+            </div>
+            <div class="card-body ibexa-card__body">
+                <p class="text-muted">
+                    {{ 'statistics.export_description'|trans|desc('Export consent statistics for further analysis or reporting.') }}
+                </p>
+                <div class="btn-group">
+                    <button class="btn ibexa-btn ibexa-btn--ghost" disabled>
+                        <svg class="ibexa-icon ibexa-icon--small">
+                            <use xlink:href="{{ ibexa_icon_path('file-csv') }}"></use>
+                        </svg>
+                        <span class="ibexa-btn__label">
+                            {{ 'statistics.export_csv'|trans|desc('Export as CSV') }}
+                        </span>
+                    </button>
+                    <button class="btn ibexa-btn ibexa-btn--ghost" disabled>
+                        <svg class="ibexa-icon ibexa-icon--small">
+                            <use xlink:href="{{ ibexa_icon_path('file') }}"></use>
+                        </svg>
+                        <span class="ibexa-btn__label">
+                            {{ 'statistics.export_json'|trans|desc('Export as JSON') }}
+                        </span>
+                    </button>
+                </div>
+                <p class="text-muted mt-2 mb-0">
+                    <small>{{ 'statistics.export_coming_soon'|trans|desc('Export functionality coming soon') }}</small>
+                </p>
+            </div>
+        </div>
+    </section>
+{% endblock %}
