@@ -7,7 +7,6 @@ namespace Masilia\ConsentBundle\Form\Type;
 use Masilia\ConsentBundle\Entity\CookiePolicy;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -86,34 +85,6 @@ class PolicyType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'ibexa-input ibexa-input--checkbox',
-                ],
-                'translation_domain' => 'masilia_consent',
-            ])
-            ->add('categories', CollectionType::class, [
-                'entry_type' => CategoryType::class,
-                'entry_options' => [
-                    'label' => false,
-                ],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'label' => 'policy.form.categories',
-                'attr' => [
-                    'class' => 'ibexa-collection',
-                ],
-                'translation_domain' => 'masilia_consent',
-            ])
-            ->add('thirdPartyServices', CollectionType::class, [
-                'entry_type' => ThirdPartyServiceType::class,
-                'entry_options' => [
-                    'label' => false,
-                ],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'label' => 'policy.form.third_party_services',
-                'attr' => [
-                    'class' => 'ibexa-collection',
                 ],
                 'translation_domain' => 'masilia_consent',
             ]);

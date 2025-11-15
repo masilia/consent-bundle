@@ -119,27 +119,64 @@
 
         {# Categories Section #}
         <div class="card ibexa-card ibexa-card--light mb-4">
-            <div class="card-header ibexa-card__header">
-                <h3 class="ibexa-card__title">
+            <div class="card-header ibexa-card__header d-flex justify-content-between align-items-center">
+                <h3 class="ibexa-card__title mb-0">
                     {{ 'policy.categories'|trans|desc('Categories') }} ({{ policy.categories|length }})
                 </h3>
+                <button 
+                    type="button" 
+                    class="btn ibexa-btn ibexa-btn--primary ibexa-btn--small"
+                    data-bs-toggle="modal"
+                    data-bs-target="#add-category-modal">
+                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
+                        <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
+                    </svg>
+                    <span class="ibexa-btn__label">
+                        {{ 'category.add'|trans|desc('Add Category') }}
+                    </span>
+                </button>
             </div>
             <div class="card-body ibexa-card__body">
                 {% for category in policy.categories %}
                     <div class="ibexa-card ibexa-card--light mb-3">
-                        <div class="card-header ibexa-card__header">
-                            <h4 class="ibexa-card__title">
+                        <div class="card-header ibexa-card__header d-flex justify-content-between align-items-center">
+                            <h4 class="ibexa-card__title mb-0">
                                 {{ category.name }}
                                 {% if category.required %}
-                                    <span class="badge bg-warning">{{ 'category.required'|trans|desc('Required') }}</span>
+                                    <span class="badge bg-warning ms-2">{{ 'category.required'|trans|desc('Required') }}</span>
                                 {% endif %}
                                 {% if category.defaultEnabled %}
-                                    <span class="badge bg-info">{{ 'category.default_enabled'|trans|desc('Default Enabled') }}</span>
+                                    <span class="badge bg-info ms-2">{{ 'category.default_enabled'|trans|desc('Default Enabled') }}</span>
                                 {% endif %}
                             </h4>
+                            <div class="btn-group">
+                                <button 
+                                    type="button"
+                                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#edit-category-{{ category.id }}"
+                                    title="{{ 'category.edit'|trans|desc('Edit') }}">
+                                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                                        <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
+                                    </svg>
+                                    <span class="ibexa-btn__label">{{ 'category.edit'|trans|desc('Edit') }}</span>
+                                </button>
+                                <button 
+                                    type="button"
+                                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#delete-category-{{ category.id }}"
+                                    title="{{ 'category.delete'|trans|desc('Delete') }}">
+                                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--trash">
+                                        <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                                    </svg>
+                                    <span class="ibexa-btn__label">{{ 'category.delete'|trans|desc('Delete') }}</span>
+                                </button>
+                            </div>
                         </div>
                         <div class="card-body ibexa-card__body">
                             <p class="text-muted">{{ category.description }}</p>
+                            <p class="mb-0"><small class="text-muted">{{ 'category.identifier'|trans|desc('Identifier') }}: <code>{{ category.identifier }}</code></small></p>
                             
                             <h5 class="mt-3 mb-2">{{ 'category.cookies'|trans({'%count%': category.cookies|length})|desc('Cookies (%count%)') }}</h5>
                             
@@ -231,31 +268,153 @@
             </div>
         {% endif %}
 
-        {# Activate Modal #}
-        {% if not policy.isActive %}
-            <div class="modal fade" id="activate-policy" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">{{ 'policy.activate.confirm'|trans|desc('Activate Policy') }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        {# Add Category Modal #}
+        {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+            id: 'add-category-modal',
+            title: 'category.add.title'|trans|desc('Add Category'),
+            size: 'large',
+        } %}
+            {% block body_content %}
+                <form id="add-category-form" method="post" action="{{ path('masilia_consent_admin_category_create', {policyId: policy.id}) }}">
+                    <div class="ibexa-form-block">
+                        <div class="mb-3">
+                            <label for="category-identifier" class="form-label">{{ 'category.form.identifier'|trans|desc('Identifier') }}</label>
+                            <input type="text" class="form-control ibexa-input ibexa-input--text" id="category-identifier" name="category[identifier]" required pattern="[a-z_]+" placeholder="analytics">
+                            <small class="form-text text-muted">{{ 'category.form.identifier_help'|trans|desc('Lowercase letters and underscores only') }}</small>
                         </div>
-                        <div class="modal-body">
-                            {{ 'policy.activate.message'|trans({'%version%': policy.version})|desc('Activate policy version %version%? This will deactivate all other policies.') }}
+                        <div class="mb-3">
+                            <label for="category-name" class="form-label">{{ 'category.form.name'|trans|desc('Name') }}</label>
+                            <input type="text" class="form-control ibexa-input ibexa-input--text" id="category-name" name="category[name]" required placeholder="Analytics">
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
-                                {{ 'policy.cancel'|trans|desc('Cancel') }}
-                            </button>
-                            <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}" class="d-inline">
-                                <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
-                                    {{ 'policy.activate'|trans|desc('Activate') }}
-                                </button>
-                            </form>
+                        <div class="mb-3">
+                            <label for="category-description" class="form-label">{{ 'category.form.description'|trans|desc('Description') }}</label>
+                            <textarea class="form-control ibexa-input ibexa-input--textarea" id="category-description" name="category[description]" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category-position" class="form-label">{{ 'category.form.position'|trans|desc('Position') }}</label>
+                            <input type="number" class="form-control ibexa-input ibexa-input--text" id="category-position" name="category[position]" value="0" min="0">
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input ibexa-input ibexa-input--checkbox" id="category-required" name="category[required]" value="1">
+                            <label class="form-check-label" for="category-required">{{ 'category.form.required'|trans|desc('Required') }}</label>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input ibexa-input ibexa-input--checkbox" id="category-default-enabled" name="category[defaultEnabled]" value="1">
+                            <label class="form-check-label" for="category-default-enabled">{{ 'category.form.default_enabled'|trans|desc('Default Enabled') }}</label>
                         </div>
                     </div>
-                </div>
-            </div>
+                </form>
+            {% endblock %}
+            {% block footer_content %}
+                <button type="submit" form="add-category-form" class="btn ibexa-btn ibexa-btn--primary">
+                    <svg class="ibexa-icon ibexa-icon--small">
+                        <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
+                    </svg>
+                    {{ 'category.form.create'|trans|desc('Create Category') }}
+                </button>
+                <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                    {{ 'category.form.cancel'|trans|desc('Cancel') }}
+                </button>
+            {% endblock %}
+        {% endembed %}
+
+        {# Edit & Delete Modals for Each Category #}
+        {% for category in policy.categories %}
+            {# Edit Category Modal #}
+            {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+                id: 'edit-category-' ~ category.id,
+                title: 'category.edit.title'|trans({'%name%': category.name})|desc('Edit Category: %name%'),
+                size: 'large',
+            } %}
+                {% block body_content %}
+                    <form id="edit-category-form-{{ category.id }}" method="post" action="{{ path('masilia_consent_admin_category_edit', {id: category.id}) }}">
+                        <div class="ibexa-form-block">
+                            <div class="mb-3">
+                                <label for="edit-category-identifier-{{ category.id }}" class="form-label">{{ 'category.form.identifier'|trans|desc('Identifier') }}</label>
+                                <input type="text" class="form-control ibexa-input ibexa-input--text" id="edit-category-identifier-{{ category.id }}" name="category[identifier]" value="{{ category.identifier }}" required pattern="[a-z_]+">
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-category-name-{{ category.id }}" class="form-label">{{ 'category.form.name'|trans|desc('Name') }}</label>
+                                <input type="text" class="form-control ibexa-input ibexa-input--text" id="edit-category-name-{{ category.id }}" name="category[name]" value="{{ category.name }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-category-description-{{ category.id }}" class="form-label">{{ 'category.form.description'|trans|desc('Description') }}</label>
+                                <textarea class="form-control ibexa-input ibexa-input--textarea" id="edit-category-description-{{ category.id }}" name="category[description]" rows="3" required>{{ category.description }}</textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-category-position-{{ category.id }}" class="form-label">{{ 'category.form.position'|trans|desc('Position') }}</label>
+                                <input type="number" class="form-control ibexa-input ibexa-input--text" id="edit-category-position-{{ category.id }}" name="category[position]" value="{{ category.position }}" min="0">
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input ibexa-input ibexa-input--checkbox" id="edit-category-required-{{ category.id }}" name="category[required]" value="1" {% if category.required %}checked{% endif %}>
+                                <label class="form-check-label" for="edit-category-required-{{ category.id }}">{{ 'category.form.required'|trans|desc('Required') }}</label>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input ibexa-input ibexa-input--checkbox" id="edit-category-default-enabled-{{ category.id }}" name="category[defaultEnabled]" value="1" {% if category.defaultEnabled %}checked{% endif %}>
+                                <label class="form-check-label" for="edit-category-default-enabled-{{ category.id }}">{{ 'category.form.default_enabled'|trans|desc('Default Enabled') }}</label>
+                            </div>
+                        </div>
+                    </form>
+                {% endblock %}
+                {% block footer_content %}
+                    <button type="submit" form="edit-category-form-{{ category.id }}" class="btn ibexa-btn ibexa-btn--primary">
+                        <svg class="ibexa-icon ibexa-icon--small">
+                            <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
+                        </svg>
+                        {{ 'category.form.save'|trans|desc('Save Changes') }}
+                    </button>
+                    <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                        {{ 'category.form.cancel'|trans|desc('Cancel') }}
+                    </button>
+                {% endblock %}
+            {% endembed %}
+
+            {# Delete Category Modal #}
+            {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+                class: 'ibexa-modal--send-to-trash',
+                no_header: true,
+                id: 'delete-category-' ~ category.id,
+            } %}
+                {% block body_content %}
+                    <p>{{ 'category.delete.message'|trans({'%name%': category.name})|desc('Delete category "%name%"? This will also delete all associated cookies. This action cannot be undone.') }}</p>
+                {% endblock %}
+                {% block footer_content %}
+                    <form method="post" action="{{ path('masilia_consent_admin_category_delete', {id: category.id}) }}" class="d-inline">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                        <button type="submit" class="btn ibexa-btn ibexa-btn--danger">
+                            <svg class="ibexa-icon ibexa-icon--small">
+                                <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                            </svg>
+                            {{ 'category.delete'|trans|desc('Delete') }}
+                        </button>
+                    </form>
+                    <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                        {{ 'category.cancel'|trans|desc('Cancel') }}
+                    </button>
+                {% endblock %}
+            {% endembed %}
+        {% endfor %}
+
+        {# Activate Policy Modal #}
+        {% if not policy.isActive %}
+            {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+                id: 'activate-policy',
+                title: 'policy.activate.confirm'|trans|desc('Activate Policy'),
+            } %}
+                {% block body_content %}
+                    <p>{{ 'policy.activate.message'|trans({'%version%': policy.version})|desc('Activate policy version %version%? This will deactivate all other policies.') }}</p>
+                {% endblock %}
+                {% block footer_content %}
+                    <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}" class="d-inline">
+                        <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
+                            {{ 'policy.activate'|trans|desc('Activate') }}
+                        </button>
+                    </form>
+                    <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                        {{ 'policy.cancel'|trans|desc('Cancel') }}
+                    </button>
+                {% endblock %}
+            {% endembed %}
         {% endif %}
     </section>
 {% endblock %}
