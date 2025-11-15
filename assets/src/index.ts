@@ -4,6 +4,9 @@ export { PreferencesModal } from './components/PreferencesModal';
 export type { ConsentBannerProps } from './components/ConsentBanner';
 export type { PreferencesModalProps } from './components/PreferencesModal';
 
+// Initialization
+export { initConsentBanner } from './init';
+
 // Services
 export { ConsentApi, consentApi } from './services/consentApi';
 
