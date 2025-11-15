@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useConsent } from '../hooks/useConsent';
 import { useConsentPolicy } from '../hooks/useConsentPolicy';
 import { PreferencesModal } from './PreferencesModal';
-import '../styles/ConsentBanner.css';
 
 export interface ConsentBannerProps {
   position?: 'top' | 'bottom';

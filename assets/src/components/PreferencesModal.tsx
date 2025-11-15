@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useConsent } from '../hooks/useConsent';
 import { useConsentPolicy } from '../hooks/useConsentPolicy';
 import type { CookieCategory } from '../types/consent.types';
-import '../styles/PreferencesModal.css';
 
 export interface PreferencesModalProps {
   isOpen: boolean;
