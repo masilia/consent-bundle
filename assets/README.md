@@ -1,13 +1,71 @@
 # Masilia Consent Bundle - React Components
 
-React hooks and utilities for integrating cookie consent management in your frontend application.
+Beautiful, accessible React components and hooks for GDPR-compliant cookie consent management.
+
+## Features
+
+✅ Ready-to-use ConsentBanner and PreferencesModal components  
+✅ React hooks for consent management  
+✅ TypeScript support  
+✅ Accessible (WCAG AA)  
+✅ Responsive design  
+✅ Light/Dark themes  
+✅ Customizable styling  
 
 ## Installation
 
 ```bash
-npm install @masilia/consent-bundle-react
+npm install @masilia/consent-bundle-react react react-dom
 # or
-yarn add @masilia/consent-bundle-react
+yarn add @masilia/consent-bundle-react react react-dom
+```
+
+## Quick Start
+
+### Option 1: Use Pre-built Components
+
+```tsx
+import { ConsentBanner } from '@masilia/consent-bundle-react';
+import '@masilia/consent-bundle-react/dist/styles/ConsentBanner.css';
+import '@masilia/consent-bundle-react/dist/styles/PreferencesModal.css';
+
+function App() {
+  return (
+    <div>
+      {/* Your app content */}
+      <ConsentBanner 
+        position="bottom" 
+        theme="light"
+        primaryColor="#007bff"
+      />
+    </div>
+  );
+}
+```
+
+### Option 2: Auto-Initialize
+
+```html
+<!-- Add to your HTML -->
+<div 
+  id="masilia-consent-banner" 
+  data-position="bottom"
+  data-theme="light"
+></div>
+
+<script src="/path/to/consent-bundle.js"></script>
+```
+
+### Option 3: Manual Initialization
+
+```typescript
+import { initConsentBanner } from '@masilia/consent-bundle-react';
+
+initConsentBanner({
+  position: 'bottom',
+  theme: 'light',
+  primaryColor: '#007bff',
+});
 ```
 
 ## Usage
@@ -91,6 +149,60 @@ function AnalyticsComponent() {
   // Load analytics scripts
   return <div>Analytics enabled</div>;
 }
+```
+
+## Components
+
+### `ConsentBanner`
+
+Pre-built consent banner component.
+
+**Props:**
+```typescript
+interface ConsentBannerProps {
+  position?: 'top' | 'bottom';
+  theme?: 'light' | 'dark';
+  primaryColor?: string;
+  onAcceptAll?: () => void;
+  onRejectAll?: () => void;
+  onSavePreferences?: () => void;
+}
+```
+
+**Example:**
+```tsx
+<ConsentBanner
+  position="bottom"
+  theme="dark"
+  primaryColor="#ff6b6b"
+  onAcceptAll={() => console.log('Accepted')}
+/>
+```
+
+### `PreferencesModal`
+
+Detailed preferences modal with category toggles.
+
+**Props:**
+```typescript
+interface PreferencesModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave?: () => void;
+  theme?: 'light' | 'dark';
+  primaryColor?: string;
+}
+```
+
+**Example:**
+```tsx
+const [showModal, setShowModal] = useState(false);
+
+<PreferencesModal
+  isOpen={showModal}
+  onClose={() => setShowModal(false)}
+  theme="light"
+/>
 ```
 
 ## API Reference

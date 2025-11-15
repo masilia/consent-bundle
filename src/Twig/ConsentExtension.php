@@ -96,7 +96,7 @@ class ConsentExtension extends AbstractExtension
         $preferences = $this->storageHandler->getConsent();
         
         // Don't show banner if user already has preferences for current policy version
-        if ($preferences && $preferences->getPolicyVersion() === $policy->getVersion()) {
+        if ($preferences && $preferences->getVersion() === $policy->getVersion()) {
             return '';
         }
 
@@ -136,7 +136,7 @@ class ConsentExtension extends AbstractExtension
         }
 
         return [
-            'policy_version' => $preferences->getPolicyVersion(),
+            'policy_version' => $preferences->getVersion(),
             'categories' => $preferences->getCategories(),
             'timestamp' => $preferences->getTimestamp(),
         ];

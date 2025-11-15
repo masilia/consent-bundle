@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Masilia\ConsentBundle\Controller\Admin;
 
+use Masilia\ConsentBundle\Entity\CookieCategory;
 use Masilia\ConsentBundle\Entity\CookiePolicy;
+use Masilia\ConsentBundle\Form\Type\CategoryType;
 use Masilia\ConsentBundle\Form\Type\PolicyType;
 use Masilia\ConsentBundle\Repository\CookiePolicyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,20 +32,20 @@ class PolicyAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'view', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'view', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function view(CookiePolicy $policy): Response
     {
         // Create forms for add category
-        $newCategory = new \Masilia\ConsentBundle\Entity\CookieCategory();
+        $newCategory = new CookieCategory();
         $newCategory->setPolicy($policy);
-        $addCategoryForm = $this->createForm(\Masilia\ConsentBundle\Form\Type\CategoryType::class, $newCategory, [
+        $addCategoryForm = $this->createForm(CategoryType::class, $newCategory, [
             'action' => $this->generateUrl('masilia_consent_admin_category_create', ['policyId' => $policy->getId()]),
         ]);
 
         // Create edit forms for each category
         $editForms = [];
         foreach ($policy->getCategories() as $category) {
-            $editForms[$category->getId()] = $this->createForm(\Masilia\ConsentBundle\Form\Type\CategoryType::class, $category, [
+            $editForms[$category->getId()] = $this->createForm(CategoryType::class, $category, [
                 'action' => $this->generateUrl('masilia_consent_admin_category_edit', ['id' => $category->getId()]),
             ])->createView();
         }
@@ -55,7 +57,7 @@ class PolicyAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/activate', name: 'activate', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/activate', name: 'activate', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function activate(CookiePolicy $policy): Response
     {
         // Deactivate all other policies
@@ -70,7 +72,7 @@ class PolicyAdminController extends AbstractController
         return $this->redirectToRoute('masilia_consent_admin_policy_list');
     }
 
-    #[Route('/{id}/deactivate', name: 'deactivate', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/deactivate', name: 'deactivate', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function deactivate(CookiePolicy $policy): Response
     {
         $policy->setIsActive(false);
@@ -106,7 +108,7 @@ class PolicyAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, CookiePolicy $policy): Response
     {
         $form = $this->createForm(PolicyType::class, $policy);
@@ -131,7 +133,7 @@ class PolicyAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(Request $request, CookiePolicy $policy): Response
     {
         if ($policy->isActive()) {
