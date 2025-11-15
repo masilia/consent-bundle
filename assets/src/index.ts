@@ -1,3 +1,9 @@
+// Components
+export { ConsentBanner } from './components/ConsentBanner';
+export { PreferencesModal } from './components/PreferencesModal';
+export type { ConsentBannerProps } from './components/ConsentBanner';
+export type { PreferencesModalProps } from './components/PreferencesModal';
+
 // Services
 export { ConsentApi, consentApi } from './services/consentApi';
 

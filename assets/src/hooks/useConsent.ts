@@ -80,6 +80,10 @@ export function useConsent(apiBaseUrl?: string) {
     return status.preferences.categories[category] === true;
   }, [status]);
 
+  const getPreferences = useCallback(() => {
+    return status?.preferences || null;
+  }, [status]);
+
   return {
     status,
     loading,
@@ -87,8 +91,10 @@ export function useConsent(apiBaseUrl?: string) {
     hasConsent,
     acceptAll,
     rejectAll,
+    rejectNonEssential: rejectAll, // Alias for clarity
     updatePreferences,
     revokeConsent,
+    getPreferences,
     refresh: fetchStatus,
   };
 }
