@@ -19,6 +19,7 @@ class MasiliaConsentExtension extends Extension
         // Set parameters
         $container->setParameter('masilia_consent.storage', $config['storage']);
         $container->setParameter('masilia_consent.logging', $config['logging']);
+        $container->setParameter('masilia_consent.logging.enabled', $config['logging']['enabled']);
         $container->setParameter('masilia_consent.api', $config['api']);
         $container->setParameter('masilia_consent.admin', $config['admin']);
 

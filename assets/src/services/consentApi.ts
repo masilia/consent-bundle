@@ -2,7 +2,6 @@ import type {
   CookiePolicy,
   ConsentStatus,
   ConsentApiResponse,
-  ConsentPreferences,
 } from '../types/consent.types';
 
 export class ConsentApi {

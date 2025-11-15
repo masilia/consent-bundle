@@ -8,15 +8,18 @@ export interface CookiePolicy {
 }
 
 export interface CookieCategory {
-  id: string;
+  id: number;
+  identifier: string;
   name: string;
   description: string;
   required: boolean;
   defaultEnabled: boolean;
+  position: number;
   cookies: Cookie[];
 }
 
 export interface Cookie {
+  id: number;
   name: string;
   purpose: string;
   provider: string;
