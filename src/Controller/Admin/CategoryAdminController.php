@@ -6,8 +6,10 @@ namespace Masilia\ConsentBundle\Controller\Admin;
 
 use Masilia\ConsentBundle\Entity\CookieCategory;
 use Masilia\ConsentBundle\Entity\CookiePolicy;
+use Masilia\ConsentBundle\Form\Type\CategoryType;
 use Masilia\ConsentBundle\Repository\CookieCategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -36,5 +38,61 @@ class CategoryAdminController extends AbstractController
         return $this->render('@MasiliaConsent/admin/category/view.html.twig', [
             'category' => $category,
         ]);
+    }
+
+    #[Route('/policy/{policyId}/create', name: 'create', methods: ['GET', 'POST'], requirements: ['policyId' => '\d+'])]
+    public function create(Request $request, CookiePolicy $policy): Response
+    {
+        $category = new CookieCategory();
+        $category->setPolicy($policy);
+        
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->categoryRepository->save($category, true);
+            $this->addFlash('success', sprintf('Category "%s" has been created.', $category->getName()));
+
+            return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
+        }
+
+        return $this->render('@MasiliaConsent/admin/category/create.html.twig', [
+            'form' => $form->createView(),
+            'category' => $category,
+            'policy' => $policy,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    public function edit(Request $request, CookieCategory $category): Response
+    {
+        $form = $this->createForm(CategoryType::class, $category);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->categoryRepository->save($category, true);
+            $this->addFlash('success', sprintf('Category "%s" has been updated.', $category->getName()));
+
+            return $this->redirectToRoute('masilia_consent_admin_category_view', ['id' => $category->getId()]);
+        }
+
+        return $this->render('@MasiliaConsent/admin/category/edit.html.twig', [
+            'form' => $form->createView(),
+            'category' => $category,
+        ]);
+    }
+
+    #[Route('/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function delete(Request $request, CookieCategory $category): Response
+    {
+        $policyId = $category->getPolicy()->getId();
+
+        if ($this->isCsrfTokenValid('delete' . $category->getId(), $request->request->get('_token'))) {
+            $name = $category->getName();
+            $this->categoryRepository->remove($category, true);
+            $this->addFlash('success', sprintf('Category "%s" has been deleted.', $name));
+        }
+
+        return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policyId]);
     }
 }

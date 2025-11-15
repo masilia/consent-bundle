@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Masilia\ConsentBundle\Controller\Admin;
 
 use Masilia\ConsentBundle\Entity\CookiePolicy;
+use Masilia\ConsentBundle\Form\Type\PolicyType;
 use Masilia\ConsentBundle\Repository\CookiePolicyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,6 +62,56 @@ class PolicyAdminController extends AbstractController
         $this->addFlash('success', sprintf('Policy version %s has been deactivated.', $policy->getVersion()));
 
         return $this->redirectToRoute('masilia_consent_admin_policy_list');
+    }
+
+    #[Route('/create', name: 'create', methods: ['GET', 'POST'])]
+    public function create(Request $request): Response
+    {
+        $policy = new CookiePolicy();
+        $form = $this->createForm(PolicyType::class, $policy);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // If this policy is set as active, deactivate all others
+            if ($policy->isActive()) {
+                $this->policyRepository->deactivateAll();
+            }
+
+            $this->policyRepository->save($policy, true);
+            $this->addFlash('success', sprintf('Policy version %s has been created.', $policy->getVersion()));
+
+            return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
+        }
+
+        return $this->render('@MasiliaConsent/admin/policy/create.html.twig', [
+            'form' => $form->createView(),
+            'policy' => $policy,
+        ]);
+    }
+
+    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    public function edit(Request $request, CookiePolicy $policy): Response
+    {
+        $form = $this->createForm(PolicyType::class, $policy);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // If this policy is set as active, deactivate all others
+            if ($policy->isActive()) {
+                $this->policyRepository->deactivateAll();
+                $policy->setIsActive(true);
+            }
+
+            $this->policyRepository->save($policy, true);
+            $this->addFlash('success', sprintf('Policy version %s has been updated.', $policy->getVersion()));
+
+            return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
+        }
+
+        return $this->render('@MasiliaConsent/admin/policy/edit.html.twig', [
+            'form' => $form->createView(),
+            'policy' => $policy,
+        ]);
     }
 
     #[Route('/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => '\d+'])]

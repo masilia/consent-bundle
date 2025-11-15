@@ -26,6 +26,19 @@
     {% set menu_items %}
         <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
             <a
+                href="{{ path('masilia_consent_admin_policy_create') }}"
+                class="btn ibexa-btn ibexa-btn--primary"
+            >
+                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
+                    <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'policy.create'|trans|desc('Create policy') }}
+                </span>
+            </a>
+        </li>
+        <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
+            <a
                 href="{{ path('masilia_consent_admin_statistics_dashboard') }}"
                 class="btn ibexa-btn ibexa-btn--ghost"
             >

@@ -36,6 +36,19 @@
                 </span>
             </a>
         </li>
+        <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
+            <a
+                href="{{ path('masilia_consent_admin_policy_edit', {id: policy.id}) }}"
+                class="btn ibexa-btn ibexa-btn--ghost"
+            >
+                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                    <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'policy.edit'|trans|desc('Edit') }}
+                </span>
+            </a>
+        </li>
         {% if not policy.isActive %}
             <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
                 <button

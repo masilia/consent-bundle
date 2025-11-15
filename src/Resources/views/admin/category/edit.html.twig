@@ -1,0 +1,60 @@
+{% extends '@ibexadesign/language/base.html.twig' %}
+
+{% form_theme form '@ibexadesign/ui/form_fields.html.twig' %}
+
+{% trans_default_domain 'masilia_consent' %}
+
+{% block header_admin %}
+    {% include '@ibexadesign/ui/edit_header.html.twig' with {
+        action_name: 'category.editing'|trans|desc('Editing'),
+        title: 'category.edit.title'|trans({'%name%': category.name})|desc('Editing category "%name%"'),
+    } %}
+{% endblock %}
+
+{% block form %}
+    {{ form_start(form, {'action': path('masilia_consent_admin_category_edit', {id: category.id})}) }}
+        <section>
+            <div class="card ibexa-card ibexa-card--light">
+                <div class="card-header ibexa-card__header">
+                    <h3 class="ibexa-card__title">
+                        {{ 'category.form.basic_information'|trans|desc('Basic Information') }}
+                    </h3>
+                </div>
+                <div class="card-body ibexa-card__body ibexa-form-block">
+                    {{ form_row(form.identifier, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.name, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.description, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.position, { row_attr: { class: 'ibexa-form-field' } }) }}
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-4">
+            <div class="card ibexa-card ibexa-card--light">
+                <div class="card-header ibexa-card__header">
+                    <h3 class="ibexa-card__title">
+                        {{ 'category.form.settings'|trans|desc('Settings') }}
+                    </h3>
+                </div>
+                <div class="card-body ibexa-card__body ibexa-form-block">
+                    {{ form_row(form.required, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                    {{ form_row(form.defaultEnabled, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                </div>
+            </div>
+        </section>
+
+        <div class="mt-4">
+            <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
+                <svg class="ibexa-icon ibexa-icon--small">
+                    <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'category.form.save'|trans|desc('Save changes') }}
+                </span>
+            </button>
+            <a href="{{ path('masilia_consent_admin_category_view', {id: category.id}) }}" class="btn ibexa-btn ibexa-btn--ghost">
+                {{ 'category.form.cancel'|trans|desc('Cancel') }}
+            </a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}
