@@ -31,3 +31,8 @@ services:
     Masilia\ConsentBundle\Command\:
         resource: '../../Command/*'
         tags: ['console.command']
+
+    # Twig Extensions
+    Masilia\ConsentBundle\Twig\:
+        resource: '../../Twig/*'
+        tags: ['twig.extension']
