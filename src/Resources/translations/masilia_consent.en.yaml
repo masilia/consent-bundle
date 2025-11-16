@@ -257,8 +257,8 @@ third_party_service:
     delete_confirm: 'Are you sure you want to delete this service?'
   actions:
     cancel: 'Cancel'
-    creating: 'Creating'
-    editing: 'Editing'
+  creating: 'Creating'
+  editing: 'Editing'
   create:
     title: 'Create new third-party service'
 
