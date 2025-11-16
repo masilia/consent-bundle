@@ -6,8 +6,10 @@ namespace Masilia\ConsentBundle\Controller\Admin;
 
 use Masilia\ConsentBundle\Entity\CookieCategory;
 use Masilia\ConsentBundle\Entity\CookiePolicy;
+use Masilia\ConsentBundle\Entity\ThirdPartyService;
 use Masilia\ConsentBundle\Form\Type\CategoryType;
 use Masilia\ConsentBundle\Form\Type\PolicyType;
+use Masilia\ConsentBundle\Form\Type\ThirdPartyServiceType;
 use Masilia\ConsentBundle\Repository\CookiePolicyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,10 +52,27 @@ class PolicyAdminController extends AbstractController
             ])->createView();
         }
 
+        // Create form for add service
+        $newService = new ThirdPartyService();
+        $newService->setPolicy($policy);
+        $addServiceForm = $this->createForm(ThirdPartyServiceType::class, $newService, [
+            'action' => $this->generateUrl('masilia_consent_admin_service_create', ['policyId' => $policy->getId()]),
+        ]);
+
+        // Create edit forms for each service
+        $editServiceForms = [];
+        foreach ($policy->getThirdPartyServices() as $service) {
+            $editServiceForms[$service->getId()] = $this->createForm(ThirdPartyServiceType::class, $service, [
+                'action' => $this->generateUrl('masilia_consent_admin_service_edit', ['id' => $service->getId()]),
+            ])->createView();
+        }
+
         return $this->render('@MasiliaConsent/admin/policy/view.html.twig', [
             'policy' => $policy,
             'addCategoryForm' => $addCategoryForm->createView(),
             'editForms' => $editForms,
+            'addServiceForm' => $addServiceForm->createView(),
+            'editServiceForms' => $editServiceForms,
         ]);
     }
 
