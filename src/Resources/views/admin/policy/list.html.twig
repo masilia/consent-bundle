@@ -27,7 +27,7 @@
         <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
             <a
                 href="{{ path('masilia_consent_admin_policy_create') }}"
-                class="btn ibexa-btn ibexa-btn--primary"
+                class="ibexa-btn ibexa-btn--primary"
             >
                 <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
                     <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
@@ -40,7 +40,7 @@
         <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
             <a
                 href="{{ path('masilia_consent_admin_statistics_dashboard') }}"
-                class="btn ibexa-btn ibexa-btn--ghost"
+                class="ibexa-btn ibexa-btn--secondary"
             >
                 <svg class="ibexa-icon ibexa-icon--small">
                     <use xlink:href="{{ ibexa_icon_path('view-list') }}"></use>
@@ -112,7 +112,7 @@
                 <a
                     title="{{ 'policy.view'|trans|desc('View') }}"
                     href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}"
-                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                    class="ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
                 >
                     <svg class="ibexa-icon ibexa-icon--small">
                         <use xlink:href="{{ ibexa_icon_path('view') }}"></use>
@@ -122,7 +122,7 @@
                     <button
                         type="button"
                         title="{{ 'policy.activate'|trans|desc('Activate') }}"
-                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                        class="ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
                         data-bs-toggle="modal"
                         data-bs-target="#activate-policy-{{ policy.id }}"
                     >
@@ -134,7 +134,7 @@
                     <button
                         type="button"
                         title="{{ 'policy.deactivate'|trans|desc('Deactivate') }}"
-                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                        class="ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
                         data-bs-toggle="modal"
                         data-bs-target="#deactivate-policy-{{ policy.id }}"
                     >
@@ -147,7 +147,7 @@
                     <button
                         type="button"
                         title="{{ 'policy.delete'|trans|desc('Delete') }}"
-                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                        class="ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
                         data-bs-toggle="modal"
                         data-bs-target="#delete-policy-{{ policy.id }}"
                     >
@@ -196,11 +196,11 @@
                                 {{ 'policy.activate.message'|trans({'%version%': policy.version})|desc('Activate policy version %version%? This will deactivate all other policies.') }}
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
+                                <button type="button" class="ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
                                     {{ 'policy.cancel'|trans|desc('Cancel') }}
                                 </button>
                                 <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}" class="d-inline">
-                                    <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
+                                    <button type="submit" class="ibexa-btn ibexa-btn--primary">
                                         {{ 'policy.activate'|trans|desc('Activate') }}
                                     </button>
                                 </form>
@@ -223,11 +223,11 @@
                                 {{ 'policy.deactivate.message'|trans({'%version%': policy.version})|desc('Deactivate policy version %version%?') }}
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
+                                <button type="button" class="ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
                                     {{ 'policy.cancel'|trans|desc('Cancel') }}
                                 </button>
                                 <form method="post" action="{{ path('masilia_consent_admin_policy_deactivate', {id: policy.id}) }}" class="d-inline">
-                                    <button type="submit" class="btn ibexa-btn ibexa-btn--warning">
+                                    <button type="submit" class="ibexa-btn ibexa-btn--warning">
                                         {{ 'policy.deactivate'|trans|desc('Deactivate') }}
                                     </button>
                                 </form>
@@ -250,12 +250,12 @@
                                 {{ 'policy.delete.message'|trans({'%version%': policy.version})|desc('Delete policy version %version%? This action cannot be undone.') }}
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
+                                <button type="button" class="ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
                                     {{ 'policy.cancel'|trans|desc('Cancel') }}
                                 </button>
                                 <form method="post" action="{{ path('masilia_consent_admin_policy_delete', {id: policy.id}) }}" class="d-inline">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ policy.id) }}">
-                                    <button type="submit" class="btn ibexa-btn ibexa-btn--danger">
+                                    <button type="submit" class="ibexa-btn ibexa-btn--danger">
                                         {{ 'policy.delete'|trans|desc('Delete') }}
                                     </button>
                                 </form>
