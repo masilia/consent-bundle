@@ -4,35 +4,42 @@ declare(strict_types=1);
 
 namespace Masilia\ConsentBundle\EventSubscriber;
 
-use EzSystems\EzPlatformAdminUi\Menu\Event\ConfigureMenuEvent;
-use EzSystems\EzPlatformAdminUi\Menu\MainMenuBuilder;
+use Ibexa\AdminUi\Menu\Event\ConfigureMenuEvent;
+use Knp\Menu\ItemInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class MenuSubscriber implements EventSubscriberInterface
 {
+
     public static function getSubscribedEvents(): array
     {
         return [
-            ConfigureMenuEvent::MAIN_MENU => ['onMenuConfigure', 0],
+            ConfigureMenuEvent::MAIN_MENU => 'onMainMenuBuild',
         ];
     }
 
-    public function onMenuConfigure(ConfigureMenuEvent $event): void
+    public function onMainMenuBuild(ConfigureMenuEvent $event): void
     {
-        $menu = $event->getMenu();
+        $this->addCookieConsentMenu($event->getMenu());
+    }
 
-        // Add main "Cookie Consent" menu item with direct link to policies
-        $menu->addChild(
-            'masilia_consent',
-            [
-                'label' => 'menu.consent',
-                'route' => 'masilia_consent_admin_policy_list',
-                'extras' => [
-                    'icon' => 'shield-check',
-                    'translation_domain' => 'masilia_consent',
-                    'orderNumber' => 100,
-                ],
-            ]
-        );
+    /**
+     * Adds the Cookie Consent menu to Ibexa admin interface.
+     */
+    private function addCookieConsentMenu(ItemInterface $menu): void
+    {
+        $menu
+            ->addChild(
+                'masilia_consent',
+                [
+                    'route' => 'masilia_consent_admin_policy_list',
+                ]
+            )
+            ->setLabel('menu.consent')
+            ->setExtra('translation_domain', 'masilia_consent')
+            ->setExtra('icon', 'content-type-group')
+            ->setExtra('orderNumber', 100)
+            ->setAttribute('data-tooltip-placement', 'right')
+            ->setAttribute('data-tooltip-extra-class', 'ibexa-tooltip--info-neon');
     }
 }
