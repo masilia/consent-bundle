@@ -1,0 +1,81 @@
+{% extends '@ibexadesign/language/base.html.twig' %}
+
+{% form_theme form '@ibexadesign/ui/form_fields.html.twig' %}
+
+{% trans_default_domain 'masilia_consent' %}
+
+{% block header_admin %}
+    {% include '@ibexadesign/ui/edit_header.html.twig' with {
+        action_name: 'third_party_service.creating'|trans|desc('Creating'),
+        title: 'third_party_service.create.title'|trans|desc('Create new third-party service'),
+    } %}
+{% endblock %}
+
+{% block form %}
+    {{ form_start(form, {'action': path('masilia_consent_admin_service_create', {policyId: policy.id})}) }}
+        <section>
+            <div class="card ibexa-card ibexa-card--light">
+                <div class="card-header ibexa-card__header">
+                    <h3 class="ibexa-card__title">
+                        {{ 'third_party_service.form.preset_section'|trans|desc('Service Preset') }}
+                    </h3>
+                </div>
+                <div class="card-body ibexa-card__body ibexa-form-block">
+                    <div class="alert alert-info">
+                        <svg class="ibexa-icon ibexa-icon--small">
+                            <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
+                        </svg>
+                        {{ 'third_party_service.form.preset_info'|trans|desc('Select a preset to automatically configure cookies and scripts for popular services like Google Analytics, Facebook Pixel, etc.') }}
+                    </div>
+                    {{ form_row(form.presetType, { row_attr: { class: 'ibexa-form-field' } }) }}
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-4">
+            <div class="card ibexa-card ibexa-card--light">
+                <div class="card-header ibexa-card__header">
+                    <h3 class="ibexa-card__title">
+                        {{ 'third_party_service.form.basic_information'|trans|desc('Basic Information') }}
+                    </h3>
+                </div>
+                <div class="card-body ibexa-card__body ibexa-form-block">
+                    {{ form_row(form.identifier, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.name, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.category, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.description, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.privacyPolicyUrl, { row_attr: { class: 'ibexa-form-field' } }) }}
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-4">
+            <div class="card ibexa-card ibexa-card--light">
+                <div class="card-header ibexa-card__header">
+                    <h3 class="ibexa-card__title">
+                        {{ 'third_party_service.form.configuration'|trans|desc('Configuration') }}
+                    </h3>
+                </div>
+                <div class="card-body ibexa-card__body ibexa-form-block">
+                    {{ form_row(form.configKey, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.configValue, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.enabled, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                </div>
+            </div>
+        </section>
+
+        <div class="mt-4">
+            <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
+                <svg class="ibexa-icon ibexa-icon--small">
+                    <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'third_party_service.form.create'|trans|desc('Create service') }}
+                </span>
+            </button>
+            <a href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}" class="btn ibexa-btn ibexa-btn--ghost">
+                {{ 'third_party_service.form.cancel'|trans|desc('Cancel') }}
+            </a>
+        </div>
+    {{ form_end(form) }}
+{% endblock %}

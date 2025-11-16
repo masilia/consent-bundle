@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Masilia\ConsentBundle\EventSubscriber;
 
-use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
+use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Events;
 use Masilia\ConsentBundle\Entity\Cookie;
@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Automatically creates cookies when a third-party service with a preset is created
  */
-#[AsDoctrineListener(event: Events::postPersist)]
+#[AsEntityListener(event: Events::postPersist)]
 class ThirdPartyServiceSubscriber
 {
     public function __construct(

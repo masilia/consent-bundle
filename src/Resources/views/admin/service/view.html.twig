@@ -1,0 +1,214 @@
+{% extends '@ibexadesign/language/base.html.twig' %}
+
+{% trans_default_domain 'masilia_consent' %}
+
+{% block header_admin %}
+    {% include '@ibexadesign/ui/page_title.html.twig' with {
+        title: service.name,
+        icon_path: ibexa_icon_path('service')
+    } %}
+{% endblock %}
+
+{% block content %}
+    <section class="container mt-4">
+        <div class="ibexa-page-header">
+            <div class="ibexa-page-header__title-wrapper">
+                <h1 class="ibexa-page-header__title">{{ service.name }}</h1>
+                <div class="ibexa-page-header__subtitle">
+                    {% if service.enabled %}
+                        <span class="badge badge-success">{{ 'common.enabled'|trans|desc('Enabled') }}</span>
+                    {% else %}
+                        <span class="badge badge-secondary">{{ 'common.disabled'|trans|desc('Disabled') }}</span>
+                    {% endif %}
+                    {% if service.presetType %}
+                        <span class="badge badge-info ml-2">{{ service.presetType }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="ibexa-page-header__actions">
+                <a href="{{ path('masilia_consent_admin_service_edit', {id: service.id}) }}" 
+                   class="btn ibexa-btn ibexa-btn--primary">
+                    <svg class="ibexa-icon ibexa-icon--small">
+                        <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
+                    </svg>
+                    <span class="ibexa-btn__label">
+                        {{ 'common.edit'|trans|desc('Edit') }}
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <div class="card ibexa-card">
+                    <div class="card-header ibexa-card__header">
+                        <h3 class="ibexa-card__title">
+                            {{ 'third_party_service.show.details'|trans|desc('Service Details') }}
+                        </h3>
+                    </div>
+                    <div class="card-body ibexa-card__body">
+                        <dl class="row">
+                            <dt class="col-sm-4">{{ 'third_party_service.show.identifier'|trans|desc('Identifier') }}</dt>
+                            <dd class="col-sm-8"><code>{{ service.identifier }}</code></dd>
+
+                            <dt class="col-sm-4">{{ 'third_party_service.show.name'|trans|desc('Name') }}</dt>
+                            <dd class="col-sm-8">{{ service.name }}</dd>
+
+                            <dt class="col-sm-4">{{ 'third_party_service.show.category'|trans|desc('Category') }}</dt>
+                            <dd class="col-sm-8">
+                                <span class="badge badge-secondary">{{ service.category }}</span>
+                            </dd>
+
+                            <dt class="col-sm-4">{{ 'third_party_service.show.preset_type'|trans|desc('Preset Type') }}</dt>
+                            <dd class="col-sm-8">
+                                {% if service.presetType %}
+                                    <span class="badge badge-info">{{ service.presetType }}</span>
+                                {% else %}
+                                    <span class="text-muted">{{ 'third_party_service.list.manual'|trans|desc('Manual Configuration') }}</span>
+                                {% endif %}
+                            </dd>
+
+                            <dt class="col-sm-4">{{ 'third_party_service.show.description'|trans|desc('Description') }}</dt>
+                            <dd class="col-sm-8">{{ service.description }}</dd>
+
+                            <dt class="col-sm-4">{{ 'third_party_service.show.privacy_policy_url'|trans|desc('Privacy Policy') }}</dt>
+                            <dd class="col-sm-8">
+                                <a href="{{ service.privacyPolicyUrl }}" target="_blank" rel="noopener">
+                                    {{ service.privacyPolicyUrl }}
+                                    <svg class="ibexa-icon ibexa-icon--tiny">
+                                        <use xlink:href="{{ ibexa_icon_path('external-link') }}"></use>
+                                    </svg>
+                                </a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="card ibexa-card mt-4">
+                    <div class="card-header ibexa-card__header">
+                        <h3 class="ibexa-card__title">
+                            {{ 'third_party_service.show.configuration'|trans|desc('Configuration') }}
+                        </h3>
+                    </div>
+                    <div class="card-body ibexa-card__body">
+                        <dl class="row">
+                            <dt class="col-sm-4">{{ 'third_party_service.show.config_key'|trans|desc('Config Key') }}</dt>
+                            <dd class="col-sm-8"><code>{{ service.configKey }}</code></dd>
+
+                            <dt class="col-sm-4">{{ 'third_party_service.show.config_value'|trans|desc('Config Value') }}</dt>
+                            <dd class="col-sm-8"><code>{{ service.configValue }}</code></dd>
+
+                            <dt class="col-sm-4">{{ 'third_party_service.show.enabled'|trans|desc('Status') }}</dt>
+                            <dd class="col-sm-8">
+                                {% if service.enabled %}
+                                    <span class="badge badge-success">{{ 'common.enabled'|trans|desc('Enabled') }}</span>
+                                {% else %}
+                                    <span class="badge badge-secondary">{{ 'common.disabled'|trans|desc('Disabled') }}</span>
+                                {% endif %}
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                {% if service.presetType %}
+                    <div class="card ibexa-card mt-4">
+                        <div class="card-header ibexa-card__header">
+                            <h3 class="ibexa-card__title">
+                                {{ 'third_party_service.show.auto_cookies'|trans|desc('Auto-Generated Cookies') }}
+                            </h3>
+                        </div>
+                        <div class="card-body ibexa-card__body">
+                            <div class="alert alert-info">
+                                <svg class="ibexa-icon ibexa-icon--small">
+                                    <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
+                                </svg>
+                                {{ 'third_party_service.show.auto_cookies_info'|trans|desc('This service uses a preset. Cookies are automatically created and managed based on the preset configuration.') }}
+                            </div>
+                            <p>
+                                <a href="{{ path('masilia_consent_admin_policy_view', {id: service.policy.id}) }}#cookies" 
+                                   class="btn ibexa-btn ibexa-btn--secondary">
+                                    {{ 'third_party_service.show.view_cookies'|trans|desc('View Cookies') }}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-4">
+                <div class="card ibexa-card">
+                    <div class="card-header ibexa-card__header">
+                        <h3 class="ibexa-card__title">
+                            {{ 'third_party_service.show.metadata'|trans|desc('Metadata') }}
+                        </h3>
+                    </div>
+                    <div class="card-body ibexa-card__body">
+                        <dl>
+                            <dt>{{ 'third_party_service.show.created_at'|trans|desc('Created') }}</dt>
+                            <dd>{{ service.createdAt|date('Y-m-d H:i:s') }}</dd>
+
+                            <dt>{{ 'third_party_service.show.updated_at'|trans|desc('Updated') }}</dt>
+                            <dd>{{ service.updatedAt|date('Y-m-d H:i:s') }}</dd>
+
+                            <dt>{{ 'third_party_service.show.policy'|trans|desc('Policy') }}</dt>
+                            <dd>
+                                <a href="{{ path('masilia_consent_admin_policy_view', {id: service.policy.id}) }}">
+                                    {{ service.policy.version }}
+                                </a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="card ibexa-card mt-4">
+                    <div class="card-header ibexa-card__header">
+                        <h3 class="ibexa-card__title">
+                            {{ 'common.actions'|trans|desc('Actions') }}
+                        </h3>
+                    </div>
+                    <div class="card-body ibexa-card__body">
+                        <form method="post" 
+                              action="{{ path('masilia_consent_admin_service_toggle', {id: service.id}) }}"
+                              class="mb-2">
+                            <input type="hidden" name="_token" value="{{ csrf_token('toggle' ~ service.id) }}">
+                            <button type="submit" class="btn ibexa-btn ibexa-btn--secondary btn-block">
+                                <svg class="ibexa-icon ibexa-icon--small">
+                                    <use xlink:href="{{ ibexa_icon_path(service.enabled ? 'circle-close' : 'checkmark') }}"></use>
+                                </svg>
+                                <span class="ibexa-btn__label">
+                                    {{ service.enabled ? 'common.disable'|trans|desc('Disable') : 'common.enable'|trans|desc('Enable') }}
+                                </span>
+                            </button>
+                        </form>
+
+                        <form method="post" 
+                              action="{{ path('masilia_consent_admin_service_delete', {id: service.id}) }}"
+                              onsubmit="return confirm('{{ 'third_party_service.messages.delete_confirm'|trans|desc('Are you sure you want to delete this service?') }}')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
+                            <button type="submit" class="btn ibexa-btn ibexa-btn--danger btn-block">
+                                <svg class="ibexa-icon ibexa-icon--small">
+                                    <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                                </svg>
+                                <span class="ibexa-btn__label">
+                                    {{ 'common.delete'|trans|desc('Delete') }}
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ path('masilia_consent_admin_policy_view', {id: service.policy.id}) }}" 
+               class="btn ibexa-btn ibexa-btn--ghost">
+                <svg class="ibexa-icon ibexa-icon--small">
+                    <use xlink:href="{{ ibexa_icon_path('back') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">
+                    {{ 'common.back'|trans|desc('Back to Policy') }}
+                </span>
+            </a>
+        </div>
+    </section>
+{% endblock %}
