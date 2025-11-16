@@ -46,15 +46,14 @@
 {% block content %}
     <section class="container ibexa-container">
         {# Date Range Info #}
-        <div class="ibexa-alert ibexa-badge--info mb-4">
-            <svg class="ibexa-icon ibexa-icon--small me-2">
-                <use xlink:href="{{ ibexa_icon_path('about-info') }}"></use>
-            </svg>
-            {{ 'statistics.date_range'|trans({
+        {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+            type: 'info',
+            title: 'statistics.date_range'|trans({
                 '%from%': dateRange.from|date('Y-m-d'),
                 '%to%': dateRange.to|date('Y-m-d')
-            })|desc('Showing statistics from %from% to %to%') }}
-        </div>
+            })|desc('Showing statistics from %from% to %to%'),
+            class: 'mb-4',
+        } only %}
 
         {# Overview Cards #}
         <div class="row mb-4">
