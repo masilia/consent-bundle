@@ -305,7 +305,7 @@
 
         {# Edit Category Modals #}
         {% for category in policy.categories %}
-            {% set editForm = editCategoryForms[category.id] %}
+            {% set editForm = editForms[category.id] %}
             {% form_theme editForm '@ibexadesign/ui/form_fields.html.twig' %}
             {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
                 id: 'edit-category-' ~ category.id,
@@ -353,9 +353,78 @@
             {% endembed %}
         {% endfor %}
 
-        {# Add Service Modal - similar structure #}
-        {# Edit Service Modals - similar structure #}
-        {# Delete Service Modals - similar structure #}
+        {# Add Service Modal #}
+        {% form_theme addServiceForm '@ibexadesign/ui/form_fields.html.twig' %}
+        {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+            id: 'add-service-modal',
+            title: 'third_party_service.add.title'|trans()|desc('Add Third-Party Service'),
+            size: 'large',
+        } %}
+            {% block body_content %}
+                {{ form_widget(addServiceForm) }}
+            {% endblock %}
+            {% block footer_content %}
+                <button type="submit" form="{{ addServiceForm.vars.id }}" class="btn ibexa-btn ibexa-btn--primary">
+                    <svg class="ibexa-icon ibexa-icon--small">
+                        <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
+                    </svg>
+                    {{ 'third_party_service.form.create'|trans()|desc('Create Service') }}
+                </button>
+                <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                    {{ 'common.cancel'|trans()|desc('Cancel') }}
+                </button>
+            {% endblock %}
+        {% endembed %}
+
+        {# Edit Service Modals #}
+        {% for service in policy.thirdPartyServices %}
+            {% set editServiceForm = editServiceForms[service.id] %}
+            {% form_theme editServiceForm '@ibexadesign/ui/form_fields.html.twig' %}
+            {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+                id: 'edit-service-' ~ service.id,
+                title: 'third_party_service.edit.title'|trans({'%name%': service.name})|desc('Edit Service: %name%'),
+                size: 'large',
+            } %}
+                {% block body_content %}
+                    {{ form_widget(editServiceForm) }}
+                {% endblock %}
+                {% block footer_content %}
+                    <button type="submit" form="{{ editServiceForm.vars.id }}" class="btn ibexa-btn ibexa-btn--primary">
+                        <svg class="ibexa-icon ibexa-icon--small">
+                            <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
+                        </svg>
+                        {{ 'third_party_service.form.save'|trans()|desc('Save Changes') }}
+                    </button>
+                    <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                        {{ 'common.cancel'|trans()|desc('Cancel') }}
+                    </button>
+                {% endblock %}
+            {% endembed %}
+
+            {# Delete Service Modal #}
+            {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+                id: 'delete-service-' ~ service.id,
+                title: 'third_party_service.delete.title'|trans()|desc('Delete Service'),
+            } %}
+                {% block body_content %}
+                    <p>{{ 'third_party_service.delete.message'|trans({'%name%': service.name})|desc('Delete service "%name%"? This action cannot be undone.') }}</p>
+                {% endblock %}
+                {% block footer_content %}
+                    <form method="post" action="{{ path('masilia_consent_admin_service_delete', {id: service.id}) }}" class="d-inline">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
+                        <button type="submit" class="btn ibexa-btn ibexa-btn--danger">
+                            <svg class="ibexa-icon ibexa-icon--small">
+                                <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                            </svg>
+                            {{ 'third_party_service.delete.button'|trans()|desc('Delete') }}
+                        </button>
+                    </form>
+                    <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                        {{ 'common.cancel'|trans()|desc('Cancel') }}
+                    </button>
+                {% endblock %}
+            {% endembed %}
+        {% endfor %}
         
         {# Activate Policy Modal #}
         {% if not policy.isActive %}
