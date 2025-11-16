@@ -60,16 +60,16 @@
 {% block content %}
     <section class="container ibexa-container">
         {% for message in app.flashes('success') %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <div class="ibexa-alert ibexa-alert-success ibexa-alert-dismissible fade show" role="ibexa-alert">
                 {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="ibexa-alert"></button>
             </div>
         {% endfor %}
 
         {% for message in app.flashes('error') %}
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="ibexa-alert ibexa-badge--danger ibexa-alert-dismissible fade show" role="ibexa-alert">
                 {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="ibexa-alert"></button>
             </div>
         {% endfor %}
 
@@ -96,9 +96,9 @@
 
             {% set col_raw %}
                 {% if policy.isActive %}
-                    <span class="badge bg-success">{{ 'policy.status.active'|trans|desc('Active') }}</span>
+                    <span class="ibexa-badge ibexa-badge--success">{{ 'policy.status.active'|trans|desc('Active') }}</span>
                 {% else %}
-                    <span class="badge bg-secondary">{{ 'policy.status.inactive'|trans|desc('Inactive') }}</span>
+                    <span class="ibexa-badge ibexa-badge--secondary">{{ 'policy.status.inactive'|trans|desc('Inactive') }}</span>
                 {% endif %}
             {% endset %}
             {% set body_row_cols = body_row_cols|merge([{

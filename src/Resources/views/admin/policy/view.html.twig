@@ -228,7 +228,7 @@
             </div>
             <div class="card-body ibexa-card__body">
                 {% if policy.thirdPartyServices|length == 0 %}
-                    <div class="alert alert-info">
+                    <div class="ibexa-alert ibexa-badge--info">
                         <svg class="ibexa-icon ibexa-icon--small">
                             <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
                         </svg>
@@ -417,7 +417,7 @@
             {% block body_content %}
                 {{ form_start(addServiceForm, {'attr': {'id': 'add-service-form'}}) }}
                     <div class="ibexa-form-block">
-                        <div class="alert alert-info">
+                        <div class="ibexa-alert ibexa-badge--info">
                             <svg class="ibexa-icon ibexa-icon--small">
                                 <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
                             </svg>
@@ -464,7 +464,7 @@
                     {{ form_start(editServiceForm, {'attr': {'id': 'edit-service-form-' ~ service.id}}) }}
                         <div class="ibexa-form-block">
                             {% if service.presetType %}
-                                <div class="alert alert-warning">
+                                <div class="ibexa-alert ibexa-badge--warning">
                                     <svg class="ibexa-icon ibexa-icon--small">
                                         <use xlink:href="{{ ibexa_icon_path('warning') }}"></use>
                                     </svg>
