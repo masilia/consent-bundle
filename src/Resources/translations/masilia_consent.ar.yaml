@@ -34,6 +34,7 @@ modal:
 
 # نموذج السياسة
 policy:
+  third_party_services: 'خدمات الطرف الثالث'
   form:
     version: 'الإصدار'
     version_placeholder: 'مثال: 1.0.0'
@@ -166,6 +167,14 @@ cookie:
 # نموذج خدمة الطرف الثالث
 third_party_service:
   form:
+    preset_section: 'إعداد مسبق للخدمة'
+    preset_info: 'اختر إعدادًا مسبقًا لتكوين ملفات تعريف الارتباط والنصوص البرمجية تلقائيًا للخدمات الشائعة مثل Google Analytics و Facebook Pixel وغيرها.'
+    preset_warning: 'تستخدم هذه الخدمة إعدادًا مسبقًا. قد يؤثر تغيير نوع الإعداد المسبق على ملفات تعريف الارتباط المُنشأة تلقائيًا.'
+    basic_information: 'المعلومات الأساسية'
+    configuration: 'التكوين'
+    preset_type: 'الإعداد المسبق للخدمة'
+    preset_type_placeholder: 'اختر إعدادًا مسبقًا أو قم بالتكوين يدويًا'
+    preset_type_help: 'اختر خدمة معرّفة مسبقًا لتكوين ملفات تعريف الارتباط والنصوص البرمجية تلقائيًا'
     identifier: 'المعرف'
     identifier_placeholder: 'مثال: google_analytics'
     identifier_required: 'المعرف مطلوب'
@@ -185,24 +194,73 @@ third_party_service:
     privacy_policy_url_format: 'الرجاء إدخال رابط صالح'
     category: 'الفئة'
     category_required: 'الفئة مطلوبة'
+    category_placeholder: 'اختر فئة'
+    config_key: 'مفتاح التكوين'
+    config_key_placeholder: 'مثال: measurement_id'
+    config_key_help: 'اسم معامل التكوين (مثل: معرف التتبع، معرف البكسل)'
+    config_value: 'قيمة التكوين'
+    config_value_placeholder: 'مثال: G-ABC123XYZ'
+    config_value_help: 'معرف الخدمة أو رمز التتبع الخاص بك'
+    config_value_required: 'قيمة التكوين مطلوبة'
+    enabled: 'مفعّل'
+    enabled_help: 'قم بتفعيل هذه الخدمة لحقن النصوص البرمجية وتتبع ملفات تعريف الارتباط'
+    create: 'إنشاء الخدمة'
+    save: 'حفظ التغييرات'
+    cancel: 'إلغاء'
+  add:
+    title: 'إضافة خدمة طرف ثالث'
+    button: 'إضافة خدمة'
+  edit:
+    title: 'تعديل الخدمة: %name%'
+  delete:
+    message: 'حذف الخدمة "%name%"؟ لا يمكن التراجع عن هذا الإجراء.'
+    button: 'حذف'
   list:
     title: 'خدمات الطرف الثالث'
+    policy: 'الخدمات للسياسة %policy%'
+    count: '%count% خدمات'
     create: 'إنشاء خدمة'
     edit: 'تعديل'
     delete: 'حذف'
     no_services: 'لم يتم العثور على خدمات'
+    name: 'الاسم'
+    preset: 'الإعداد المسبق'
+    category: 'الفئة'
+    identifier: 'المعرف'
+    status: 'الحالة'
+    manual: 'يدوي'
+  no_services: 'لم يتم تكوين خدمات طرف ثالث. أضف خدمات مثل Google Analytics و Facebook Pixel وغيرها لإدارة ملفات تعريف الارتباط والنصوص البرمجية تلقائيًا.'
   show:
     title: 'تفاصيل الخدمة'
+    details: 'تفاصيل الخدمة'
     identifier: 'المعرف'
     name: 'الاسم'
     description: 'الوصف'
-    privacy_policy_url: 'رابط سياسة الخصوصية'
+    privacy_policy_url: 'سياسة الخصوصية'
     category: 'الفئة'
+    preset_type: 'نوع الإعداد المسبق'
+    config_key: 'مفتاح التكوين'
+    config_value: 'قيمة التكوين'
+    enabled: 'الحالة'
+    configuration: 'التكوين'
+    metadata: 'البيانات الوصفية'
+    created_at: 'تاريخ الإنشاء'
+    updated_at: 'تاريخ التحديث'
+    policy: 'السياسة'
+    auto_cookies: 'ملفات تعريف الارتباط المُنشأة تلقائيًا'
+    auto_cookies_info: 'تستخدم هذه الخدمة إعدادًا مسبقًا. يتم إنشاء ملفات تعريف الارتباط وإدارتها تلقائيًا بناءً على تكوين الإعداد المسبق.'
+    view_cookies: 'عرض ملفات تعريف الارتباط'
   messages:
     created: 'تم إنشاء الخدمة بنجاح'
     updated: 'تم تحديث الخدمة بنجاح'
     deleted: 'تم حذف الخدمة بنجاح'
     delete_confirm: 'هل أنت متأكد من حذف هذه الخدمة؟'
+  actions:
+    cancel: 'إلغاء'
+    creating: 'جاري الإنشاء'
+    editing: 'جاري التعديل'
+  create:
+    title: 'إنشاء خدمة طرف ثالث جديدة'
 
 # قائمة الإدارة
 menu:
@@ -222,6 +280,8 @@ common:
   no: 'لا'
   enabled: 'مفعل'
   disabled: 'معطل'
+  enable: 'تفعيل'
+  disable: 'تعطيل'
   active: 'نشط'
   inactive: 'غير نشط'
   required: 'مطلوب'
@@ -230,6 +290,9 @@ common:
   error: 'حدث خطأ'
   success: 'تمت العملية بنجاح'
   confirm: 'هل أنت متأكد؟'
+  view: 'عرض'
+  edit: 'تعديل'
+  delete: 'حذف'
 
 # الأخطاء
 error:

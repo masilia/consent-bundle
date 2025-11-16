@@ -34,6 +34,7 @@ modal:
 
 # Policy Form
 policy:
+  third_party_services: 'Third-Party Services'
   form:
     version: 'Version'
     version_placeholder: 'e.g., 1.0.0'
@@ -166,6 +167,11 @@ cookie:
 # Third-Party Service Form
 third_party_service:
   form:
+    preset_section: 'Service Preset'
+    preset_info: 'Select a preset to automatically configure cookies and scripts for popular services like Google Analytics, Facebook Pixel, etc.'
+    preset_warning: 'This service uses a preset. Changing the preset type may affect auto-generated cookies.'
+    basic_information: 'Basic Information'
+    configuration: 'Configuration'
     preset_type: 'Service Preset'
     preset_type_placeholder: 'Select a preset or configure manually'
     preset_type_help: 'Select a predefined service to auto-configure cookies and scripts'
@@ -188,24 +194,73 @@ third_party_service:
     privacy_policy_url_format: 'Please enter a valid URL'
     category: 'Category'
     category_required: 'Category is required'
+    category_placeholder: 'Select a category'
+    config_key: 'Configuration Key'
+    config_key_placeholder: 'e.g., measurement_id'
+    config_key_help: 'The configuration parameter name (e.g., tracking ID, pixel ID)'
+    config_value: 'Configuration Value'
+    config_value_placeholder: 'e.g., G-ABC123XYZ'
+    config_value_help: 'Your service ID or tracking code'
+    config_value_required: 'Configuration value is required'
+    enabled: 'Enabled'
+    enabled_help: 'Enable this service to inject scripts and track cookies'
+    create: 'Create Service'
+    save: 'Save Changes'
+    cancel: 'Cancel'
+  add:
+    title: 'Add Third-Party Service'
+    button: 'Add Service'
+  edit:
+    title: 'Edit Service: %name%'
+  delete:
+    message: 'Delete service "%name%"? This action cannot be undone.'
+    button: 'Delete'
   list:
     title: 'Third-Party Services'
+    policy: 'Services for Policy %policy%'
+    count: '%count% services'
     create: 'Create Service'
     edit: 'Edit'
     delete: 'Delete'
     no_services: 'No services found'
+    name: 'Name'
+    preset: 'Preset'
+    category: 'Category'
+    identifier: 'Identifier'
+    status: 'Status'
+    manual: 'Manual'
+  no_services: 'No third-party services configured. Add services like Google Analytics, Facebook Pixel, etc. to automatically manage cookies and scripts.'
   show:
     title: 'Service Details'
+    details: 'Service Details'
     identifier: 'Identifier'
     name: 'Name'
     description: 'Description'
-    privacy_policy_url: 'Privacy Policy URL'
+    privacy_policy_url: 'Privacy Policy'
     category: 'Category'
+    preset_type: 'Preset Type'
+    config_key: 'Config Key'
+    config_value: 'Config Value'
+    enabled: 'Status'
+    configuration: 'Configuration'
+    metadata: 'Metadata'
+    created_at: 'Created'
+    updated_at: 'Updated'
+    policy: 'Policy'
+    auto_cookies: 'Auto-Generated Cookies'
+    auto_cookies_info: 'This service uses a preset. Cookies are automatically created and managed based on the preset configuration.'
+    view_cookies: 'View Cookies'
   messages:
     created: 'Service created successfully'
     updated: 'Service updated successfully'
     deleted: 'Service deleted successfully'
     delete_confirm: 'Are you sure you want to delete this service?'
+  actions:
+    cancel: 'Cancel'
+    creating: 'Creating'
+    editing: 'Editing'
+  create:
+    title: 'Create new third-party service'
 
 # Admin Menu
 menu:
@@ -225,6 +280,8 @@ common:
   no: 'No'
   enabled: 'Enabled'
   disabled: 'Disabled'
+  enable: 'Enable'
+  disable: 'Disable'
   active: 'Active'
   inactive: 'Inactive'
   required: 'Required'
@@ -233,6 +290,9 @@ common:
   error: 'An error occurred'
   success: 'Operation completed successfully'
   confirm: 'Are you sure?'
+  view: 'View'
+  edit: 'Edit'
+  delete: 'Delete'
 
 # Errors
 error:

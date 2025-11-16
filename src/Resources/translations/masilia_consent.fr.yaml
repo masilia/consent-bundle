@@ -34,6 +34,7 @@ modal:
 
 # Formulaire de Politique
 policy:
+  third_party_services: 'Services Tiers'
   form:
     version: 'Version'
     version_placeholder: 'ex : 1.0.0'
@@ -166,6 +167,14 @@ cookie:
 # Formulaire de Service Tiers
 third_party_service:
   form:
+    preset_section: 'Préréglage de Service'
+    preset_info: 'Sélectionnez un préréglage pour configurer automatiquement les cookies et scripts pour les services populaires comme Google Analytics, Facebook Pixel, etc.'
+    preset_warning: 'Ce service utilise un préréglage. Modifier le type de préréglage peut affecter les cookies générés automatiquement.'
+    basic_information: 'Informations de Base'
+    configuration: 'Configuration'
+    preset_type: 'Préréglage de Service'
+    preset_type_placeholder: 'Sélectionnez un préréglage ou configurez manuellement'
+    preset_type_help: 'Sélectionnez un service prédéfini pour auto-configurer les cookies et scripts'
     identifier: 'Identifiant'
     identifier_placeholder: 'ex : google_analytics'
     identifier_required: 'L''identifiant est requis'
@@ -185,24 +194,73 @@ third_party_service:
     privacy_policy_url_format: 'Veuillez entrer une URL valide'
     category: 'Catégorie'
     category_required: 'La catégorie est requise'
+    category_placeholder: 'Sélectionnez une catégorie'
+    config_key: 'Clé de Configuration'
+    config_key_placeholder: 'ex : measurement_id'
+    config_key_help: 'Le nom du paramètre de configuration (ex : ID de suivi, ID pixel)'
+    config_value: 'Valeur de Configuration'
+    config_value_placeholder: 'ex : G-ABC123XYZ'
+    config_value_help: 'Votre ID de service ou code de suivi'
+    config_value_required: 'La valeur de configuration est requise'
+    enabled: 'Activé'
+    enabled_help: 'Activer ce service pour injecter les scripts et suivre les cookies'
+    create: 'Créer le Service'
+    save: 'Enregistrer les Modifications'
+    cancel: 'Annuler'
+  add:
+    title: 'Ajouter un Service Tiers'
+    button: 'Ajouter un Service'
+  edit:
+    title: 'Modifier le Service : %name%'
+  delete:
+    message: 'Supprimer le service "%name%" ? Cette action ne peut pas être annulée.'
+    button: 'Supprimer'
   list:
     title: 'Services Tiers'
+    policy: 'Services pour la Politique %policy%'
+    count: '%count% services'
     create: 'Créer un Service'
     edit: 'Modifier'
     delete: 'Supprimer'
     no_services: 'Aucun service trouvé'
+    name: 'Nom'
+    preset: 'Préréglage'
+    category: 'Catégorie'
+    identifier: 'Identifiant'
+    status: 'Statut'
+    manual: 'Manuel'
+  no_services: 'Aucun service tiers configuré. Ajoutez des services comme Google Analytics, Facebook Pixel, etc. pour gérer automatiquement les cookies et scripts.'
   show:
     title: 'Détails du Service'
+    details: 'Détails du Service'
     identifier: 'Identifiant'
     name: 'Nom'
     description: 'Description'
-    privacy_policy_url: 'URL de la Politique de Confidentialité'
+    privacy_policy_url: 'Politique de Confidentialité'
     category: 'Catégorie'
+    preset_type: 'Type de Préréglage'
+    config_key: 'Clé de Config'
+    config_value: 'Valeur de Config'
+    enabled: 'Statut'
+    configuration: 'Configuration'
+    metadata: 'Métadonnées'
+    created_at: 'Créé le'
+    updated_at: 'Mis à jour le'
+    policy: 'Politique'
+    auto_cookies: 'Cookies Générés Automatiquement'
+    auto_cookies_info: 'Ce service utilise un préréglage. Les cookies sont automatiquement créés et gérés selon la configuration du préréglage.'
+    view_cookies: 'Voir les Cookies'
   messages:
     created: 'Service créé avec succès'
     updated: 'Service mis à jour avec succès'
     deleted: 'Service supprimé avec succès'
     delete_confirm: 'Êtes-vous sûr de vouloir supprimer ce service ?'
+  actions:
+    cancel: 'Annuler'
+    creating: 'Création'
+    editing: 'Modification'
+  create:
+    title: 'Créer un nouveau service tiers'
 
 # Menu Admin
 menu:
@@ -222,6 +280,8 @@ common:
   no: 'Non'
   enabled: 'Activé'
   disabled: 'Désactivé'
+  enable: 'Activer'
+  disable: 'Désactiver'
   active: 'Active'
   inactive: 'Inactive'
   required: 'Requis'
@@ -230,6 +290,9 @@ common:
   error: 'Une erreur s''est produite'
   success: 'Opération réussie'
   confirm: 'Êtes-vous sûr ?'
+  view: 'Voir'
+  edit: 'Modifier'
+  delete: 'Supprimer'
 
 # Erreurs
 error:

@@ -222,7 +222,7 @@
                         <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
                     </svg>
                     <span class="ibexa-btn__label">
-                        {{ 'third_party_service.add'|trans|desc('Add Service') }}
+                        {{ 'third_party_service.add.button'|trans|desc('Add Service') }}
                     </span>
                 </button>
             </div>
@@ -514,11 +514,11 @@
                             <svg class="ibexa-icon ibexa-icon--small">
                                 <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
                             </svg>
-                            {{ 'third_party_service.delete'|trans|desc('Delete') }}
+                            {{ 'third_party_service.delete.button'|trans|desc('Delete') }}
                         </button>
                     </form>
                     <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                        {{ 'third_party_service.cancel'|trans|desc('Cancel') }}
+                        {{ 'third_party_service.actions.cancel'|trans|desc('Cancel') }}
                     </button>
                 {% endblock %}
             {% endembed %}
