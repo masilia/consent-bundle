@@ -6,12 +6,15 @@ namespace Masilia\ConsentBundle\Service;
 
 use Masilia\ConsentBundle\Entity\CookieCategory;
 use Masilia\ConsentBundle\Repository\CookieRepository;
+use Masilia\ConsentBundle\Repository\ThirdPartyServiceRepository;
 
 readonly class ScriptInjectionService
 {
     public function __construct(
         private CookieRepository $cookieRepository,
-        private ConsentManager $consentManager
+        private ConsentManager $consentManager,
+        private ThirdPartyServiceRepository $serviceRepository,
+        private CookiePresetService $presetService
     ) {
     }
 
@@ -75,5 +78,53 @@ readonly class ScriptInjectionService
     public function shouldInjectScripts(string $categoryIdentifier): bool
     {
         return $this->consentManager->hasConsent($categoryIdentifier);
+    }
+
+    /**
+     * Get scripts from third-party services for a category
+     */
+    public function getServiceScriptsForCategory(CookieCategory $category): string
+    {
+        if (!$this->consentManager->hasConsent($category->getIdentifier())) {
+            return '';
+        }
+
+        $services = $this->serviceRepository->findBy([
+            'policy' => $category->getPolicy(),
+            'category' => $category->getIdentifier(),
+            'enabled' => true,
+        ]);
+
+        $html = '';
+        foreach ($services as $service) {
+            if ($service->getPresetType()) {
+                $script = $this->presetService->getScriptForPreset(
+                    $service->getPresetType(),
+                    $service->getConfigValue()
+                );
+                
+                if ($script) {
+                    $html .= $script . PHP_EOL;
+                }
+            }
+        }
+
+        return $html;
+    }
+
+    /**
+     * Generate all scripts (cookies + services) for a category
+     */
+    public function generateAllScripts(CookieCategory $category): string
+    {
+        $html = '';
+        
+        // Add cookie scripts
+        $html .= $this->generateScriptTags($category);
+        
+        // Add service scripts
+        $html .= $this->getServiceScriptsForCategory($category);
+        
+        return $html;
     }
 }

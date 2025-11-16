@@ -43,6 +43,9 @@ class ThirdPartyService
     #[ORM\Column(type: 'string', length: 255)]
     private string $configValue;
 
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $presetType = null;
+
     #[ORM\Column(type: 'boolean')]
     private bool $enabled = true;
 
@@ -154,6 +157,17 @@ class ThirdPartyService
     public function setConfigValue(string $configValue): self
     {
         $this->configValue = $configValue;
+        return $this;
+    }
+
+    public function getPresetType(): ?string
+    {
+        return $this->presetType;
+    }
+
+    public function setPresetType(?string $presetType): self
+    {
+        $this->presetType = $presetType;
         return $this;
     }
 

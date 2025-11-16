@@ -166,6 +166,9 @@ cookie:
 # Third-Party Service Form
 third_party_service:
   form:
+    preset_type: 'Service Preset'
+    preset_type_placeholder: 'Select a preset or configure manually'
+    preset_type_help: 'Select a predefined service to auto-configure cookies and scripts'
     identifier: 'Identifier'
     identifier_placeholder: 'e.g., google_analytics'
     identifier_required: 'Identifier is required'

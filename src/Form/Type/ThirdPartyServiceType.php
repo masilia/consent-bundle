@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Masilia\ConsentBundle\Form\Type;
 
 use Masilia\ConsentBundle\Entity\ThirdPartyService;
+use Masilia\ConsentBundle\Service\CookiePresetService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -16,9 +18,31 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class ThirdPartyServiceType extends AbstractType
 {
+    public function __construct(
+        private CookiePresetService $presetService
+    ) {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $presets = $this->presetService->getPresets();
+        $presetChoices = [];
+        foreach ($presets as $key => $preset) {
+            $presetChoices[$preset['name']] = $key;
+        }
+
         $builder
+            ->add('presetType', ChoiceType::class, [
+                'label' => 'third_party_service.form.preset_type',
+                'choices' => $presetChoices,
+                'required' => false,
+                'placeholder' => 'third_party_service.form.preset_type_placeholder',
+                'attr' => [
+                    'class' => 'ibexa-input ibexa-input--select',
+                ],
+                'help' => 'third_party_service.form.preset_type_help',
+                'translation_domain' => 'masilia_consent',
+            ])
             ->add('identifier', TextType::class, [
                 'label' => 'service.form.identifier',
                 'attr' => [
