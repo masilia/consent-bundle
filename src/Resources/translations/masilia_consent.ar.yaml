@@ -1,0 +1,243 @@
+# Masilia Consent Bundle - الترجمة العربية
+
+# البانر
+banner:
+  title: 'نحن نحترم خصوصيتك'
+  description: 'نستخدم ملفات تعريف الارتباط لتحسين تجربة التصفح الخاصة بك، وتقديم محتوى مخصص، وتحليل حركة المرور لدينا. بالنقر على "قبول الكل"، فإنك توافق على استخدامنا لملفات تعريف الارتباط.'
+  accept_all: 'قبول الكل'
+  reject_all: 'رفض الكل'
+  customize: 'تخصيص'
+  aria:
+    accept_all: 'قبول جميع ملفات تعريف الارتباط'
+    reject_all: 'رفض ملفات تعريف الارتباط غير الأساسية'
+    customize: 'تخصيص تفضيلات ملفات تعريف الارتباط'
+
+# النافذة المنبثقة
+modal:
+  title: 'تفضيلات ملفات تعريف الارتباط'
+  overview: 'نظرة عامة'
+  description: 'نستخدم ملفات تعريف الارتباط لتحسين تجربتك على موقعنا. يمكنك اختيار فئات ملفات تعريف الارتباط التي تريد السماح بها. لا يمكن تعطيل ملفات تعريف الارتباط المطلوبة لأنها ضرورية لعمل الموقع بشكل صحيح.'
+  accept_all: 'قبول الكل'
+  reject_all: 'رفض الكل'
+  save_preferences: 'حفظ التفضيلات'
+  close: 'إغلاق'
+  required_badge: 'مطلوب'
+  cookies_used: 'ملفات تعريف الارتباط المستخدمة:'
+  table:
+    name: 'الاسم'
+    provider: 'المزود'
+    purpose: 'الغرض'
+    expiry: 'انتهاء الصلاحية'
+  aria:
+    toggle: 'تبديل ملفات تعريف الارتباط %category%'
+    close: 'إغلاق مربع حوار تفضيلات ملفات تعريف الارتباط'
+
+# نموذج السياسة
+policy:
+  form:
+    version: 'الإصدار'
+    version_placeholder: 'مثال: 1.0.0'
+    version_required: 'الإصدار مطلوب'
+    version_max_length: 'يجب ألا يتجاوز الإصدار 20 حرفًا'
+    version_format: 'يجب أن يتبع الإصدار تنسيق الإصدار الدلالي (مثال: 1.0.0)'
+    cookie_prefix: 'بادئة ملف تعريف الارتباط'
+    cookie_prefix_placeholder: 'مثال: consent_'
+    cookie_prefix_required: 'بادئة ملف تعريف الارتباط مطلوبة'
+    cookie_prefix_max_length: 'يجب ألا تتجاوز البادئة 50 حرفًا'
+    cookie_prefix_format: 'يجب أن تحتوي البادئة على أحرف صغيرة وشرطات سفلية فقط'
+    expiration_days: 'أيام انتهاء الصلاحية'
+    expiration_days_placeholder: 'مثال: 365'
+    expiration_days_required: 'أيام انتهاء الصلاحية مطلوبة'
+    expiration_days_range: 'يجب أن تكون أيام انتهاء الصلاحية بين 1 و 365'
+    is_active: 'نشط'
+  list:
+    title: 'سياسات ملفات تعريف الارتباط'
+    create: 'إنشاء سياسة'
+    edit: 'تعديل'
+    delete: 'حذف'
+    activate: 'تفعيل'
+    deactivate: 'إلغاء التفعيل'
+    no_policies: 'لم يتم العثور على سياسات'
+    active_badge: 'نشط'
+    inactive_badge: 'غير نشط'
+  show:
+    title: 'تفاصيل السياسة'
+    version: 'الإصدار'
+    cookie_prefix: 'بادئة ملف تعريف الارتباط'
+    expiration_days: 'أيام انتهاء الصلاحية'
+    status: 'الحالة'
+    created_at: 'تاريخ الإنشاء'
+    updated_at: 'تاريخ التحديث'
+    categories: 'الفئات'
+    third_party_services: 'خدمات الطرف الثالث'
+  messages:
+    created: 'تم إنشاء السياسة بنجاح'
+    updated: 'تم تحديث السياسة بنجاح'
+    deleted: 'تم حذف السياسة بنجاح'
+    activated: 'تم تفعيل السياسة بنجاح'
+    deactivated: 'تم إلغاء تفعيل السياسة بنجاح'
+    delete_confirm: 'هل أنت متأكد من حذف هذه السياسة؟'
+
+# نموذج الفئة
+category:
+  form:
+    identifier: 'المعرف'
+    identifier_placeholder: 'مثال: analytics'
+    identifier_required: 'المعرف مطلوب'
+    identifier_max_length: 'يجب ألا يتجاوز المعرف 50 حرفًا'
+    identifier_format: 'يجب أن يحتوي المعرف على أحرف صغيرة وأرقام وشرطات سفلية فقط'
+    identifier_unique: 'هذا المعرف مستخدم بالفعل'
+    name: 'الاسم'
+    name_placeholder: 'مثال: ملفات تعريف الارتباط التحليلية'
+    name_required: 'الاسم مطلوب'
+    name_max_length: 'يجب ألا يتجاوز الاسم 100 حرف'
+    description: 'الوصف'
+    description_placeholder: 'صف الغرض من هذه الفئة...'
+    description_required: 'الوصف مطلوب'
+    required: 'مطلوب'
+    required_help: 'لا يمكن للمستخدمين تعطيل الفئات المطلوبة'
+    default_enabled: 'مفعل افتراضيًا'
+    default_enabled_help: 'تفعيل هذه الفئة افتراضيًا للمستخدمين الجدد'
+    position: 'الموضع'
+    position_placeholder: 'مثال: 1'
+    position_help: 'ترتيب العرض (الأرقام الأصغر تظهر أولاً)'
+  list:
+    title: 'فئات ملفات تعريف الارتباط'
+    create: 'إنشاء فئة'
+    edit: 'تعديل'
+    delete: 'حذف'
+    no_categories: 'لم يتم العثور على فئات'
+    required_badge: 'مطلوب'
+    optional_badge: 'اختياري'
+  show:
+    title: 'تفاصيل الفئة'
+    identifier: 'المعرف'
+    name: 'الاسم'
+    description: 'الوصف'
+    required: 'مطلوب'
+    default_enabled: 'مفعل افتراضيًا'
+    position: 'الموضع'
+    cookies: 'ملفات تعريف الارتباط'
+  messages:
+    created: 'تم إنشاء الفئة بنجاح'
+    updated: 'تم تحديث الفئة بنجاح'
+    deleted: 'تم حذف الفئة بنجاح'
+    delete_confirm: 'هل أنت متأكد من حذف هذه الفئة؟'
+
+# نموذج ملف تعريف الارتباط
+cookie:
+  form:
+    name: 'اسم ملف تعريف الارتباط'
+    name_placeholder: 'مثال: _ga'
+    name_required: 'اسم ملف تعريف الارتباط مطلوب'
+    name_max_length: 'يجب ألا يتجاوز الاسم 100 حرف'
+    provider: 'المزود'
+    provider_placeholder: 'مثال: Google Analytics'
+    provider_required: 'المزود مطلوب'
+    provider_max_length: 'يجب ألا يتجاوز المزود 100 حرف'
+    purpose: 'الغرض'
+    purpose_placeholder: 'صف الغرض من استخدام هذا الملف...'
+    purpose_required: 'الغرض مطلوب'
+    expiry: 'انتهاء الصلاحية'
+    expiry_placeholder: 'مثال: سنتان'
+    expiry_required: 'انتهاء الصلاحية مطلوب'
+    expiry_max_length: 'يجب ألا يتجاوز انتهاء الصلاحية 50 حرفًا'
+    category: 'الفئة'
+    category_required: 'الفئة مطلوبة'
+  list:
+    title: 'ملفات تعريف الارتباط'
+    create: 'إنشاء ملف تعريف ارتباط'
+    edit: 'تعديل'
+    delete: 'حذف'
+    no_cookies: 'لم يتم العثور على ملفات تعريف ارتباط'
+  show:
+    title: 'تفاصيل ملف تعريف الارتباط'
+    name: 'الاسم'
+    provider: 'المزود'
+    purpose: 'الغرض'
+    expiry: 'انتهاء الصلاحية'
+    category: 'الفئة'
+  messages:
+    created: 'تم إنشاء ملف تعريف الارتباط بنجاح'
+    updated: 'تم تحديث ملف تعريف الارتباط بنجاح'
+    deleted: 'تم حذف ملف تعريف الارتباط بنجاح'
+    delete_confirm: 'هل أنت متأكد من حذف ملف تعريف الارتباط هذا؟'
+
+# نموذج خدمة الطرف الثالث
+third_party_service:
+  form:
+    identifier: 'المعرف'
+    identifier_placeholder: 'مثال: google_analytics'
+    identifier_required: 'المعرف مطلوب'
+    identifier_max_length: 'يجب ألا يتجاوز المعرف 50 حرفًا'
+    identifier_format: 'يجب أن يحتوي المعرف على أحرف صغيرة وأرقام وشرطات سفلية فقط'
+    identifier_unique: 'هذا المعرف مستخدم بالفعل'
+    name: 'اسم الخدمة'
+    name_placeholder: 'مثال: Google Analytics'
+    name_required: 'اسم الخدمة مطلوب'
+    name_max_length: 'يجب ألا يتجاوز اسم الخدمة 100 حرف'
+    description: 'الوصف'
+    description_placeholder: 'صف هذه الخدمة...'
+    description_required: 'الوصف مطلوب'
+    privacy_policy_url: 'رابط سياسة الخصوصية'
+    privacy_policy_url_placeholder: 'https://...'
+    privacy_policy_url_required: 'رابط سياسة الخصوصية مطلوب'
+    privacy_policy_url_format: 'الرجاء إدخال رابط صالح'
+    category: 'الفئة'
+    category_required: 'الفئة مطلوبة'
+  list:
+    title: 'خدمات الطرف الثالث'
+    create: 'إنشاء خدمة'
+    edit: 'تعديل'
+    delete: 'حذف'
+    no_services: 'لم يتم العثور على خدمات'
+  show:
+    title: 'تفاصيل الخدمة'
+    identifier: 'المعرف'
+    name: 'الاسم'
+    description: 'الوصف'
+    privacy_policy_url: 'رابط سياسة الخصوصية'
+    category: 'الفئة'
+  messages:
+    created: 'تم إنشاء الخدمة بنجاح'
+    updated: 'تم تحديث الخدمة بنجاح'
+    deleted: 'تم حذف الخدمة بنجاح'
+    delete_confirm: 'هل أنت متأكد من حذف هذه الخدمة؟'
+
+# قائمة الإدارة
+menu:
+  consent: 'الموافقة على ملفات تعريف الارتباط'
+  policies: 'السياسات'
+  categories: 'الفئات'
+  cookies: 'ملفات تعريف الارتباط'
+  services: 'خدمات الطرف الثالث'
+
+# عام
+common:
+  actions: 'الإجراءات'
+  save: 'حفظ'
+  cancel: 'إلغاء'
+  back: 'رجوع'
+  yes: 'نعم'
+  no: 'لا'
+  enabled: 'مفعل'
+  disabled: 'معطل'
+  active: 'نشط'
+  inactive: 'غير نشط'
+  required: 'مطلوب'
+  optional: 'اختياري'
+  loading: 'جاري التحميل...'
+  error: 'حدث خطأ'
+  success: 'تمت العملية بنجاح'
+  confirm: 'هل أنت متأكد؟'
+
+# الأخطاء
+error:
+  policy_not_found: 'السياسة غير موجودة'
+  category_not_found: 'الفئة غير موجودة'
+  cookie_not_found: 'ملف تعريف الارتباط غير موجود'
+  service_not_found: 'الخدمة غير موجودة'
+  no_active_policy: 'لم يتم العثور على سياسة نشطة'
+  invalid_consent: 'بيانات الموافقة غير صالحة'
+  api_error: 'خطأ في واجهة برمجة التطبيقات'
+  network_error: 'خطأ في الشبكة'

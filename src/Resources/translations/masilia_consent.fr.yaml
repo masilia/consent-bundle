@@ -1,0 +1,243 @@
+# Masilia Consent Bundle - Traductions Françaises
+
+# Bannière
+banner:
+  title: 'Nous respectons votre vie privée'
+  description: 'Nous utilisons des cookies pour améliorer votre expérience de navigation, proposer du contenu personnalisé et analyser notre trafic. En cliquant sur "Tout Accepter", vous consentez à notre utilisation des cookies.'
+  accept_all: 'Tout Accepter'
+  reject_all: 'Tout Refuser'
+  customize: 'Personnaliser'
+  aria:
+    accept_all: 'Accepter tous les cookies'
+    reject_all: 'Refuser les cookies non essentiels'
+    customize: 'Personnaliser les préférences de cookies'
+
+# Modale
+modal:
+  title: 'Préférences de Cookies'
+  overview: 'Aperçu'
+  description: 'Nous utilisons des cookies pour améliorer votre expérience sur notre site web. Vous pouvez choisir les catégories de cookies que vous souhaitez autoriser. Les cookies requis ne peuvent pas être désactivés car ils sont essentiels au bon fonctionnement du site.'
+  accept_all: 'Tout Accepter'
+  reject_all: 'Tout Refuser'
+  save_preferences: 'Enregistrer les Préférences'
+  close: 'Fermer'
+  required_badge: 'Requis'
+  cookies_used: 'Cookies Utilisés :'
+  table:
+    name: 'Nom'
+    provider: 'Fournisseur'
+    purpose: 'Objectif'
+    expiry: 'Expiration'
+  aria:
+    toggle: 'Activer/désactiver les cookies %category%'
+    close: 'Fermer la boîte de dialogue des préférences de cookies'
+
+# Formulaire de Politique
+policy:
+  form:
+    version: 'Version'
+    version_placeholder: 'ex : 1.0.0'
+    version_required: 'La version est requise'
+    version_max_length: 'La version ne doit pas dépasser 20 caractères'
+    version_format: 'La version doit suivre le format de versionnage sémantique (ex : 1.0.0)'
+    cookie_prefix: 'Préfixe de Cookie'
+    cookie_prefix_placeholder: 'ex : consent_'
+    cookie_prefix_required: 'Le préfixe de cookie est requis'
+    cookie_prefix_max_length: 'Le préfixe de cookie ne doit pas dépasser 50 caractères'
+    cookie_prefix_format: 'Le préfixe de cookie ne doit contenir que des lettres minuscules et des underscores'
+    expiration_days: 'Jours d''Expiration'
+    expiration_days_placeholder: 'ex : 365'
+    expiration_days_required: 'Les jours d''expiration sont requis'
+    expiration_days_range: 'Les jours d''expiration doivent être entre 1 et 365'
+    is_active: 'Active'
+  list:
+    title: 'Politiques de Cookies'
+    create: 'Créer une Politique'
+    edit: 'Modifier'
+    delete: 'Supprimer'
+    activate: 'Activer'
+    deactivate: 'Désactiver'
+    no_policies: 'Aucune politique trouvée'
+    active_badge: 'Active'
+    inactive_badge: 'Inactive'
+  show:
+    title: 'Détails de la Politique'
+    version: 'Version'
+    cookie_prefix: 'Préfixe de Cookie'
+    expiration_days: 'Jours d''Expiration'
+    status: 'Statut'
+    created_at: 'Créée le'
+    updated_at: 'Mise à jour le'
+    categories: 'Catégories'
+    third_party_services: 'Services Tiers'
+  messages:
+    created: 'Politique créée avec succès'
+    updated: 'Politique mise à jour avec succès'
+    deleted: 'Politique supprimée avec succès'
+    activated: 'Politique activée avec succès'
+    deactivated: 'Politique désactivée avec succès'
+    delete_confirm: 'Êtes-vous sûr de vouloir supprimer cette politique ?'
+
+# Formulaire de Catégorie
+category:
+  form:
+    identifier: 'Identifiant'
+    identifier_placeholder: 'ex : analytics'
+    identifier_required: 'L''identifiant est requis'
+    identifier_max_length: 'L''identifiant ne doit pas dépasser 50 caractères'
+    identifier_format: 'L''identifiant ne doit contenir que des lettres minuscules, des chiffres et des underscores'
+    identifier_unique: 'Cet identifiant est déjà utilisé'
+    name: 'Nom'
+    name_placeholder: 'ex : Cookies Analytiques'
+    name_required: 'Le nom est requis'
+    name_max_length: 'Le nom ne doit pas dépasser 100 caractères'
+    description: 'Description'
+    description_placeholder: 'Décrivez l''objectif de cette catégorie...'
+    description_required: 'La description est requise'
+    required: 'Requis'
+    required_help: 'Les catégories requises ne peuvent pas être désactivées par les utilisateurs'
+    default_enabled: 'Activé par Défaut'
+    default_enabled_help: 'Activer cette catégorie par défaut pour les nouveaux utilisateurs'
+    position: 'Position'
+    position_placeholder: 'ex : 1'
+    position_help: 'Ordre d''affichage (les nombres plus petits apparaissent en premier)'
+  list:
+    title: 'Catégories de Cookies'
+    create: 'Créer une Catégorie'
+    edit: 'Modifier'
+    delete: 'Supprimer'
+    no_categories: 'Aucune catégorie trouvée'
+    required_badge: 'Requis'
+    optional_badge: 'Optionnel'
+  show:
+    title: 'Détails de la Catégorie'
+    identifier: 'Identifiant'
+    name: 'Nom'
+    description: 'Description'
+    required: 'Requis'
+    default_enabled: 'Activé par Défaut'
+    position: 'Position'
+    cookies: 'Cookies'
+  messages:
+    created: 'Catégorie créée avec succès'
+    updated: 'Catégorie mise à jour avec succès'
+    deleted: 'Catégorie supprimée avec succès'
+    delete_confirm: 'Êtes-vous sûr de vouloir supprimer cette catégorie ?'
+
+# Formulaire de Cookie
+cookie:
+  form:
+    name: 'Nom du Cookie'
+    name_placeholder: 'ex : _ga'
+    name_required: 'Le nom du cookie est requis'
+    name_max_length: 'Le nom du cookie ne doit pas dépasser 100 caractères'
+    provider: 'Fournisseur'
+    provider_placeholder: 'ex : Google Analytics'
+    provider_required: 'Le fournisseur est requis'
+    provider_max_length: 'Le fournisseur ne doit pas dépasser 100 caractères'
+    purpose: 'Objectif'
+    purpose_placeholder: 'Décrivez à quoi sert ce cookie...'
+    purpose_required: 'L''objectif est requis'
+    expiry: 'Expiration'
+    expiry_placeholder: 'ex : 2 ans'
+    expiry_required: 'L''expiration est requise'
+    expiry_max_length: 'L''expiration ne doit pas dépasser 50 caractères'
+    category: 'Catégorie'
+    category_required: 'La catégorie est requise'
+  list:
+    title: 'Cookies'
+    create: 'Créer un Cookie'
+    edit: 'Modifier'
+    delete: 'Supprimer'
+    no_cookies: 'Aucun cookie trouvé'
+  show:
+    title: 'Détails du Cookie'
+    name: 'Nom'
+    provider: 'Fournisseur'
+    purpose: 'Objectif'
+    expiry: 'Expiration'
+    category: 'Catégorie'
+  messages:
+    created: 'Cookie créé avec succès'
+    updated: 'Cookie mis à jour avec succès'
+    deleted: 'Cookie supprimé avec succès'
+    delete_confirm: 'Êtes-vous sûr de vouloir supprimer ce cookie ?'
+
+# Formulaire de Service Tiers
+third_party_service:
+  form:
+    identifier: 'Identifiant'
+    identifier_placeholder: 'ex : google_analytics'
+    identifier_required: 'L''identifiant est requis'
+    identifier_max_length: 'L''identifiant ne doit pas dépasser 50 caractères'
+    identifier_format: 'L''identifiant ne doit contenir que des lettres minuscules, des chiffres et des underscores'
+    identifier_unique: 'Cet identifiant est déjà utilisé'
+    name: 'Nom du Service'
+    name_placeholder: 'ex : Google Analytics'
+    name_required: 'Le nom du service est requis'
+    name_max_length: 'Le nom du service ne doit pas dépasser 100 caractères'
+    description: 'Description'
+    description_placeholder: 'Décrivez ce service...'
+    description_required: 'La description est requise'
+    privacy_policy_url: 'URL de la Politique de Confidentialité'
+    privacy_policy_url_placeholder: 'https://...'
+    privacy_policy_url_required: 'L''URL de la politique de confidentialité est requise'
+    privacy_policy_url_format: 'Veuillez entrer une URL valide'
+    category: 'Catégorie'
+    category_required: 'La catégorie est requise'
+  list:
+    title: 'Services Tiers'
+    create: 'Créer un Service'
+    edit: 'Modifier'
+    delete: 'Supprimer'
+    no_services: 'Aucun service trouvé'
+  show:
+    title: 'Détails du Service'
+    identifier: 'Identifiant'
+    name: 'Nom'
+    description: 'Description'
+    privacy_policy_url: 'URL de la Politique de Confidentialité'
+    category: 'Catégorie'
+  messages:
+    created: 'Service créé avec succès'
+    updated: 'Service mis à jour avec succès'
+    deleted: 'Service supprimé avec succès'
+    delete_confirm: 'Êtes-vous sûr de vouloir supprimer ce service ?'
+
+# Menu Admin
+menu:
+  consent: 'Consentement aux Cookies'
+  policies: 'Politiques'
+  categories: 'Catégories'
+  cookies: 'Cookies'
+  services: 'Services Tiers'
+
+# Commun
+common:
+  actions: 'Actions'
+  save: 'Enregistrer'
+  cancel: 'Annuler'
+  back: 'Retour'
+  yes: 'Oui'
+  no: 'Non'
+  enabled: 'Activé'
+  disabled: 'Désactivé'
+  active: 'Active'
+  inactive: 'Inactive'
+  required: 'Requis'
+  optional: 'Optionnel'
+  loading: 'Chargement...'
+  error: 'Une erreur s''est produite'
+  success: 'Opération réussie'
+  confirm: 'Êtes-vous sûr ?'
+
+# Erreurs
+error:
+  policy_not_found: 'Politique introuvable'
+  category_not_found: 'Catégorie introuvable'
+  cookie_not_found: 'Cookie introuvable'
+  service_not_found: 'Service introuvable'
+  no_active_policy: 'Aucune politique active trouvée'
+  invalid_consent: 'Données de consentement invalides'
+  api_error: 'Erreur API'
+  network_error: 'Erreur réseau'

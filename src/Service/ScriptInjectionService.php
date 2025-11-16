@@ -7,11 +7,11 @@ namespace Masilia\ConsentBundle\Service;
 use Masilia\ConsentBundle\Entity\CookieCategory;
 use Masilia\ConsentBundle\Repository\CookieRepository;
 
-class ScriptInjectionService
+readonly class ScriptInjectionService
 {
     public function __construct(
-        private readonly CookieRepository $cookieRepository,
-        private readonly ConsentManager $consentManager
+        private CookieRepository $cookieRepository,
+        private ConsentManager $consentManager
     ) {
     }
 

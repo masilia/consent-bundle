@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Masilia\ConsentBundle\ValueObject;
 
+use DateTime;
+
 class ConsentPreferences
 {
     private array $categories;
@@ -14,7 +16,7 @@ class ConsentPreferences
     {
         $this->categories = $categories;
         $this->version = $version;
-        $this->timestamp = $timestamp ?? new \DateTime();
+        $this->timestamp = $timestamp ?? new DateTime();
     }
 
     public function getCategories(): array
@@ -51,7 +53,7 @@ class ConsentPreferences
         return new self(
             $data['categories'] ?? [],
             $data['version'] ?? '1.0.0',
-            isset($data['timestamp']) ? new \DateTime($data['timestamp']) : null
+            isset($data['timestamp']) ? new DateTime($data['timestamp']) : null
         );
     }
 }

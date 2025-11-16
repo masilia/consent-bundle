@@ -8,11 +8,11 @@ use Masilia\ConsentBundle\Event\ConsentChangedEvent;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ConsentEventSubscriber implements EventSubscriberInterface
+readonly class ConsentEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly bool $loggingEnabled = true
+        private LoggerInterface $logger,
+        private bool $loggingEnabled = true
     ) {
     }
 
@@ -65,11 +65,11 @@ class ConsentEventSubscriber implements EventSubscriberInterface
         $new = $event->getNewPreferences();
 
         $context = [
-            'old_policy_version' => $old?->getPolicyVersion(),
-            'new_policy_version' => $new?->getPolicyVersion(),
+            'old_policy_version' => $old?->getVersion(),
+            'new_policy_version' => $new?->getVersion(),
             'old_categories' => $old?->getCategories() ?? [],
             'new_categories' => $new?->getCategories() ?? [],
-            'timestamp' => $new?->getTimestamp() ?? time(),
+            'timestamp' => $new?->getTimestamp() ?? new \DateTime(),
         ];
 
         if (!$old && $new) {
@@ -97,11 +97,11 @@ class ConsentEventSubscriber implements EventSubscriberInterface
 
         $acceptedCategories = array_filter(
             $preferences->getCategories(),
-            fn($consented) => $consented === true
+            static fn($consented) => $consented === true
         );
 
         $this->logger->debug('Initial consent given', [
-            'policy_version' => $preferences->getPolicyVersion(),
+            'policy_version' => $preferences->getVersion(),
             'accepted_categories' => array_keys($acceptedCategories),
             'total_categories' => count($preferences->getCategories()),
         ]);
@@ -123,7 +123,7 @@ class ConsentEventSubscriber implements EventSubscriberInterface
         }
 
         $this->logger->warning('User revoked all consent', [
-            'previous_policy_version' => $oldPreferences->getPolicyVersion(),
+            'previous_policy_version' => $oldPreferences->getVersion(),
             'revoked_categories' => array_keys($oldPreferences->getCategories()),
         ]);
 
@@ -158,10 +158,10 @@ class ConsentEventSubscriber implements EventSubscriberInterface
         }
 
         // Check for policy version change
-        if ($old->getPolicyVersion() !== $new->getPolicyVersion()) {
+        if ($old->getVersion() !== $new->getVersion()) {
             $this->logger->info('User accepted new policy version', [
-                'old_version' => $old->getPolicyVersion(),
-                'new_version' => $new->getPolicyVersion(),
+                'old_version' => $old->getVersion(),
+                'new_version' => $new->getVersion(),
             ]);
         }
     }

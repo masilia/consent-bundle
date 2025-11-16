@@ -1,0 +1,243 @@
+# Masilia Consent Bundle - English Translations
+
+# Banner
+banner:
+  title: 'We value your privacy'
+  description: 'We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.'
+  accept_all: 'Accept All'
+  reject_all: 'Reject All'
+  customize: 'Customize'
+  aria:
+    accept_all: 'Accept all cookies'
+    reject_all: 'Reject non-essential cookies'
+    customize: 'Customize cookie preferences'
+
+# Modal
+modal:
+  title: 'Cookie Preferences'
+  overview: 'Overview'
+  description: 'We use cookies to improve your experience on our website. You can choose which categories of cookies you want to allow. Required cookies cannot be disabled as they are essential for the website to function properly.'
+  accept_all: 'Accept All'
+  reject_all: 'Reject All'
+  save_preferences: 'Save Preferences'
+  close: 'Close'
+  required_badge: 'Required'
+  cookies_used: 'Cookies Used:'
+  table:
+    name: 'Name'
+    provider: 'Provider'
+    purpose: 'Purpose'
+    expiry: 'Expiry'
+  aria:
+    toggle: 'Toggle %category% cookies'
+    close: 'Close cookie preferences dialog'
+
+# Policy Form
+policy:
+  form:
+    version: 'Version'
+    version_placeholder: 'e.g., 1.0.0'
+    version_required: 'Version is required'
+    version_max_length: 'Version must not exceed 20 characters'
+    version_format: 'Version must follow semantic versioning format (e.g., 1.0.0)'
+    cookie_prefix: 'Cookie Prefix'
+    cookie_prefix_placeholder: 'e.g., consent_'
+    cookie_prefix_required: 'Cookie prefix is required'
+    cookie_prefix_max_length: 'Cookie prefix must not exceed 50 characters'
+    cookie_prefix_format: 'Cookie prefix must contain only lowercase letters and underscores'
+    expiration_days: 'Expiration Days'
+    expiration_days_placeholder: 'e.g., 365'
+    expiration_days_required: 'Expiration days is required'
+    expiration_days_range: 'Expiration days must be between 1 and 365'
+    is_active: 'Active'
+  list:
+    title: 'Cookie Policies'
+    create: 'Create Policy'
+    edit: 'Edit'
+    delete: 'Delete'
+    activate: 'Activate'
+    deactivate: 'Deactivate'
+    no_policies: 'No policies found'
+    active_badge: 'Active'
+    inactive_badge: 'Inactive'
+  show:
+    title: 'Policy Details'
+    version: 'Version'
+    cookie_prefix: 'Cookie Prefix'
+    expiration_days: 'Expiration Days'
+    status: 'Status'
+    created_at: 'Created At'
+    updated_at: 'Updated At'
+    categories: 'Categories'
+    third_party_services: 'Third-Party Services'
+  messages:
+    created: 'Policy created successfully'
+    updated: 'Policy updated successfully'
+    deleted: 'Policy deleted successfully'
+    activated: 'Policy activated successfully'
+    deactivated: 'Policy deactivated successfully'
+    delete_confirm: 'Are you sure you want to delete this policy?'
+
+# Category Form
+category:
+  form:
+    identifier: 'Identifier'
+    identifier_placeholder: 'e.g., analytics'
+    identifier_required: 'Identifier is required'
+    identifier_max_length: 'Identifier must not exceed 50 characters'
+    identifier_format: 'Identifier must contain only lowercase letters, numbers, and underscores'
+    identifier_unique: 'This identifier is already in use'
+    name: 'Name'
+    name_placeholder: 'e.g., Analytics Cookies'
+    name_required: 'Name is required'
+    name_max_length: 'Name must not exceed 100 characters'
+    description: 'Description'
+    description_placeholder: 'Describe the purpose of this category...'
+    description_required: 'Description is required'
+    required: 'Required'
+    required_help: 'Required categories cannot be disabled by users'
+    default_enabled: 'Enabled by Default'
+    default_enabled_help: 'Enable this category by default for new users'
+    position: 'Position'
+    position_placeholder: 'e.g., 1'
+    position_help: 'Display order (lower numbers appear first)'
+  list:
+    title: 'Cookie Categories'
+    create: 'Create Category'
+    edit: 'Edit'
+    delete: 'Delete'
+    no_categories: 'No categories found'
+    required_badge: 'Required'
+    optional_badge: 'Optional'
+  show:
+    title: 'Category Details'
+    identifier: 'Identifier'
+    name: 'Name'
+    description: 'Description'
+    required: 'Required'
+    default_enabled: 'Enabled by Default'
+    position: 'Position'
+    cookies: 'Cookies'
+  messages:
+    created: 'Category created successfully'
+    updated: 'Category updated successfully'
+    deleted: 'Category deleted successfully'
+    delete_confirm: 'Are you sure you want to delete this category?'
+
+# Cookie Form
+cookie:
+  form:
+    name: 'Cookie Name'
+    name_placeholder: 'e.g., _ga'
+    name_required: 'Cookie name is required'
+    name_max_length: 'Cookie name must not exceed 100 characters'
+    provider: 'Provider'
+    provider_placeholder: 'e.g., Google Analytics'
+    provider_required: 'Provider is required'
+    provider_max_length: 'Provider must not exceed 100 characters'
+    purpose: 'Purpose'
+    purpose_placeholder: 'Describe what this cookie is used for...'
+    purpose_required: 'Purpose is required'
+    expiry: 'Expiry'
+    expiry_placeholder: 'e.g., 2 years'
+    expiry_required: 'Expiry is required'
+    expiry_max_length: 'Expiry must not exceed 50 characters'
+    category: 'Category'
+    category_required: 'Category is required'
+  list:
+    title: 'Cookies'
+    create: 'Create Cookie'
+    edit: 'Edit'
+    delete: 'Delete'
+    no_cookies: 'No cookies found'
+  show:
+    title: 'Cookie Details'
+    name: 'Name'
+    provider: 'Provider'
+    purpose: 'Purpose'
+    expiry: 'Expiry'
+    category: 'Category'
+  messages:
+    created: 'Cookie created successfully'
+    updated: 'Cookie updated successfully'
+    deleted: 'Cookie deleted successfully'
+    delete_confirm: 'Are you sure you want to delete this cookie?'
+
+# Third-Party Service Form
+third_party_service:
+  form:
+    identifier: 'Identifier'
+    identifier_placeholder: 'e.g., google_analytics'
+    identifier_required: 'Identifier is required'
+    identifier_max_length: 'Identifier must not exceed 50 characters'
+    identifier_format: 'Identifier must contain only lowercase letters, numbers, and underscores'
+    identifier_unique: 'This identifier is already in use'
+    name: 'Service Name'
+    name_placeholder: 'e.g., Google Analytics'
+    name_required: 'Service name is required'
+    name_max_length: 'Service name must not exceed 100 characters'
+    description: 'Description'
+    description_placeholder: 'Describe this service...'
+    description_required: 'Description is required'
+    privacy_policy_url: 'Privacy Policy URL'
+    privacy_policy_url_placeholder: 'https://...'
+    privacy_policy_url_required: 'Privacy policy URL is required'
+    privacy_policy_url_format: 'Please enter a valid URL'
+    category: 'Category'
+    category_required: 'Category is required'
+  list:
+    title: 'Third-Party Services'
+    create: 'Create Service'
+    edit: 'Edit'
+    delete: 'Delete'
+    no_services: 'No services found'
+  show:
+    title: 'Service Details'
+    identifier: 'Identifier'
+    name: 'Name'
+    description: 'Description'
+    privacy_policy_url: 'Privacy Policy URL'
+    category: 'Category'
+  messages:
+    created: 'Service created successfully'
+    updated: 'Service updated successfully'
+    deleted: 'Service deleted successfully'
+    delete_confirm: 'Are you sure you want to delete this service?'
+
+# Admin Menu
+menu:
+  consent: 'Cookie Consent'
+  policies: 'Policies'
+  categories: 'Categories'
+  cookies: 'Cookies'
+  services: 'Third-Party Services'
+
+# Common
+common:
+  actions: 'Actions'
+  save: 'Save'
+  cancel: 'Cancel'
+  back: 'Back'
+  yes: 'Yes'
+  no: 'No'
+  enabled: 'Enabled'
+  disabled: 'Disabled'
+  active: 'Active'
+  inactive: 'Inactive'
+  required: 'Required'
+  optional: 'Optional'
+  loading: 'Loading...'
+  error: 'An error occurred'
+  success: 'Operation completed successfully'
+  confirm: 'Are you sure?'
+
+# Errors
+error:
+  policy_not_found: 'Policy not found'
+  category_not_found: 'Category not found'
+  cookie_not_found: 'Cookie not found'
+  service_not_found: 'Service not found'
+  no_active_policy: 'No active policy found'
+  invalid_consent: 'Invalid consent data'
+  api_error: 'API error occurred'
+  network_error: 'Network error occurred'
