@@ -208,38 +208,50 @@
         </div>
 
         {# Third-Party Services Section #}
-        {% if policy.thirdPartyServices|length > 0 %}
-            <div class="card ibexa-card ibexa-card--light mb-4">
-                <div class="card-header ibexa-card__header">
-                    <h3 class="ibexa-card__title">
-                        {{ 'policy.third_party_services'|trans|desc('Third-Party Services') }} ({{ policy.thirdPartyServices|length }})
-                    </h3>
-                </div>
-                <div class="card-body ibexa-card__body">
+        <div class="card ibexa-card ibexa-card--light mb-4">
+            <div class="card-header ibexa-card__header d-flex justify-content-between align-items-center">
+                <h3 class="ibexa-card__title mb-0">
+                    {{ 'policy.third_party_services'|trans|desc('Third-Party Services') }} ({{ policy.thirdPartyServices|length }})
+                </h3>
+                <a href="{{ path('masilia_consent_admin_service_create', {policyId: policy.id}) }}" 
+                   class="btn ibexa-btn ibexa-btn--primary ibexa-btn--small">
+                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
+                        <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
+                    </svg>
+                    <span class="ibexa-btn__label">
+                        {{ 'third_party_service.add'|trans|desc('Add Service') }}
+                    </span>
+                </a>
+            </div>
+            <div class="card-body ibexa-card__body">
+                {% if policy.thirdPartyServices|length == 0 %}
+                    <div class="alert alert-info">
+                        <svg class="ibexa-icon ibexa-icon--small">
+                            <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
+                        </svg>
+                        {{ 'third_party_service.no_services'|trans|desc('No third-party services configured. Add services like Google Analytics, Facebook Pixel, etc. to automatically manage cookies and scripts.') }}
+                    </div>
+                {% else %}
                     {% set service_body_rows = [] %}
                     {% for service in policy.thirdPartyServices %}
                         {% set service_row_cols = [] %}
                         
+                        {% set name_col %}
+                            <a href="{{ path('masilia_consent_admin_service_view', {id: service.id}) }}">
+                                <strong>{{ service.name }}</strong>
+                            </a>
+                            {% if service.presetType %}
+                                <br><small class="badge bg-info">{{ service.presetType }}</small>
+                            {% endif %}
+                        {% endset %}
+                        
                         {% set service_row_cols = service_row_cols|merge([
-                            { content: service.name },
+                            { content: name_col, raw: true },
                             { content: '<span class="badge bg-secondary">' ~ service.category ~ '</span>', raw: true },
                             { content: service.description },
                         ]) %}
 
-                        {% set col_raw %}
-                            <a href="{{ service.privacyPolicyUrl }}" target="_blank" class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small">
-                                <svg class="ibexa-icon ibexa-icon--small">
-                                    <use xlink:href="{{ ibexa_icon_path('open-newtab') }}"></use>
-                                </svg>
-                                {{ 'service.view_policy'|trans|desc('View Policy') }}
-                            </a>
-                        {% endset %}
-                        {% set service_row_cols = service_row_cols|merge([{
-                            content: col_raw,
-                            raw: true,
-                        }]) %}
-
-                        {% set col_raw %}
+                        {% set status_col %}
                             {% if service.enabled %}
                                 <span class="badge bg-success">{{ 'service.enabled'|trans|desc('Enabled') }}</span>
                             {% else %}
@@ -247,7 +259,30 @@
                             {% endif %}
                         {% endset %}
                         {% set service_row_cols = service_row_cols|merge([{
-                            content: col_raw,
+                            content: status_col,
+                            raw: true,
+                        }]) %}
+
+                        {% set actions_col %}
+                            <div class="btn-group">
+                                <a href="{{ path('masilia_consent_admin_service_view', {id: service.id}) }}" 
+                                   class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                                   title="{{ 'common.view'|trans|desc('View') }}">
+                                    <svg class="ibexa-icon ibexa-icon--small">
+                                        <use xlink:href="{{ ibexa_icon_path('view') }}"></use>
+                                    </svg>
+                                </a>
+                                <a href="{{ path('masilia_consent_admin_service_edit', {id: service.id}) }}" 
+                                   class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                                   title="{{ 'common.edit'|trans|desc('Edit') }}">
+                                    <svg class="ibexa-icon ibexa-icon--small">
+                                        <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
+                                    </svg>
+                                </a>
+                            </div>
+                        {% endset %}
+                        {% set service_row_cols = service_row_cols|merge([{
+                            content: actions_col,
                             raw: true,
                         }]) %}
 
@@ -259,14 +294,14 @@
                             { content: 'service.name'|trans|desc('Name') },
                             { content: 'service.category'|trans|desc('Category') },
                             { content: 'service.description'|trans|desc('Description') },
-                            { content: 'service.privacy_policy'|trans|desc('Privacy Policy') },
                             { content: 'service.status'|trans|desc('Status') },
+                            { content: 'common.actions'|trans|desc('Actions'), class: 'text-right' },
                         ],
                         body_rows: service_body_rows,
                     } %}
-                </div>
+                {% endif %}
             </div>
-        {% endif %}
+        </div>
 
         {# Add Category Modal #}
         {% form_theme addCategoryForm '@ibexadesign/ui/form_fields.html.twig' %}

@@ -21,7 +21,7 @@ class ThirdPartyServiceController extends AbstractController
     ) {
     }
 
-    #[Route('/policy/{policyId}', name: 'list', methods: ['GET'], requirements: ['policyId' => '\d+'])]
+    #[Route('/policy/{policyId}', name: 'list', requirements: ['policyId' => '\d+'], methods: ['GET'])]
     public function list(CookiePolicy $policy): Response
     {
         $services = $this->serviceRepository->findBy(
@@ -35,7 +35,7 @@ class ThirdPartyServiceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'view', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'view', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function view(ThirdPartyService $service): Response
     {
         return $this->render('@MasiliaConsent/admin/service/view.html.twig', [
@@ -43,7 +43,7 @@ class ThirdPartyServiceController extends AbstractController
         ]);
     }
 
-    #[Route('/policy/{policyId}/create', name: 'create', methods: ['GET', 'POST'], requirements: ['policyId' => '\d+'])]
+    #[Route('/policy/{policyId}/create', name: 'create', requirements: ['policyId' => '\d+'], methods: ['GET', 'POST'])]
     public function create(Request $request, CookiePolicy $policy): Response
     {
         $service = new ThirdPartyService();
@@ -66,7 +66,7 @@ class ThirdPartyServiceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'edit', methods: ['GET', 'POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, ThirdPartyService $service): Response
     {
         $form = $this->createForm(ThirdPartyServiceType::class, $service);
@@ -85,7 +85,7 @@ class ThirdPartyServiceController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function delete(Request $request, ThirdPartyService $service): Response
     {
         $policyId = $service->getPolicy()->getId();
@@ -99,7 +99,7 @@ class ThirdPartyServiceController extends AbstractController
         return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policyId]);
     }
 
-    #[Route('/{id}/toggle', name: 'toggle', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/toggle', name: 'toggle', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function toggle(Request $request, ThirdPartyService $service): Response
     {
         if ($this->isCsrfTokenValid('toggle' . $service->getId(), $request->request->get('_token'))) {
