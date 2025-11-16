@@ -56,11 +56,7 @@ class ThirdPartyServiceType extends AbstractType
                     new Assert\Length([
                         'max' => 50,
                         'maxMessage' => 'third_party_service.form.identifier_max_length',
-                    ]),
-                    new Assert\Regex([
-                        'pattern' => '/^[a-z_]+$/',
-                        'message' => 'third_party_service.form.identifier_format',
-                    ]),
+                    ])
                 ],
                 'translation_domain' => 'masilia_consent',
             ])
