@@ -185,78 +185,84 @@
         {% for policy in policies %}
             {# Activate Modal #}
             {% if not policy.isActive %}
-                {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
-                    id: 'activate-policy-' ~ policy.id,
-                    title: 'policy.activate.confirm'|trans|desc('Activate Policy'),
-                } %}
-                    {% block body_content %}
-                        <p>{{ 'policy.activate.message'|trans({'%version%': policy.version})|desc('Activate policy version %version%? This will deactivate all other policies.') }}</p>
-                    {% endblock %}
-                    {% block footer_content %}
-                        <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}" class="d-inline">
-                            <button type="submit" class="ibexa-btn ibexa-btn--primary">
-                                <svg class="ibexa-icon ibexa-icon--small">
-                                    <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
-                                </svg>
-                                {{ 'policy.activate'|trans|desc('Activate') }}
-                            </button>
-                        </form>
-                        <button type="button" class="ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                            {{ 'common.cancel'|trans|desc('Cancel') }}
-                        </button>
-                    {% endblock %}
-                {% endembed %}
+                <div class="modal fade" id="activate-policy-{{ policy.id }}" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{ 'policy.activate.confirm'|trans|desc('Activate Policy') }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{ 'policy.activate.message'|trans({'%version%': policy.version})|desc('Activate policy version %version%? This will deactivate all other policies.') }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
+                                    {{ 'policy.cancel'|trans|desc('Cancel') }}
+                                </button>
+                                <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}" class="d-inline">
+                                    <button type="submit" class="ibexa-btn ibexa-btn--primary">
+                                        {{ 'policy.activate'|trans|desc('Activate') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
 
             {# Deactivate Modal #}
             {% if policy.isActive %}
-                {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
-                    id: 'deactivate-policy-' ~ policy.id,
-                    title: 'policy.deactivate.confirm'|trans|desc('Deactivate Policy'),
-                } %}
-                    {% block body_content %}
-                        <p>{{ 'policy.deactivate.message'|trans({'%version%': policy.version})|desc('Deactivate policy version %version%?') }}</p>
-                    {% endblock %}
-                    {% block footer_content %}
-                        <form method="post" action="{{ path('masilia_consent_admin_policy_deactivate', {id: policy.id}) }}" class="d-inline">
-                            <button type="submit" class="ibexa-btn ibexa-btn--warning">
-                                <svg class="ibexa-icon ibexa-icon--small">
-                                    <use xlink:href="{{ ibexa_icon_path('circle-close') }}"></use>
-                                </svg>
-                                {{ 'policy.deactivate'|trans|desc('Deactivate') }}
-                            </button>
-                        </form>
-                        <button type="button" class="ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                            {{ 'common.cancel'|trans|desc('Cancel') }}
-                        </button>
-                    {% endblock %}
-                {% endembed %}
+                <div class="modal fade" id="deactivate-policy-{{ policy.id }}" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{ 'policy.deactivate.confirm'|trans|desc('Deactivate Policy') }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{ 'policy.deactivate.message'|trans({'%version%': policy.version})|desc('Deactivate policy version %version%?') }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
+                                    {{ 'policy.cancel'|trans|desc('Cancel') }}
+                                </button>
+                                <form method="post" action="{{ path('masilia_consent_admin_policy_deactivate', {id: policy.id}) }}" class="d-inline">
+                                    <button type="submit" class="ibexa-btn ibexa-btn--warning">
+                                        {{ 'policy.deactivate'|trans|desc('Deactivate') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
 
             {# Delete Modal #}
             {% if not policy.isActive %}
-                {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
-                    id: 'delete-policy-' ~ policy.id,
-                    title: 'policy.delete.confirm'|trans|desc('Delete Policy'),
-                } %}
-                    {% block body_content %}
-                        <p>{{ 'policy.delete.message'|trans({'%version%': policy.version})|desc('Delete policy version %version%? This action cannot be undone.') }}</p>
-                    {% endblock %}
-                    {% block footer_content %}
-                        <form method="post" action="{{ path('masilia_consent_admin_policy_delete', {id: policy.id}) }}" class="d-inline">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ policy.id) }}">
-                            <button type="submit" class="ibexa-btn ibexa-btn--danger">
-                                <svg class="ibexa-icon ibexa-icon--small">
-                                    <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
-                                </svg>
-                                {{ 'policy.delete'|trans|desc('Delete') }}
-                            </button>
-                        </form>
-                        <button type="button" class="ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                            {{ 'common.cancel'|trans|desc('Cancel') }}
-                        </button>
-                    {% endblock %}
-                {% endembed %}
+                <div class="modal fade" id="delete-policy-{{ policy.id }}" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{ 'policy.delete.confirm'|trans|desc('Delete Policy') }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{ 'policy.delete.message'|trans({'%version%': policy.version})|desc('Delete policy version %version%? This action cannot be undone.') }}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="ibexa-btn ibexa-btn--ghost" data-bs-dismiss="modal">
+                                    {{ 'policy.cancel'|trans|desc('Cancel') }}
+                                </button>
+                                <form method="post" action="{{ path('masilia_consent_admin_policy_delete', {id: policy.id}) }}" class="d-inline">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ policy.id) }}">
+                                    <button type="submit" class="ibexa-btn ibexa-btn--danger">
+                                        {{ 'policy.delete'|trans|desc('Delete') }}
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
         {% endfor %}
     </section>

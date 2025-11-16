@@ -59,7 +59,7 @@
             <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
                 <button
                         type="button"
-                        class="ibexa-btn ibexa-btn--primary"
+                        class="btn ibexa-btn ibexa-btn--primary"
                         data-bs-toggle="modal"
                         data-bs-target="#activate-policy"
                 >
@@ -80,7 +80,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="ibexa-content-container">
+    <div class="ibexa-content-container ibexa-container">
         {# Policy Information Section #}
         {% block policy_information %}
             {% set version_content %}
@@ -232,10 +232,10 @@
                         {% endset %}
 
                         {% set actions_col %}
-                            <div class="ibexa-extra-actions__btns">
+                            <div class="btn-group">
                                 <button
                                         type="button"
-                                        class="ibexa-btn ibexa-btn--ghost ibexa-btn--small ibexa-btn--no-text"
+                                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small ibexa-btn--no-text"
                                         data-bs-toggle="modal"
                                         data-bs-target="#edit-service-{{ service.id }}"
                                         title="{{ 'common.edit'|trans()|desc('Edit') }}">
@@ -245,7 +245,7 @@
                                 </button>
                                 <button
                                         type="button"
-                                        class="ibexa-btn ibexa-btn--ghost ibexa-btn--small ibexa-btn--no-text"
+                                        class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small ibexa-btn--no-text"
                                         data-bs-toggle="modal"
                                         data-bs-target="#delete-service-{{ service.id }}"
                                         title="{{ 'common.delete'|trans()|desc('Delete') }}">
@@ -302,7 +302,7 @@
                 {{ form_widget(addCategoryForm) }}
             {% endblock %}
             {% block footer_content %}
-                <button type="submit" form="{{ addCategoryForm.vars.id }}" class="ibexa-btn ibexa-btn--primary">
+                <button type="submit" form="{{ addCategoryForm.vars.id }}" class="btn ibexa-btn ibexa-btn--primary">
                     <svg class="ibexa-icon ibexa-icon--small">
                         <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
                     </svg>
@@ -327,7 +327,7 @@
                     {{ form_widget(editForm) }}
                 {% endblock %}
                 {% block footer_content %}
-                    <button type="submit" form="{{ editForm.vars.id }}" class="ibexa-btn ibexa-btn--primary">
+                    <button type="submit" form="{{ editForm.vars.id }}" class="btn ibexa-btn ibexa-btn--primary">
                         <svg class="ibexa-icon ibexa-icon--small">
                             <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
                         </svg>
