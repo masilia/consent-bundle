@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Masilia\ConsentBundle\Controller\Admin;
 
+use Masilia\ConsentBundle\Entity\Cookie;
 use Masilia\ConsentBundle\Entity\CookieCategory;
 use Masilia\ConsentBundle\Entity\CookiePolicy;
 use Masilia\ConsentBundle\Entity\ThirdPartyService;
 use Masilia\ConsentBundle\Form\Type\CategoryType;
+use Masilia\ConsentBundle\Form\Type\CookieType;
 use Masilia\ConsentBundle\Form\Type\PolicyType;
 use Masilia\ConsentBundle\Form\Type\ThirdPartyServiceType;
 use Masilia\ConsentBundle\Repository\CookiePolicyRepository;
@@ -46,10 +48,28 @@ class PolicyAdminController extends AbstractController
 
         // Create edit forms for each category
         $editForms = [];
+        $addCookieForms = [];
+        $editCookieForms = [];
+        
         foreach ($policy->getCategories() as $category) {
             $editForms[$category->getId()] = $this->createForm(CategoryType::class, $category, [
                 'action' => $this->generateUrl('masilia_consent_admin_category_edit', ['id' => $category->getId()]),
             ])->createView();
+            
+            // Create add cookie form for this category
+            $newCookie = new Cookie();
+            $newCookie->setCategory($category);
+            $addCookieForms[$category->getId()] = $this->createForm(CookieType::class, $newCookie, [
+                'action' => $this->generateUrl('masilia_consent_admin_cookie_create', ['categoryId' => $category->getId()]),
+            ])->createView();
+            
+            // Create edit forms for each cookie in this category
+            $editCookieForms[$category->getId()] = [];
+            foreach ($category->getCookies() as $cookie) {
+                $editCookieForms[$category->getId()][$cookie->getId()] = $this->createForm(CookieType::class, $cookie, [
+                    'action' => $this->generateUrl('masilia_consent_admin_cookie_edit', ['id' => $cookie->getId()]),
+                ])->createView();
+            }
         }
 
         // Create form for add service
@@ -71,6 +91,8 @@ class PolicyAdminController extends AbstractController
             'policy' => $policy,
             'addCategoryForm' => $addCategoryForm->createView(),
             'editForms' => $editForms,
+            'addCookieForms' => $addCookieForms,
+            'editCookieForms' => $editCookieForms,
             'addServiceForm' => $addServiceForm->createView(),
             'editServiceForms' => $editServiceForms,
         ]);

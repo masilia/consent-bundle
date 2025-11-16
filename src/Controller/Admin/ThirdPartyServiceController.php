@@ -8,6 +8,7 @@ use Masilia\ConsentBundle\Entity\CookiePolicy;
 use Masilia\ConsentBundle\Entity\ThirdPartyService;
 use Masilia\ConsentBundle\Form\Type\ThirdPartyServiceType;
 use Masilia\ConsentBundle\Repository\ThirdPartyServiceRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +23,7 @@ class ThirdPartyServiceController extends AbstractController
     }
 
     #[Route('/policy/{policyId}', name: 'list', requirements: ['policyId' => '\d+'], methods: ['GET'])]
+    #[ParamConverter('policy', options: ['id' => 'policyId'])]
     public function list(CookiePolicy $policy): Response
     {
         $services = $this->serviceRepository->findBy(
@@ -44,6 +46,7 @@ class ThirdPartyServiceController extends AbstractController
     }
 
     #[Route('/policy/{policyId}/create', name: 'create', requirements: ['policyId' => '\d+'], methods: ['POST'])]
+    #[ParamConverter('policy', options: ['id' => 'policyId'])]
     public function create(Request $request, CookiePolicy $policy): Response
     {
         $service = new ThirdPartyService();

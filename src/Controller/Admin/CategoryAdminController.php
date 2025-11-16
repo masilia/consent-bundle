@@ -8,6 +8,7 @@ use Masilia\ConsentBundle\Entity\CookieCategory;
 use Masilia\ConsentBundle\Entity\CookiePolicy;
 use Masilia\ConsentBundle\Form\Type\CategoryType;
 use Masilia\ConsentBundle\Repository\CookieCategoryRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,8 @@ class CategoryAdminController extends AbstractController
     ) {
     }
 
-    #[Route('/policy/{policyId}', name: 'list', methods: ['GET'], requirements: ['policyId' => '\d+'])]
+    #[Route('/policy/{policyId}', name: 'list', requirements: ['policyId' => '\d+'], methods: ['GET'])]
+    #[ParamConverter('policy', options: ['id' => 'policyId'])]
     public function list(CookiePolicy $policy): Response
     {
         $categories = $this->categoryRepository->findByPolicy($policy);
@@ -32,7 +34,7 @@ class CategoryAdminController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'view', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'view', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function view(CookieCategory $category): Response
     {
         return $this->render('@MasiliaConsent/admin/category/view.html.twig', [
@@ -41,6 +43,7 @@ class CategoryAdminController extends AbstractController
     }
 
     #[Route('/policy/{policyId}/create', name: 'create', methods: ['POST'], requirements: ['policyId' => '\d+'])]
+    #[ParamConverter('policy', options: ['id' => 'policyId'])]
     public function create(Request $request, CookiePolicy $policy): Response
     {
         $category = new CookieCategory();
@@ -61,7 +64,7 @@ class CategoryAdminController extends AbstractController
         return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
     }
 
-    #[Route('/{id}/edit', name: 'edit', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function edit(Request $request, CookieCategory $category): Response
     {
         $form = $this->createForm(CategoryType::class, $category);

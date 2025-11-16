@@ -34,7 +34,7 @@ modal:
 
 # Policy Form
 policy:
-  third_party_services: 'Third-Party Services'
+  third_party_services: 'Third-Party Services (%count%)'
   form:
     version: 'Version'
     version_placeholder: 'e.g., 1.0.0'
