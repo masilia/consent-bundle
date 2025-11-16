@@ -44,137 +44,138 @@ class ThirdPartyServiceType extends AbstractType
                 'translation_domain' => 'masilia_consent',
             ])
             ->add('identifier', TextType::class, [
-                'label' => 'service.form.identifier',
+                'label' => 'third_party_service.form.identifier',
                 'attr' => [
-                    'placeholder' => 'service.form.identifier_placeholder',
+                    'placeholder' => 'third_party_service.form.identifier_placeholder',
                     'class' => 'ibexa-input ibexa-input--text',
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
-                        'message' => 'service.form.identifier_required',
+                        'message' => 'third_party_service.form.identifier_required',
                     ]),
                     new Assert\Length([
                         'max' => 50,
-                        'maxMessage' => 'service.form.identifier_max_length',
+                        'maxMessage' => 'third_party_service.form.identifier_max_length',
                     ]),
                     new Assert\Regex([
                         'pattern' => '/^[a-z_]+$/',
-                        'message' => 'service.form.identifier_format',
+                        'message' => 'third_party_service.form.identifier_format',
                     ]),
                 ],
                 'translation_domain' => 'masilia_consent',
             ])
             ->add('name', TextType::class, [
-                'label' => 'service.form.name',
+                'label' => 'third_party_service.form.name',
                 'attr' => [
-                    'placeholder' => 'service.form.name_placeholder',
+                    'placeholder' => 'third_party_service.form.name_placeholder',
                     'class' => 'ibexa-input ibexa-input--text',
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
-                        'message' => 'service.form.name_required',
+                        'message' => 'third_party_service.form.name_required',
                     ]),
                     new Assert\Length([
                         'max' => 100,
-                        'maxMessage' => 'service.form.name_max_length',
+                        'maxMessage' => 'third_party_service.form.name_max_length',
                     ]),
                 ],
                 'translation_domain' => 'masilia_consent',
             ])
             ->add('category', TextType::class, [
-                'label' => 'service.form.category',
+                'label' => 'third_party_service.form.category',
                 'attr' => [
-                    'placeholder' => 'service.form.category_placeholder',
+                    'placeholder' => 'third_party_service.form.category_placeholder',
                     'class' => 'ibexa-input ibexa-input--text',
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
-                        'message' => 'service.form.category_required',
+                        'message' => 'third_party_service.form.category_required',
                     ]),
                     new Assert\Length([
                         'max' => 50,
-                        'maxMessage' => 'service.form.category_max_length',
+                        'maxMessage' => 'third_party_service.form.category_max_length',
                     ]),
                 ],
-                'help' => 'service.form.category_help',
+                'help' => 'third_party_service.form.category_help',
                 'translation_domain' => 'masilia_consent',
             ])
             ->add('description', TextareaType::class, [
-                'label' => 'service.form.description',
+                'label' => 'third_party_service.form.description',
                 'attr' => [
-                    'placeholder' => 'service.form.description_placeholder',
+                    'placeholder' => 'third_party_service.form.description_placeholder',
                     'class' => 'ibexa-input ibexa-input--textarea',
                     'rows' => 3,
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
-                        'message' => 'service.form.description_required',
+                        'message' => 'third_party_service.form.description_required',
                     ]),
                 ],
                 'translation_domain' => 'masilia_consent',
             ])
             ->add('privacyPolicyUrl', UrlType::class, [
-                'label' => 'service.form.privacy_policy_url',
+                'label' => 'third_party_service.form.privacy_policy_url',
                 'attr' => [
-                    'placeholder' => 'service.form.privacy_policy_url_placeholder',
+                    'placeholder' => 'third_party_service.form.privacy_policy_url_placeholder',
                     'class' => 'ibexa-input ibexa-input--text',
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
-                        'message' => 'service.form.privacy_policy_url_required',
+                        'message' => 'third_party_service.form.privacy_policy_url_required',
                     ]),
                     new Assert\Url([
-                        'message' => 'service.form.privacy_policy_url_url',
+                        'message' => 'third_party_service.form.privacy_policy_url_format',
                     ]),
                     new Assert\Length([
                         'max' => 500,
-                        'maxMessage' => 'service.form.privacy_policy_url_max_length',
+                        'maxMessage' => 'third_party_service.form.privacy_policy_url_max_length',
                     ]),
                 ],
                 'translation_domain' => 'masilia_consent',
             ])
             ->add('configKey', TextType::class, [
-                'label' => 'service.form.config_key',
+                'label' => 'third_party_service.form.config_key',
                 'attr' => [
-                    'placeholder' => 'service.form.config_key_placeholder',
+                    'placeholder' => 'third_party_service.form.config_key_placeholder',
                     'class' => 'ibexa-input ibexa-input--text',
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
-                        'message' => 'service.form.config_key_required',
+                        'message' => 'third_party_service.form.config_key_required',
                     ]),
                     new Assert\Length([
                         'max' => 100,
-                        'maxMessage' => 'service.form.config_key_max_length',
+                        'maxMessage' => 'third_party_service.form.config_key_max_length',
                     ]),
                 ],
-                'help' => 'service.form.config_key_help',
+                'help' => 'third_party_service.form.config_key_help',
                 'translation_domain' => 'masilia_consent',
             ])
             ->add('configValue', TextType::class, [
-                'label' => 'service.form.config_value',
+                'label' => 'third_party_service.form.config_value',
                 'attr' => [
-                    'placeholder' => 'service.form.config_value_placeholder',
+                    'placeholder' => 'third_party_service.form.config_value_placeholder',
                     'class' => 'ibexa-input ibexa-input--text',
                 ],
                 'constraints' => [
                     new Assert\NotBlank([
-                        'message' => 'service.form.config_value_required',
+                        'message' => 'third_party_service.form.config_value_required',
                     ]),
                     new Assert\Length([
                         'max' => 255,
-                        'maxMessage' => 'service.form.config_value_max_length',
+                        'maxMessage' => 'third_party_service.form.config_value_max_length',
                     ]),
                 ],
-                'help' => 'service.form.config_value_help',
+                'help' => 'third_party_service.form.config_value_help',
                 'translation_domain' => 'masilia_consent',
             ])
             ->add('enabled', CheckboxType::class, [
-                'label' => 'service.form.enabled',
+                'label' => 'third_party_service.form.enabled',
                 'required' => false,
                 'attr' => [
                     'class' => 'ibexa-input ibexa-input--checkbox',
                 ],
+                'help' => 'third_party_service.form.enabled_help',
                 'translation_domain' => 'masilia_consent',
             ]);
     }

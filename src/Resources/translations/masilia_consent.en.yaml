@@ -165,6 +165,7 @@ cookie:
     delete_confirm: 'Are you sure you want to delete this cookie?'
 
 # Third-Party Service Form
+
 third_party_service:
   form:
     preset_section: 'Service Preset'
@@ -178,7 +179,7 @@ third_party_service:
     identifier: 'Identifier'
     identifier_placeholder: 'e.g., google_analytics'
     identifier_required: 'Identifier is required'
-    identifier_max_length: 'Identifier must not exceed 50 characters'
+    identifier_max_length: 'Identifier must not exceed %limit% characters'
     identifier_format: 'Identifier must contain only lowercase letters, numbers, and underscores'
     identifier_unique: 'This identifier is already in use'
     name: 'Service Name'
@@ -192,16 +193,22 @@ third_party_service:
     privacy_policy_url_placeholder: 'https://...'
     privacy_policy_url_required: 'Privacy policy URL is required'
     privacy_policy_url_format: 'Please enter a valid URL'
+    privacy_policy_url_max_length: 'Privacy policy URL must not exceed %limit% characters'
     category: 'Category'
     category_required: 'Category is required'
-    category_placeholder: 'Select a category'
+    category_placeholder: 'e.g., analytics, marketing'
+    category_max_length: 'Category must not exceed %limit% characters'
+    category_help: 'Category type for grouping (e.g., analytics, marketing, functional)'
     config_key: 'Configuration Key'
     config_key_placeholder: 'e.g., measurement_id'
+    config_key_required: 'Configuration key is required'
+    config_key_max_length: 'Configuration key must not exceed %limit% characters'
     config_key_help: 'The configuration parameter name (e.g., tracking ID, pixel ID)'
     config_value: 'Configuration Value'
     config_value_placeholder: 'e.g., G-ABC123XYZ'
     config_value_help: 'Your service ID or tracking code'
     config_value_required: 'Configuration value is required'
+    config_value_max_length: 'Configuration value must not exceed %limit% characters'
     enabled: 'Enabled'
     enabled_help: 'Enable this service to inject scripts and track cookies'
     create: 'Create Service'
