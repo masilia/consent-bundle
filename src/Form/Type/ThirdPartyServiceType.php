@@ -19,7 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ThirdPartyServiceType extends AbstractType
 {
     public function __construct(
-        private CookiePresetService $presetService
+        private readonly CookiePresetService $presetService
     ) {
     }
 

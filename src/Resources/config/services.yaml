@@ -42,3 +42,8 @@ services:
         arguments:
             $loggingEnabled: '%masilia_consent.logging.enabled%'
         tags: ['kernel.event_subscriber']
+
+    # Form Types
+    Masilia\ConsentBundle\Form\Type\:
+        resource: '../../Form/Type/*'
+        tags: ['form.type']

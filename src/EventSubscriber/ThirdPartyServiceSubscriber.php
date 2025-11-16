@@ -18,8 +18,8 @@ use Psr\Log\LoggerInterface;
 /**
  * Automatically creates cookies when a third-party service with a preset is created
  */
-#[AsEntityListener(event: Events::postPersist)]
-class ThirdPartyServiceSubscriber
+#[AsEntityListener(event: Events::postPersist, entity: ThirdPartyService::class)]
+readonly class ThirdPartyServiceSubscriber
 {
     public function __construct(
         private CookiePresetService $presetService,
