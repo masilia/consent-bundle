@@ -67,7 +67,7 @@ class PolicyAdminController extends AbstractController
             ])->createView();
         }
 
-        return $this->render('@MasiliaConsent/admin/policy/view.html.twig', [
+        return $this->render('@MasiliaConsent/admin/policy/view_refactored.html.twig', [
             'policy' => $policy,
             'addCategoryForm' => $addCategoryForm->createView(),
             'editForms' => $editForms,
