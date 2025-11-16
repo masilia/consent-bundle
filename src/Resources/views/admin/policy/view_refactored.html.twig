@@ -175,12 +175,10 @@
                                 body_rows: cookie_body_rows,
                             } %}
                         {% else %}
-                            <div class="ibexa-alert ibexa-badge--info">
-                                <svg class="ibexa-icon ibexa-icon--small">
-                                    <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
-                                </svg>
-                                {{ 'category.no_cookies'|trans|desc('No cookies defined for this category yet.') }}
-                            </div>
+                            {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                                type: 'info',
+                                title: 'category.no_cookies'|trans|desc('No cookies defined for this category yet.'),
+                            } only %}
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -192,12 +190,10 @@
                         headline: 'policy.categories'|trans()|desc('Categories'),
                         actions: macros.add_category_button(),
                     } %}
-                    <div class="ibexa-alert ibexa-badge--info">
-                        <svg class="ibexa-icon ibexa-icon--small">
-                            <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
-                        </svg>
-                        {{ 'policy.no_categories'|trans|desc('No categories defined yet. Add a category to get started.') }}
-                    </div>
+                    {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                        type: 'info',
+                        title: 'policy.no_categories'|trans|desc('No categories defined yet. Add a category to get started.'),
+                    } only %}
                 </section>
             {% endif %}
         {% endblock %}
@@ -284,12 +280,10 @@
                         body_rows: service_body_rows,
                     } %}
                 {% else %}
-                    <div class="ibexa-alert ibexa-badge--info">
-                        <svg class="ibexa-icon ibexa-icon--small">
-                            <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
-                        </svg>
-                        {{ 'third_party_service.no_services'|trans|desc('No third-party services configured. Add services like Google Analytics, Facebook Pixel, etc. to automatically manage cookies and scripts.') }}
-                    </div>
+                    {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                        type: 'info',
+                        title: 'third_party_service.no_services'|trans|desc('No third-party services configured. Add services like Google Analytics, Facebook Pixel, etc. to automatically manage cookies and scripts.'),
+                    } only %}
                 {% endif %}
             </section>
         {% endblock %}

@@ -31,12 +31,11 @@
         </div>
 
         {% if services is empty %}
-            <div class="ibexa-alert ibexa-badge--info mt-4">
-                <svg class="ibexa-icon ibexa-icon--small">
-                    <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
-                </svg>
-                {{ 'third_party_service.list.no_services'|trans|desc('No third-party services found. Create one to get started.') }}
-            </div>
+            {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                type: 'info',
+                title: 'third_party_service.no_services'|trans|desc('No third-party services configured for this policy.'),
+                class: 'mt-4',
+            } only %}
         {% else %}
             <div class="ibexa-table-header mt-4">
                 <div class="ibexa-table-header__headline">

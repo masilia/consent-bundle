@@ -228,12 +228,10 @@
             </div>
             <div class="card-body ibexa-card__body">
                 {% if policy.thirdPartyServices|length == 0 %}
-                    <div class="ibexa-alert ibexa-badge--info">
-                        <svg class="ibexa-icon ibexa-icon--small">
-                            <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
-                        </svg>
-                        {{ 'third_party_service.no_services'|trans|desc('No third-party services configured. Add services like Google Analytics, Facebook Pixel, etc. to automatically manage cookies and scripts.') }}
-                    </div>
+                    {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                        type: 'info',
+                        title: 'third_party_service.no_services'|trans|desc('No third-party services configured. Add services like Google Analytics, Facebook Pixel, etc. to automatically manage cookies and scripts.'),
+                    } only %}
                 {% else %}
                     {% set service_body_rows = [] %}
                     {% for service in policy.thirdPartyServices %}
@@ -417,12 +415,10 @@
             {% block body_content %}
                 {{ form_start(addServiceForm, {'attr': {'id': 'add-service-form'}}) }}
                     <div class="ibexa-form-block">
-                        <div class="ibexa-alert ibexa-badge--info">
-                            <svg class="ibexa-icon ibexa-icon--small">
-                                <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
-                            </svg>
-                            {{ 'third_party_service.form.preset_info'|trans|desc('Select a preset to automatically configure cookies and scripts for popular services like Google Analytics, Facebook Pixel, etc.') }}
-                        </div>
+                        {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                            type: 'info',
+                            title: 'third_party_service.form.preset_info'|trans|desc('Select a preset to automatically configure cookies and scripts for popular services like Google Analytics, Facebook Pixel, etc.'),
+                        } only %}
                         {{ form_row(addServiceForm.presetType, { row_attr: { class: 'ibexa-form-field' } }) }}
                         <hr>
                         {{ form_row(addServiceForm.identifier, { row_attr: { class: 'ibexa-form-field' } }) }}
@@ -464,12 +460,10 @@
                     {{ form_start(editServiceForm, {'attr': {'id': 'edit-service-form-' ~ service.id}}) }}
                         <div class="ibexa-form-block">
                             {% if service.presetType %}
-                                <div class="ibexa-alert ibexa-badge--warning">
-                                    <svg class="ibexa-icon ibexa-icon--small">
-                                        <use xlink:href="{{ ibexa_icon_path('warning') }}"></use>
-                                    </svg>
-                                    {{ 'third_party_service.form.preset_warning'|trans|desc('This service uses a preset. Changing the preset type may affect auto-generated cookies.') }}
-                                </div>
+                                {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                                    type: 'warning',
+                                    title: 'third_party_service.form.preset_warning'|trans|desc('This service uses a preset. Changing the preset type may affect auto-generated cookies.'),
+                                } only %}
                             {% endif %}
                             {{ form_row(editServiceForm.presetType, { row_attr: { class: 'ibexa-form-field' } }) }}
                             <hr>

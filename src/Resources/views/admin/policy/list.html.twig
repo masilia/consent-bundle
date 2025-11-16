@@ -60,17 +60,19 @@
 {% block content %}
     <section class="container ibexa-container">
         {% for message in app.flashes('success') %}
-            <div class="ibexa-alert ibexa-alert-success ibexa-alert-dismissible fade show" role="ibexa-alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="ibexa-alert"></button>
-            </div>
+            {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                type: 'success',
+                title: message,
+                show_close_btn: true,
+            } only %}
         {% endfor %}
 
         {% for message in app.flashes('error') %}
-            <div class="ibexa-alert ibexa-badge--danger ibexa-alert-dismissible fade show" role="ibexa-alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="ibexa-alert"></button>
-            </div>
+            {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                type: 'error',
+                title: message,
+                show_close_btn: true,
+            } only %}
         {% endfor %}
 
         {% set body_rows = [] %}

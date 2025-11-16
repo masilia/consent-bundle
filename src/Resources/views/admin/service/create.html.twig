@@ -21,12 +21,10 @@
                     </h3>
                 </div>
                 <div class="card-body ibexa-card__body ibexa-form-block">
-                    <div class="ibexa-alert ibexa-badge--info">
-                        <svg class="ibexa-icon ibexa-icon--small">
-                            <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
-                        </svg>
-                        {{ 'third_party_service.form.preset_info'|trans|desc('Select a preset to automatically configure cookies and scripts for popular services like Google Analytics, Facebook Pixel, etc.') }}
-                    </div>
+                    {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                        type: 'info',
+                        title: 'third_party_service.form.preset_info'|trans|desc('Select a preset to automatically configure cookies and scripts for popular services like Google Analytics, Facebook Pixel, etc.'),
+                    } only %}
                     {{ form_row(form.presetType, { row_attr: { class: 'ibexa-form-field' } }) }}
                 </div>
             </div>

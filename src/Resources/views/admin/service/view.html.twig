@@ -118,12 +118,10 @@
                             </h3>
                         </div>
                         <div class="card-body ibexa-card__body">
-                            <div class="ibexa-alert ibexa-badge--info">
-                                <svg class="ibexa-icon ibexa-icon--small">
-                                    <use xlink:href="{{ ibexa_icon_path('about') }}"></use>
-                                </svg>
-                                {{ 'third_party_service.show.auto_cookies_info'|trans|desc('This service uses a preset. Cookies are automatically created and managed based on the preset configuration.') }}
-                            </div>
+                            {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                                type: 'info',
+                                title: 'third_party_service.show.auto_cookies_info'|trans|desc('This service uses a preset. Cookies are automatically created and managed based on the preset configuration.'),
+                            } only %}
                             <p>
                                 <a href="{{ path('masilia_consent_admin_policy_view', {id: service.policy.id}) }}#cookies" 
                                    class="btn ibexa-btn ibexa-btn--secondary">
