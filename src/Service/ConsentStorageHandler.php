@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Masilia\ConsentBundle\Service;
 
 use Masilia\ConsentBundle\ValueObject\ConsentPreferences;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,11 +13,13 @@ use Symfony\Component\HttpFoundation\Response;
 class ConsentStorageHandler
 {
     private const COOKIE_NAME = 'masilia_consent';
+    private array $storageConfig;
 
     public function __construct(
         private readonly RequestStack $requestStack,
-        private readonly array $storageConfig
+        public readonly ParameterBagInterface $parameterBag
     ) {
+        $this->storageConfig = $this->parameterBag->get('masilia_consent.storage');
     }
 
     public function getConsent(): ?ConsentPreferences

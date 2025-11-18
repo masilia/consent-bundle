@@ -9,18 +9,8 @@ services:
         resource: '../../Repository/*'
         tags: ['doctrine.repository_service']
 
-    # Services with explicit configuration
-    Masilia\ConsentBundle\Service\ConsentStorageHandler:
-        arguments:
-            $storageConfig: '%masilia_consent.storage%'
-
-    Masilia\ConsentBundle\Service\ConsentManager:
-        arguments:
-            $loggingConfig: '%masilia_consent.logging%'
-
     Masilia\ConsentBundle\Service\:
         resource: '../../Service/*'
-        exclude: '../../Service/{ConsentManager.php,ConsentStorageHandler.php}'
 
     # Controllers
     Masilia\ConsentBundle\Controller\:
@@ -45,6 +35,9 @@ services:
 
     Masilia\ConsentBundle\EventSubscriber\MenuSubscriber:
         tags: ['kernel.event_subscriber']
+
+    Masilia\ConsentBundle\EventSubscriber\ThirdPartyServiceSubscriber:
+        tags: ['doctrine.event_subscriber']
 
     # Form Types
     Masilia\ConsentBundle\Form\Type\:

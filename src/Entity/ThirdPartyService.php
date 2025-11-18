@@ -49,6 +49,10 @@ class ThirdPartyService
     #[ORM\Column(type: 'boolean')]
     private bool $enabled = true;
 
+    #[ORM\OneToOne(targetEntity: CookieCategory::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
+    private ?CookieCategory $cookieCategory = null;
+
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $createdAt;
 
@@ -190,5 +194,16 @@ class ThirdPartyService
     public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
+    }
+
+    public function getCookieCategory(): ?CookieCategory
+    {
+        return $this->cookieCategory;
+    }
+
+    public function setCookieCategory(?CookieCategory $cookieCategory): self
+    {
+        $this->cookieCategory = $cookieCategory;
+        return $this;
     }
 }

@@ -17,14 +17,16 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ConsentManager
 {
+    private array $loggingConfig;
+
     public function __construct(
         private readonly CookiePolicyRepository $policyRepository,
         private readonly ConsentLogRepository $logRepository,
         private readonly ConsentStorageHandler $storageHandler,
         private readonly RequestStack $requestStack,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly array $loggingConfig
     ) {
+        $this->loggingConfig = $this->storageHandler->parameterBag->get('masilia_consent.logging');
     }
 
     public function getActivePolicy(): ?CookiePolicy
