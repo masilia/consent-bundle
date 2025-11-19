@@ -119,7 +119,12 @@ class PolicyAdminController extends AbstractController
         $policy->setIsActive(true);
         $this->policyRepository->save($policy, true);
 
-        $this->notificationHandler->success(sprintf('Policy version %s has been activated.', $policy->getVersion()));
+        $this->notificationHandler->success(
+            /** @Desc("Policy version '%version%' has been activated.") */
+            'policy.activate.success',
+            ['%version%' => $policy->getVersion()],
+            'masilia_consent'
+        );
         
         return $this->redirectToRoute('masilia_consent_admin_policy_list');
     }
@@ -130,7 +135,12 @@ class PolicyAdminController extends AbstractController
         $policy->setIsActive(false);
         $this->policyRepository->save($policy, true);
 
-        $this->notificationHandler->success(sprintf('Policy version %s has been deactivated.', $policy->getVersion()));
+        $this->notificationHandler->success(
+            /** @Desc("Policy version '%version%' has been deactivated.") */
+            'policy.deactivate.success',
+            ['%version%' => $policy->getVersion()],
+            'masilia_consent'
+        );
 
         return $this->redirectToRoute('masilia_consent_admin_policy_list');
     }
@@ -149,7 +159,12 @@ class PolicyAdminController extends AbstractController
             }
 
             $this->policyRepository->save($policy, true);
-            $this->notificationHandler->success(sprintf('Policy version %s has been created.', $policy->getVersion()));
+            $this->notificationHandler->success(
+                /** @Desc("Policy version '%version%' has been created.") */
+                'policy.create.success',
+                ['%version%' => $policy->getVersion()],
+                'masilia_consent'
+            );
 
             return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
         }
@@ -174,7 +189,12 @@ class PolicyAdminController extends AbstractController
             }
 
             $this->policyRepository->save($policy, true);
-            $this->notificationHandler->success(sprintf('Policy version %s has been updated.', $policy->getVersion()));
+            $this->notificationHandler->success(
+                /** @Desc("Policy version '%version%' has been updated.") */
+                'policy.edit.success',
+                ['%version%' => $policy->getVersion()],
+                'masilia_consent'
+            );
 
             return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
         }
@@ -189,14 +209,24 @@ class PolicyAdminController extends AbstractController
     public function delete(Request $request, CookiePolicy $policy): Response
     {
         if ($policy->isActive()) {
-            $this->notificationHandler->error('Cannot delete an active policy. Deactivate it first.');
+            $this->notificationHandler->error(
+                /** @Desc("Cannot delete an active policy. Deactivate it first.") */
+                'policy.delete.error.active',
+                [],
+                'masilia_consent'
+            );
             return $this->redirectToRoute('masilia_consent_admin_policy_list');
         }
 
         if ($this->isCsrfTokenValid('delete' . $policy->getId(), $request->request->get('_token'))) {
             $version = $policy->getVersion();
             $this->policyRepository->remove($policy, true);
-            $this->notificationHandler->success(sprintf('Policy version %s has been deleted.', $version));
+            $this->notificationHandler->success(
+                /** @Desc("Policy version '%version%' has been deleted.") */
+                'policy.delete.success',
+                ['%version%' => $version],
+                'masilia_consent'
+            );
         }
 
         return $this->redirectToRoute('masilia_consent_admin_policy_list');

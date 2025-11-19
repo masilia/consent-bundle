@@ -59,10 +59,19 @@ class ThirdPartyServiceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->serviceRepository->save($service, true);
-            $this->notificationHandler->success(sprintf('Service "%s" has been created.', $service->getName()));
+            $this->notificationHandler->success(
+                /** @Desc("Service '%name%' has been created.") */
+                'service.create.success',
+                ['%name%' => $service->getName()],
+                'masilia_consent'
+            );
         } else {
             foreach ($form->getErrors(true) as $error) {
-                $this->notificationHandler->error($error->getMessage());
+                $this->notificationHandler->error(
+                    $error->getMessage(),
+                    [],
+                    'masilia_consent'
+                );
             }
         }
 
@@ -77,10 +86,19 @@ class ThirdPartyServiceController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->serviceRepository->save($service, true);
-            $this->notificationHandler->success(sprintf('Service "%s" has been updated.', $service->getName()));
+            $this->notificationHandler->success(
+                /** @Desc("Service '%name%' has been updated.") */
+                'service.edit.success',
+                ['%name%' => $service->getName()],
+                'masilia_consent'
+            );
         } else {
             foreach ($form->getErrors(true) as $error) {
-                $this->notificationHandler->error($error->getMessage());
+                $this->notificationHandler->error(
+                    $error->getMessage(),
+                    [],
+                    'masilia_consent'
+                );
             }
         }
 
@@ -95,7 +113,12 @@ class ThirdPartyServiceController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $service->getId(), $request->request->get('_token'))) {
             $name = $service->getName();
             $this->serviceRepository->remove($service, true);
-            $this->notificationHandler->success(sprintf('Service "%s" has been deleted.', $name));
+            $this->notificationHandler->success(
+                /** @Desc("Service '%name%' has been deleted.") */
+                'service.delete.success',
+                ['%name%' => $name],
+                'masilia_consent'
+            );
         }
 
         return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policyId]);
@@ -109,7 +132,12 @@ class ThirdPartyServiceController extends AbstractController
             $this->serviceRepository->save($service, true);
             
             $status = $service->isEnabled() ? 'enabled' : 'disabled';
-            $this->notificationHandler->success(sprintf('Service "%s" has been %s.', $service->getName(), $status));
+            $this->notificationHandler->success(
+                /** @Desc("Service '%name%' has been %status%.") */
+                'service.toggle.success',
+                ['%name%' => $service->getName(), '%status%' => $status],
+                'masilia_consent'
+            );
         }
 
         return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $service->getPolicy()->getId()]);
