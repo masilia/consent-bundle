@@ -1,6 +1,7 @@
 {% extends '@ibexadesign/ui/layout.html.twig' %}
 
 {% trans_default_domain 'masilia_consent' %}
+{% import _self as macros %}
 
 {% block body_class %}ibexa-consent-policy-view{% endblock %}
 
@@ -15,18 +16,23 @@
 {% block title %}{{ 'policy.view.title'|trans({'%version%': policy.version})|desc('Policy %version%') }}{% endblock %}
 
 {% block header %}
-    {% include '@ibexadesign/ui/page_title.html.twig' with {
-        title: 'policy.view.title'|trans({'%version%': policy.version})|desc('Cookie Policy - Version %version%'),
-        icon_path: ibexa_icon_path('cookie')
+    {% embed '@ibexadesign/ui/page_title.html.twig' with {
+        title: 'policy.view.title'|trans|desc('Cookie Policy'),
     } %}
+        {% block bottom %}
+            <span class="ibexa-icon-tag">
+                {{ 'policy.view.list.version'|trans({'%version%': policy.version})|desc('Version: %version%') }}
+            </span>
+        {% endblock %}
+    {% endembed %}
 {% endblock %}
 
 {% block context_menu %}
     {% set menu_items %}
         <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
             <a
-                href="{{ path('masilia_consent_admin_policy_list') }}"
-                class="btn ibexa-btn ibexa-btn--ghost"
+                    href="{{ path('masilia_consent_admin_policy_list') }}"
+                    class="btn ibexa-btn ibexa-btn--tertiary"
             >
                 <svg class="ibexa-icon ibexa-icon--small">
                     <use xlink:href="{{ ibexa_icon_path('back') }}"></use>
@@ -38,8 +44,8 @@
         </li>
         <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
             <a
-                href="{{ path('masilia_consent_admin_policy_edit', {id: policy.id}) }}"
-                class="btn ibexa-btn ibexa-btn--ghost"
+                    href="{{ path('masilia_consent_admin_policy_edit', {id: policy.id}) }}"
+                    class="btn ibexa-btn ibexa-btn--secondary"
             >
                 <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
                     <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
@@ -52,10 +58,10 @@
         {% if not policy.isActive %}
             <li class="ibexa-context-menu__item ibexa-adaptive-items__item">
                 <button
-                    type="button"
-                    class="btn ibexa-btn ibexa-btn--primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#activate-policy"
+                        type="button"
+                        class="btn ibexa-btn ibexa-btn--primary"
+                        data-bs-toggle="modal"
+                        data-bs-target="#activate-policy"
                 >
                     <svg class="ibexa-icon ibexa-icon--small">
                         <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
@@ -74,249 +80,276 @@
 {% endblock %}
 
 {% block content %}
-    <section class="container ibexa-container">
-        {# Policy Information Card #}
-        <div class="card ibexa-card ibexa-card--light mb-4">
-            <div class="card-header ibexa-card__header">
-                <h3 class="ibexa-card__title">
-                    {{ 'policy.information'|trans|desc('Policy Information') }}
-                </h3>
-            </div>
-            <div class="card-body ibexa-card__body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <dl class="ibexa-details">
-                            <div class="ibexa-details__item">
-                                <dt class="ibexa-details__item-label">{{ 'policy.version'|trans|desc('Version') }}</dt>
-                                <dd class="ibexa-details__item-value">
-                                    <strong>{{ policy.version }}</strong>
-                                    {% if policy.isActive %}
-                                        <span class="badge bg-success ms-2">{{ 'policy.status.active'|trans|desc('Active') }}</span>
-                                    {% endif %}
-                                </dd>
-                            </div>
-                            <div class="ibexa-details__item">
-                                <dt class="ibexa-details__item-label">{{ 'policy.last_updated'|trans|desc('Last Updated') }}</dt>
-                                <dd class="ibexa-details__item-value">{{ policy.lastUpdated|date('Y-m-d H:i:s') }}</dd>
-                            </div>
-                        </dl>
-                    </div>
-                    <div class="col-md-6">
-                        <dl class="ibexa-details">
-                            <div class="ibexa-details__item">
-                                <dt class="ibexa-details__item-label">{{ 'policy.cookie_prefix'|trans|desc('Cookie Prefix') }}</dt>
-                                <dd class="ibexa-details__item-value"><code>{{ policy.cookiePrefix }}</code></dd>
-                            </div>
-                            <div class="ibexa-details__item">
-                                <dt class="ibexa-details__item-label">{{ 'policy.expiration_days'|trans|desc('Expiration Days') }}</dt>
-                                <dd class="ibexa-details__item-value">{{ policy.expirationDays }} {{ 'policy.days'|trans|desc('days') }}</dd>
-                            </div>
-                        </dl>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="container ibexa-container">
+        {# Policy Information Section #}
+        {% block policy_information %}
+            {% set version_content %}
+                <strong>{{ policy.version }}</strong>
+                {% if policy.isActive %}
+                    <span class="ibexa-badge ibexa-badge--success">{{ 'policy.status.active'|trans|desc('Active') }}</span>
+                {% endif %}
+            {% endset %}
+
+            {% set cookie_prefix_content %}
+                <code>{{ policy.cookiePrefix }}</code>
+            {% endset %}
+
+            {% set policy_properties_items = [
+                {
+                    label: 'policy.version'|trans|desc('Version'),
+                    content_raw: version_content,
+                },
+                {
+                    label: 'policy.last_updated'|trans|desc('Last Updated'),
+                    content: policy.lastUpdated|date('Y-m-d H:i:s'),
+                },
+                {
+                    label: 'policy.cookie_prefix'|trans|desc('Cookie Prefix'),
+                    content_raw: cookie_prefix_content,
+                },
+                {
+                    label: 'policy.expiration_days'|trans|desc('Expiration Days'),
+                    content: policy.expirationDays ~ ' ' ~ ('policy.days'|trans|desc('days')),
+                },
+            ] %}
+
+
+            {% include '@ibexadesign/ui/component/details/details.html.twig' with {
+                headline: 'policy.information'|trans()|desc('Policy Information'),
+                items: policy_properties_items,
+            } only %}
+        {% endblock %}
 
         {# Categories Section #}
-        <div class="card ibexa-card ibexa-card--light mb-4">
-            <div class="card-header ibexa-card__header d-flex justify-content-between align-items-center">
-                <h3 class="ibexa-card__title mb-0">
-                    {{ 'policy.categories'|trans|desc('Categories') }} ({{ policy.categories|length }})
-                </h3>
-                <button 
-                    type="button" 
-                    class="btn ibexa-btn ibexa-btn--primary ibexa-btn--small"
-                    data-bs-toggle="modal"
-                    data-bs-target="#add-category-modal">
-                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
-                        <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
-                    </svg>
-                    <span class="ibexa-btn__label">
-                        {{ 'category.add'|trans|desc('Add Category') }}
-                    </span>
-                </button>
-            </div>
-            <div class="card-body ibexa-card__body">
-                {% for category in policy.categories %}
-                    <div class="ibexa-card ibexa-card--light mb-3">
-                        <div class="card-header ibexa-card__header d-flex justify-content-between align-items-center">
-                            <h4 class="ibexa-card__title mb-0">
-                                {{ category.name }}
-                                {% if category.required %}
-                                    <span class="badge bg-warning ms-2">{{ 'category.required'|trans|desc('Required') }}</span>
-                                {% endif %}
-                                {% if category.defaultEnabled %}
-                                    <span class="badge bg-info ms-2">{{ 'category.default_enabled'|trans|desc('Default Enabled') }}</span>
-                                {% endif %}
-                            </h4>
-                            <div class="btn-group">
-                                <button 
-                                    type="button"
-                                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#edit-category-{{ category.id }}"
-                                    title="{{ 'category.edit'|trans|desc('Edit') }}">
-                                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
-                                        <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
+        {% block categories_section %}
+            <section class="ibexa-fieldgroup">
+                <div class="ibexa-fieldgroup__header">
+                    <h2 class="ibexa-edit-header__name">{{ 'policy.categories'|trans()|desc('Categories') }}</h2>
+                    {{ macros.add_category_button() }}
+                </div>
+
+                <div class="ibexa-fieldgroup__content">
+                    {% for category in policy.categories %}
+                        {% set status %}
+                            {% if category.isAutoGenerated %}
+                                <span class="ibexa-badge ibexa-badge--info" title="{{ 'category.auto_generated.tooltip'|trans|desc('Auto-generated from third-party service') }}">
+                                    <svg class="ibexa-icon ibexa-icon--small">
+                                        <use xlink:href="{{ ibexa_icon_path('system-information') }}"></use>
                                     </svg>
-                                    <span class="ibexa-btn__label">{{ 'category.edit'|trans|desc('Edit') }}</span>
-                                </button>
-                                <button 
-                                    type="button"
-                                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#delete-category-{{ category.id }}"
-                                    title="{{ 'category.delete'|trans|desc('Delete') }}">
-                                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--trash">
-                                        <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
-                                    </svg>
-                                    <span class="ibexa-btn__label">{{ 'category.delete'|trans|desc('Delete') }}</span>
-                                </button>
+                                    {{ 'category.auto_generated'|trans|desc('Auto-Generated') }}
+                                </span>
+                            {% endif %}
+                            {% if category.required %}
+                                <span class="ibexa-badge ibexa-badge--warning">{{ 'category.required'|trans|desc('Required') }}</span>
+                            {% endif %}
+                            {% if category.defaultEnabled %}
+                                <span class="ibexa-badge ibexa-badge--complementary">{{ 'category.default_enabled'|trans|desc('Default Enabled') }}</span>
+                            {% endif %}
+                        {% endset %}
+
+                        {% block between_header_and_table %}
+                            <div class="ibexa-table-sub-header">
+                                {{ status }}
                             </div>
-                        </div>
-                        <div class="card-body ibexa-card__body">
-                            <p class="text-muted">{{ category.description }}</p>
-                            <p class="mb-0"><small class="text-muted">{{ 'category.identifier'|trans|desc('Identifier') }}: <code>{{ category.identifier }}</code></small></p>
-                            
-                            <h5 class="mt-3 mb-2">{{ 'category.cookies'|trans({'%count%': category.cookies|length})|desc('Cookies (%count%)') }}</h5>
-                            
+                        {% endblock %}
+
+
+                        {% include '@ibexadesign/ui/component/table/table_header.html.twig' with {
+                            headline: 'category.cookies_count'|trans({
+                                '%count%': category.cookies|length,
+                                '%name%': category.name,
+                            })|desc('%name% (%count% cookies)'),
+                            actions: macros.category_header_tools(category),
+                            show_notice: true,
+                            notice_message: category.description ,
+                        } only %}
+
+
+                        {% if category.cookies is not empty %}
                             {% set cookie_body_rows = [] %}
                             {% for cookie in category.cookies %}
+                                {% set cookie_name %}
+                                    <code>{{ cookie.name }}</code>
+                                    {% if cookie.isAutoGenerated %}
+                                        <span class="ibexa-badge ibexa-badge--info" title="{{ 'cookie.auto_generated.tooltip'|trans|desc('Auto-generated from third-party service') }}">
+                                            {{ 'cookie.auto_generated'|trans|desc('Auto') }}
+                                        </span>
+                                    {% endif %}
+                                {% endset %}
+                                
+                                {% set actions_col %}
+                                    {% if not cookie.isAutoGenerated %}
+                                        <button
+                                            type="button"
+                                            class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#edit-cookie-{{ cookie.id }}"
+                                            title="{{ 'common.edit'|trans()|desc('Edit') }}">
+                                            <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                                                <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
+                                            </svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#delete-cookie-{{ cookie.id }}"
+                                            title="{{ 'common.delete'|trans()|desc('Delete') }}">
+                                            <svg class="ibexa-icon ibexa-icon--small ibexa-icon--trash">
+                                                <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                                            </svg>
+                                        </button>
+                                    {% else %}
+                                        <span class="ibexa-label" title="{{ 'cookie.auto_generated.read_only'|trans|desc('This cookie is managed by the third-party service') }}">
+                                            <svg class="ibexa-icon ibexa-icon--small ibexa-icon--lock">
+                                                <use xlink:href="{{ ibexa_icon_path('lock') }}"></use>
+                                            </svg>
+                                        </span>
+                                    {% endif %}
+                                {% endset %}
+                                
                                 {% set cookie_row_cols = [
-                                    { content: '<code>' ~ cookie.name ~ '</code>', raw: true },
+                                    { content: cookie_name, raw: true },
                                     { content: cookie.provider },
                                     { content: cookie.purpose },
                                     { content: cookie.expiry },
+                                    { content: actions_col, raw: true, has_action_btns: true },
                                 ] %}
                                 {% set cookie_body_rows = cookie_body_rows|merge([{ cols: cookie_row_cols }]) %}
                             {% endfor %}
 
                             {% include '@ibexadesign/ui/component/table/table.html.twig' with {
                                 head_cols: [
-                                    { content: 'cookie.name'|trans|desc('Name') },
-                                    { content: 'cookie.provider'|trans|desc('Provider') },
-                                    { content: 'cookie.purpose'|trans|desc('Purpose') },
-                                    { content: 'cookie.expiry'|trans|desc('Expiry') },
+                                    { content: 'cookie.name'|trans()|desc('Name') },
+                                    { content: 'cookie.provider'|trans()|desc('Provider') },
+                                    { content: 'cookie.purpose'|trans()|desc('Purpose') },
+                                    { content: 'cookie.expiry'|trans()|desc('Expiry') },
+                                    { },
                                 ],
                                 body_rows: cookie_body_rows,
-                                table_class: 'ibexa-table--sm',
                             } %}
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
+                        {% else %}
+                            {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                                type: 'info',
+                                title: 'category.no_cookies'|trans|desc('No cookies defined for this category yet.'),
+                            } only %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </section>
 
-        {# Third-Party Services Section #}
-        <div class="card ibexa-card ibexa-card--light mb-4">
-            <div class="card-header ibexa-card__header d-flex justify-content-between align-items-center">
-                <h3 class="ibexa-card__title mb-0">
-                    {{ 'policy.third_party_services'|trans|desc('Third-Party Services') }} ({{ policy.thirdPartyServices|length }})
-                </h3>
-                <button 
-                    type="button" 
-                    class="btn ibexa-btn ibexa-btn--primary ibexa-btn--small"
-                    data-bs-toggle="modal"
-                    data-bs-target="#add-service-modal">
-                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
-                        <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
-                    </svg>
-                    <span class="ibexa-btn__label">
-                        {{ 'third_party_service.add.button'|trans|desc('Add Service') }}
-                    </span>
-                </button>
-            </div>
-            <div class="card-body ibexa-card__body">
-                {% if policy.thirdPartyServices|length == 0 %}
+            {% if policy.categories is empty %}
+                <section>
+                    {% include '@ibexadesign/ui/component/table/table_header.html.twig' with {
+                        headline: 'policy.categories'|trans()|desc('Categories'),
+                        actions: macros.add_category_button(),
+                    } %}
                     {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
                         type: 'info',
-                        title: 'third_party_service.no_services'|trans|desc('No third-party services configured. Add services like Google Analytics, Facebook Pixel, etc. to automatically manage cookies and scripts.'),
+                        title: 'policy.no_categories'|trans|desc('No categories defined yet. Add a category to get started.'),
                     } only %}
-                {% else %}
+                </section>
+            {% endif %}
+        {% endblock %}
+
+        {# Third-Party Services Section #}
+        {% block services_section %}
+            <section class="ibexa-fieldgroup">
+                <div class="ibexa-fieldgroup__content">
+                {% include '@ibexadesign/ui/component/table/table_header.html.twig' with {
+                    headline: 'policy.third_party_services'|trans({'%count%': policy.thirdPartyServices|length})|desc('Third-Party Services (%count%)'),
+                    actions: macros.add_service_button(),
+                } %}
+
+                {% if policy.thirdPartyServices is not empty %}
                     {% set service_body_rows = [] %}
                     {% for service in policy.thirdPartyServices %}
-                        {% set service_row_cols = [] %}
-                        
                         {% set name_col %}
-                            <a href="{{ path('masilia_consent_admin_service_view', {id: service.id}) }}">
-                                <strong>{{ service.name }}</strong>
-                            </a>
+                            <strong>{{ service.name }}</strong>
+                        {% endset %}
+
+                        {% set preset_col %}
                             {% if service.presetType %}
-                                <br><small class="badge bg-info">{{ service.presetType }}</small>
+                                <small class="ibexa-badge ibexa-badge--info">{{ service.presetType }}</small>
                             {% endif %}
                         {% endset %}
-                        
-                        {% set service_row_cols = service_row_cols|merge([
-                            { content: name_col, raw: true },
-                            { content: '<span class="badge bg-secondary">' ~ service.category ~ '</span>', raw: true },
-                            { content: service.description },
-                        ]) %}
+
+                        {% set category_col %}
+                            {{ service.category }}
+                        {% endset %}
 
                         {% set status_col %}
                             {% if service.enabled %}
-                                <span class="badge bg-success">{{ 'service.enabled'|trans|desc('Enabled') }}</span>
+                                <span class="ibexa-badge ibexa-badge--success">{{ 'common.enabled'|trans|desc('Enabled') }}</span>
                             {% else %}
-                                <span class="badge bg-secondary">{{ 'service.disabled'|trans|desc('Disabled') }}</span>
+                                <span class="ibexa-badge ibexa-badge--secondary">{{ 'common.disabled'|trans|desc('Disabled') }}</span>
                             {% endif %}
                         {% endset %}
-                        {% set service_row_cols = service_row_cols|merge([{
-                            content: status_col,
-                            raw: true,
-                        }]) %}
 
                         {% set actions_col %}
-                            <div class="btn-group">
-                                <button 
+                            <button
                                     type="button"
-                                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
                                     data-bs-toggle="modal"
                                     data-bs-target="#edit-service-{{ service.id }}"
-                                    title="{{ 'common.edit'|trans|desc('Edit') }}">
-                                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
-                                        <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
-                                    </svg>
-                                    <span class="ibexa-btn__label">{{ 'common.edit'|trans|desc('Edit') }}</span>
-                                </button>
-                                <button 
+                                    title="{{ 'common.edit'|trans()|desc('Edit') }}">
+                                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                                    <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
+                                </svg>
+                            </button>
+                            <button
                                     type="button"
-                                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small"
+                                    class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--no-text"
                                     data-bs-toggle="modal"
                                     data-bs-target="#delete-service-{{ service.id }}"
-                                    title="{{ 'common.delete'|trans|desc('Delete') }}">
-                                    <svg class="ibexa-icon ibexa-icon--small ibexa-icon--trash">
-                                        <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
-                                    </svg>
-                                    <span class="ibexa-btn__label">{{ 'common.delete'|trans|desc('Delete') }}</span>
-                                </button>
-                            </div>
+                                    title="{{ 'common.delete'|trans()|desc('Delete') }}">
+                                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--trash">
+                                    <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                                </svg>
+                            </button>
                         {% endset %}
-                        {% set service_row_cols = service_row_cols|merge([{
-                            content: actions_col,
-                            raw: true,
-                        }]) %}
 
+                        {% set service_row_cols = [
+                            { content: name_col, raw: true },
+                            { content: preset_col, raw: true },
+                            { content: category_col, raw: true },
+                            { content: service.identifier },
+                            { content: status_col, raw: true },
+                            { content: actions_col, raw: true, has_action_btns: true },
+                        ] %}
                         {% set service_body_rows = service_body_rows|merge([{ cols: service_row_cols }]) %}
                     {% endfor %}
 
                     {% include '@ibexadesign/ui/component/table/table.html.twig' with {
                         head_cols: [
-                            { content: 'service.name'|trans|desc('Name') },
-                            { content: 'service.category'|trans|desc('Category') },
-                            { content: 'service.description'|trans|desc('Description') },
-                            { content: 'service.status'|trans|desc('Status') },
-                            { content: 'common.actions'|trans|desc('Actions'), class: 'text-right' },
+                            { content: 'third_party_service.list.name'|trans()|desc('Name') },
+                            { content: 'third_party_service.list.preset'|trans()|desc('Preset') },
+                            { content: 'third_party_service.list.category'|trans()|desc('Category') },
+                            { content: 'third_party_service.list.identifier'|trans()|desc('Identifier') },
+                            { content: 'third_party_service.list.status'|trans()|desc('Status') },
+                            { content: 'common.actions'|trans()|desc('Actions'), has_icon_col: true },
+                            { },
                         ],
                         body_rows: service_body_rows,
                     } %}
+                {% else %}
+                    {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
+                        type: 'info',
+                        title: 'third_party_service.no_services'|trans|desc('No third-party services configured. Add services like Google Analytics, Facebook Pixel, etc. to automatically manage cookies and scripts.'),
+                    } only %}
                 {% endif %}
-            </div>
-        </div>
+                </div>
+            </section>
+        {% endblock %}
+    </div>
 
+    {# Modals #}
+    {% block modals %}
         {# Add Category Modal #}
         {% form_theme addCategoryForm '@ibexadesign/ui/form_fields.html.twig' %}
         {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
             id: 'add-category-modal',
-            title: 'category.add.title'|trans|desc('Add Category'),
+            title: 'category.add.title'|trans()|desc('Add Category'),
             size: 'large',
         } %}
             {% block body_content %}
@@ -336,80 +369,82 @@
                     <svg class="ibexa-icon ibexa-icon--small">
                         <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
                     </svg>
-                    {{ 'category.form.create'|trans|desc('Create Category') }}
+                    {{ 'category.form.create'|trans()|desc('Create Category') }}
                 </button>
                 <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                    {{ 'category.form.cancel'|trans|desc('Cancel') }}
+                    {{ 'common.cancel'|trans()|desc('Cancel') }}
                 </button>
             {% endblock %}
         {% endembed %}
 
-        {# Edit & Delete Modals for Each Category #}
+        {# Edit Category Modals - Only for manual categories #}
         {% for category in policy.categories %}
-            {# Edit Category Modal #}
-            {% set editForm = editForms[category.id] %}
-            {% form_theme editForm '@ibexadesign/ui/form_fields.html.twig' %}
-            {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
-                id: 'edit-category-' ~ category.id,
-                title: 'category.edit.title'|trans({'%name%': category.name})|desc('Edit Category: %name%'),
-                size: 'large',
-            } %}
-                {% block body_content %}
-                    {{ form_start(editForm, {'attr': {'id': 'edit-category-form-' ~ category.id}}) }}
-                        <div class="ibexa-form-block">
-                            {{ form_row(editForm.identifier, { row_attr: { class: 'ibexa-form-field' } }) }}
-                            {{ form_row(editForm.name, { row_attr: { class: 'ibexa-form-field' } }) }}
-                            {{ form_row(editForm.description, { row_attr: { class: 'ibexa-form-field' } }) }}
-                            {{ form_row(editForm.position, { row_attr: { class: 'ibexa-form-field' } }) }}
-                            {{ form_row(editForm.required, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
-                            {{ form_row(editForm.defaultEnabled, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
-                        </div>
-                    {{ form_end(editForm) }}
-                {% endblock %}
-                {% block footer_content %}
-                    <button type="submit" form="edit-category-form-{{ category.id }}" class="btn ibexa-btn ibexa-btn--primary">
-                        <svg class="ibexa-icon ibexa-icon--small">
-                            <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
-                        </svg>
-                        {{ 'category.form.save'|trans|desc('Save Changes') }}
-                    </button>
-                    <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                        {{ 'category.form.cancel'|trans|desc('Cancel') }}
-                    </button>
-                {% endblock %}
-            {% endembed %}
-
-            {# Delete Category Modal #}
-            {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
-                class: 'ibexa-modal--send-to-trash',
-                no_header: true,
-                id: 'delete-category-' ~ category.id,
-            } %}
-                {% block body_content %}
-                    <p>{{ 'category.delete.message'|trans({'%name%': category.name})|desc('Delete category "%name%"? This will also delete all associated cookies. This action cannot be undone.') }}</p>
-                {% endblock %}
-                {% block footer_content %}
-                    <form method="post" action="{{ path('masilia_consent_admin_category_delete', {id: category.id}) }}" class="d-inline">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
-                        <button type="submit" class="btn ibexa-btn ibexa-btn--danger">
+            {% if not category.isAutoGenerated %}
+                {% set editForm = editForms[category.id] %}
+                {% form_theme editForm '@ibexadesign/ui/form_fields.html.twig' %}
+                {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+                    id: 'edit-category-' ~ category.id,
+                    title: 'category.edit.title'|trans({'%name%': category.name})|desc('Edit Category: %name%'),
+                    size: 'large',
+                } %}
+                    {% block body_content %}
+                        {{ form_start(editForm, {'attr': {'id': 'edit-category-form-' ~ category.id}}) }}
+                            <div class="ibexa-form-block">
+                                {{ form_row(editForm.identifier, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                {{ form_row(editForm.name, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                {{ form_row(editForm.description, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                {{ form_row(editForm.position, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                {{ form_row(editForm.required, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                                {{ form_row(editForm.defaultEnabled, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                            </div>
+                        {{ form_end(editForm) }}
+                    {% endblock %}
+                    {% block footer_content %}
+                        <button type="submit" form="edit-category-form-{{ category.id }}" class="btn ibexa-btn ibexa-btn--primary">
                             <svg class="ibexa-icon ibexa-icon--small">
-                                <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                                <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
                             </svg>
-                            {{ 'category.delete'|trans|desc('Delete') }}
+                            {{ 'category.form.save'|trans()|desc('Save Changes') }}
                         </button>
-                    </form>
-                    <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                        {{ 'category.cancel'|trans|desc('Cancel') }}
-                    </button>
-                {% endblock %}
-            {% endembed %}
+                        <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                            {{ 'common.cancel'|trans()|desc('Cancel') }}
+                        </button>
+                    {% endblock %}
+                {% endembed %}
+
+                {# Delete Category Modal #}
+                {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+                    class: 'ibexa-modal--send-to-trash',
+                    no_header: true,
+                    id: 'delete-category-' ~ category.id,
+                } %}
+                    {% block body_content %}
+                        <p>{{ 'category.delete.message'|trans({'%name%': category.name})|desc('Delete category "%name%"? This will also delete all associated cookies. This action cannot be undone.') }}</p>
+                    {% endblock %}
+                    {% block footer_content %}
+                        <form method="post" action="{{ path('masilia_consent_admin_category_delete', {id: category.id}) }}"
+                              class="d-inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ category.id) }}">
+                            <button type="submit" class="btn ibexa-btn ibexa-btn--danger">
+                                <svg class="ibexa-icon ibexa-icon--small">
+                                    <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                                </svg>
+                                {{ 'common.delete'|trans()|desc('Delete') }}
+                            </button>
+                        </form>
+                        <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                            {{ 'common.cancel'|trans()|desc('Cancel') }}
+                        </button>
+                    {% endblock %}
+                {% endembed %}
+            {% endif %}
         {% endfor %}
 
         {# Add Service Modal #}
         {% form_theme addServiceForm '@ibexadesign/ui/form_fields.html.twig' %}
         {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
             id: 'add-service-modal',
-            title: 'third_party_service.add.title'|trans|desc('Add Third-Party Service'),
+            title: 'third_party_service.add.title'|trans()|desc('Add Third-Party Service'),
             size: 'large',
         } %}
             {% block body_content %}
@@ -418,6 +453,7 @@
                         {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
                             type: 'info',
                             title: 'third_party_service.form.preset_info'|trans|desc('Select a preset to automatically configure cookies and scripts for popular services like Google Analytics, Facebook Pixel, etc.'),
+                            size: 'small',
                         } only %}
                         {{ form_row(addServiceForm.presetType, { row_attr: { class: 'ibexa-form-field' } }) }}
                         <hr>
@@ -438,17 +474,16 @@
                     <svg class="ibexa-icon ibexa-icon--small">
                         <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
                     </svg>
-                    {{ 'third_party_service.form.create'|trans|desc('Create Service') }}
+                    {{ 'third_party_service.form.create'|trans()|desc('Create Service') }}
                 </button>
-                <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                    {{ 'third_party_service.form.cancel'|trans|desc('Cancel') }}
+                <button type="button" class="ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                    {{ 'common.cancel'|trans()|desc('Cancel') }}
                 </button>
             {% endblock %}
         {% endembed %}
 
-        {# Edit & Delete Modals for Each Service #}
+        {# Edit Service Modals #}
         {% for service in policy.thirdPartyServices %}
-            {# Edit Service Modal #}
             {% set editServiceForm = editServiceForms[service.id] %}
             {% form_theme editServiceForm '@ibexadesign/ui/form_fields.html.twig' %}
             {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
@@ -463,6 +498,7 @@
                                 {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
                                     type: 'warning',
                                     title: 'third_party_service.form.preset_warning'|trans|desc('This service uses a preset. Changing the preset type may affect auto-generated cookies.'),
+                                    size: 'small',
                                 } only %}
                             {% endif %}
                             {{ form_row(editServiceForm.presetType, { row_attr: { class: 'ibexa-form-field' } }) }}
@@ -484,10 +520,10 @@
                         <svg class="ibexa-icon ibexa-icon--small">
                             <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
                         </svg>
-                        {{ 'third_party_service.form.save'|trans|desc('Save Changes') }}
+                        {{ 'third_party_service.form.save'|trans()|desc('Save Changes') }}
                     </button>
-                    <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                        {{ 'third_party_service.form.cancel'|trans|desc('Cancel') }}
+                    <button type="button" class="ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                        {{ 'common.cancel'|trans()|desc('Cancel') }}
                     </button>
                 {% endblock %}
             {% endembed %}
@@ -502,42 +538,237 @@
                     <p>{{ 'third_party_service.delete.message'|trans({'%name%': service.name})|desc('Delete service "%name%"? This action cannot be undone.') }}</p>
                 {% endblock %}
                 {% block footer_content %}
-                    <form method="post" action="{{ path('masilia_consent_admin_service_delete', {id: service.id}) }}" class="d-inline">
+                    <form method="post" action="{{ path('masilia_consent_admin_service_delete', {id: service.id}) }}"
+                          class="d-inline">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ service.id) }}">
                         <button type="submit" class="btn ibexa-btn ibexa-btn--danger">
                             <svg class="ibexa-icon ibexa-icon--small">
                                 <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
                             </svg>
-                            {{ 'third_party_service.delete.button'|trans|desc('Delete') }}
+                            {{ 'third_party_service.delete.button'|trans()|desc('Delete') }}
                         </button>
                     </form>
                     <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                        {{ 'third_party_service.actions.cancel'|trans|desc('Cancel') }}
+                        {{ 'common.cancel'|trans()|desc('Cancel') }}
                     </button>
                 {% endblock %}
             {% endembed %}
+        {% endfor %}
+
+        {# Cookie Modals - Only for manual categories #}
+        {% for category in policy.categories %}
+            {% if not category.isAutoGenerated %}
+                {# Add Cookie Modal #}
+                {% set addCookieForm = addCookieForms[category.id] %}
+                {% form_theme addCookieForm '@ibexadesign/ui/form_fields.html.twig' %}
+                {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+                    id: 'add-cookie-' ~ category.id,
+                    title: 'cookie.add.title'|trans({'%category%': category.name})|desc('Add Cookie to %category%'),
+                    size: 'large',
+                } %}
+                {% block body_content %}
+                    {{ form_start(addCookieForm, {'attr': {'id': 'add-cookie-form-' ~ category.id}}) }}
+                        <div class="ibexa-form-block">
+                            {{ form_row(addCookieForm.name, { row_attr: { class: 'ibexa-form-field' } }) }}
+                            {{ form_row(addCookieForm.provider, { row_attr: { class: 'ibexa-form-field' } }) }}
+                            {{ form_row(addCookieForm.purpose, { row_attr: { class: 'ibexa-form-field' } }) }}
+                            {{ form_row(addCookieForm.expiry, { row_attr: { class: 'ibexa-form-field' } }) }}
+                            <hr>
+                            <h3 class="ibexa-form-section-header">{{ 'cookie.form.script_section'|trans|desc('Script Configuration (Optional)') }}</h3>
+                            {{ form_row(addCookieForm.scriptSrc, { row_attr: { class: 'ibexa-form-field' } }) }}
+                            {{ form_row(addCookieForm.scriptAsync, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                            {{ form_row(addCookieForm.initCode, { row_attr: { class: 'ibexa-form-field' } }) }}
+                            <hr>
+                            {{ form_row(addCookieForm.position, { row_attr: { class: 'ibexa-form-field' } }) }}
+                        </div>
+                    {{ form_end(addCookieForm) }}
+                {% endblock %}
+                {% block footer_content %}
+                    <button type="submit" form="add-cookie-form-{{ category.id }}" class="btn ibexa-btn ibexa-btn--primary">
+                        <svg class="ibexa-icon ibexa-icon--small">
+                            <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
+                        </svg>
+                        {{ 'cookie.form.create'|trans()|desc('Create Cookie') }}
+                    </button>
+                    <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                        {{ 'common.cancel'|trans()|desc('Cancel') }}
+                    </button>
+                {% endblock %}
+            {% endembed %}
+
+            {# Edit Cookie Modals - Only for manual cookies #}
+            {% for cookie in category.cookies %}
+                {% if not cookie.isAutoGenerated %}
+                    {% set editCookieForm = editCookieForms[category.id][cookie.id] %}
+                    {% form_theme editCookieForm '@ibexadesign/ui/form_fields.html.twig' %}
+                    {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+                        id: 'edit-cookie-' ~ cookie.id,
+                        title: 'cookie.edit.title'|trans({'%name%': cookie.name})|desc('Edit Cookie: %name%'),
+                        size: 'large',
+                    } %}
+                        {% block body_content %}
+                            {{ form_start(editCookieForm, {'attr': {'id': 'edit-cookie-form-' ~ cookie.id}}) }}
+                                <div class="ibexa-form-block">
+                                    {{ form_row(editCookieForm.name, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                    {{ form_row(editCookieForm.provider, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                    {{ form_row(editCookieForm.purpose, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                    {{ form_row(editCookieForm.expiry, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                    <hr>
+                                    <h3 class="ibexa-form-section-header">{{ 'cookie.form.script_section'|trans|desc('Script Configuration (Optional)') }}</h3>
+                                    {{ form_row(editCookieForm.scriptSrc, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                    {{ form_row(editCookieForm.scriptAsync, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                                    {{ form_row(editCookieForm.initCode, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                    <hr>
+                                    {{ form_row(editCookieForm.position, { row_attr: { class: 'ibexa-form-field' } }) }}
+                                </div>
+                            {{ form_end(editCookieForm) }}
+                        {% endblock %}
+                        {% block footer_content %}
+                            <button type="submit" form="edit-cookie-form-{{ cookie.id }}" class="btn ibexa-btn ibexa-btn--primary">
+                                <svg class="ibexa-icon ibexa-icon--small">
+                                    <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
+                                </svg>
+                                {{ 'cookie.form.save'|trans()|desc('Save Changes') }}
+                            </button>
+                            <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                                {{ 'common.cancel'|trans()|desc('Cancel') }}
+                            </button>
+                        {% endblock %}
+                    {% endembed %}
+
+                    {# Delete Cookie Modal #}
+                    {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
+                        class: 'ibexa-modal--send-to-trash',
+                        no_header: true,
+                        id: 'delete-cookie-' ~ cookie.id,
+                    } %}
+                        {% block body_content %}
+                            <p>{{ 'cookie.delete.message'|trans({'%name%': cookie.name})|desc('Delete cookie "%name%"? This action cannot be undone.') }}</p>
+                        {% endblock %}
+                        {% block footer_content %}
+                            <form method="post" action="{{ path('masilia_consent_admin_cookie_delete', {id: cookie.id}) }}"
+                                  class="d-inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ cookie.id) }}">
+                                <button type="submit" class="btn ibexa-btn ibexa-btn--danger">
+                                    <svg class="ibexa-icon ibexa-icon--small">
+                                        <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                                    </svg>
+                                    {{ 'common.delete'|trans()|desc('Delete') }}
+                                </button>
+                            </form>
+                            <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
+                                {{ 'common.cancel'|trans()|desc('Cancel') }}
+                            </button>
+                        {% endblock %}
+                    {% endembed %}
+                {% endif %}
+            {% endfor %}
+            {% endif %}
         {% endfor %}
 
         {# Activate Policy Modal #}
         {% if not policy.isActive %}
             {% embed '@ibexadesign/ui/component/modal/modal.html.twig' with {
                 id: 'activate-policy',
-                title: 'policy.activate.confirm'|trans|desc('Activate Policy'),
+                title: 'policy.activate.confirm'|trans()|desc('Activate Policy'),
             } %}
                 {% block body_content %}
                     <p>{{ 'policy.activate.message'|trans({'%version%': policy.version})|desc('Activate policy version %version%? This will deactivate all other policies.') }}</p>
                 {% endblock %}
                 {% block footer_content %}
-                    <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}" class="d-inline">
+                    <form method="post" action="{{ path('masilia_consent_admin_policy_activate', {id: policy.id}) }}"
+                          class="d-inline">
+                        <input type="hidden" name="_token" value="{{ csrf_token('activate' ~ policy.id) }}">
                         <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
-                            {{ 'policy.activate'|trans|desc('Activate') }}
+                            <svg class="ibexa-icon ibexa-icon--small">
+                                <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
+                            </svg>
+                            {{ 'policy.activate'|trans()|desc('Activate') }}
                         </button>
                     </form>
                     <button type="button" class="btn ibexa-btn ibexa-btn--secondary" data-bs-dismiss="modal">
-                        {{ 'policy.cancel'|trans|desc('Cancel') }}
+                        {{ 'common.cancel'|trans()|desc('Cancel') }}
                     </button>
                 {% endblock %}
             {% endembed %}
         {% endif %}
-    </section>
+    {% endblock %}
 {% endblock %}
+
+{# Macros for reusable components #}
+{% macro category_header_tools(category) %}
+    <div class="ibexa-extra-actions__btns">
+        {% if not category.isAutoGenerated %}
+            <button
+                    type="button"
+                    class="btn ibexa-btn ibexa-btn--tertiary ibexa-btn--small"
+                    data-bs-toggle="modal"
+                    data-bs-target="#add-cookie-{{ category.id }}"
+                    title="{{ 'cookie.add'|trans()|desc('Add Cookie') }}">
+                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
+                    <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">{{ 'cookie.add'|trans()|desc('Add Cookie') }}</span>
+            </button>
+            <button
+                    type="button"
+                    class="btn ibexa-btn ibexa-btn--tertiary ibexa-btn--small"
+                    data-bs-toggle="modal"
+                    data-bs-target="#edit-category-{{ category.id }}"
+                    title="{{ 'common.edit'|trans()|desc('Edit') }}">
+                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--edit">
+                    <use xlink:href="{{ ibexa_icon_path('edit') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">{{ 'common.edit'|trans()|desc('Edit') }}</span>
+            </button>
+            <button
+                    type="button"
+                    class="btn ibexa-btn ibexa-btn--tertiary ibexa-btn--small"
+                    data-bs-toggle="modal"
+                    data-bs-target="#delete-category-{{ category.id }}"
+                    title="{{ 'common.delete'|trans()|desc('Delete') }}">
+                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--trash">
+                    <use xlink:href="{{ ibexa_icon_path('trash') }}"></use>
+                </svg>
+                <span class="ibexa-btn__label">{{ 'common.delete'|trans()|desc('Delete') }}</span>
+            </button>
+        {% else %}
+            <span class="ibexa-label" title="{{ 'category.auto_generated.read_only'|trans|desc('This category is managed by the third-party service') }}">
+                <svg class="ibexa-icon ibexa-icon--small ibexa-icon--lock">
+                    <use xlink:href="{{ ibexa_icon_path('lock') }}"></use>
+                </svg>
+                <span class="ibexa-label__text">{{ 'category.read_only'|trans|desc('Read-only') }}</span>
+            </span>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro add_category_button() %}
+    <button
+            type="button"
+            class="ibexa-btn ibexa-btn--secondary ibexa-btn--small"
+            data-bs-toggle="modal"
+            data-bs-target="#add-category-modal">
+        <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
+            <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
+        </svg>
+        <span class="ibexa-btn__label">
+            {{ 'category.add'|trans()|desc('Add Category') }}
+        </span>
+    </button>
+{% endmacro %}
+
+{% macro add_service_button() %}
+    <button
+            type="button"
+            class="ibexa-btn ibexa-btn--primary ibexa-btn--small"
+            data-bs-toggle="modal"
+            data-bs-target="#add-service-modal">
+        <svg class="ibexa-icon ibexa-icon--small ibexa-icon--create">
+            <use xlink:href="{{ ibexa_icon_path('create') }}"></use>
+        </svg>
+        <span class="ibexa-btn__label">
+            {{ 'third_party_service.add.button'|trans()|desc('Add Service') }}
+        </span>
+    </button>
+{% endmacro %}

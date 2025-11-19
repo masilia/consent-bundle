@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Masilia\ConsentBundle\Controller\Admin;
 
+use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Contracts\Core\Repository\NotificationService;
 use Masilia\ConsentBundle\Entity\Cookie;
 use Masilia\ConsentBundle\Entity\CookieCategory;
 use Masilia\ConsentBundle\Entity\CookiePolicy;
@@ -22,7 +24,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class PolicyAdminController extends AbstractController
 {
     public function __construct(
-        private readonly CookiePolicyRepository $policyRepository
+        private readonly CookiePolicyRepository $policyRepository,
+        private readonly NotificationHandlerInterface $notificationHandler
     ) {
     }
 
@@ -56,8 +59,12 @@ class PolicyAdminController extends AbstractController
                 continue;
             }
 
-            $editCategoryForms[$category->getId()] = $this->createForm(CategoryType::class, $category, [
-                'action' => $this->generateUrl('masilia_consent_admin_category_edit', ['id' => $category->getId()]),
+            $categoryId = $category->getId();
+            $editCategoryForms[$categoryId] = $this->createForm(CategoryType::class, $category, [
+                'action' => $this->generateUrl('masilia_consent_admin_category_edit',
+                    [
+                        'id' => $categoryId
+                    ]),
             ])->createView();
             
             // Create add cookie form for this category
@@ -91,7 +98,7 @@ class PolicyAdminController extends AbstractController
             ])->createView();
         }
 
-        return $this->render('@MasiliaConsent/admin/policy/view_refactored.html.twig', [
+        return $this->render('@MasiliaConsent/admin/policy/view.html.twig', [
             'policy' => $policy,
             'addCategoryForm' => $addCategoryForm->createView(),
             'editForms' => $editCategoryForms,
@@ -112,8 +119,8 @@ class PolicyAdminController extends AbstractController
         $policy->setIsActive(true);
         $this->policyRepository->save($policy, true);
 
-        $this->addFlash('success', sprintf('Policy version %s has been activated.', $policy->getVersion()));
-
+        $this->notificationHandler->success(sprintf('Policy version %s has been activated.', $policy->getVersion()));
+        
         return $this->redirectToRoute('masilia_consent_admin_policy_list');
     }
 
@@ -123,7 +130,7 @@ class PolicyAdminController extends AbstractController
         $policy->setIsActive(false);
         $this->policyRepository->save($policy, true);
 
-        $this->addFlash('success', sprintf('Policy version %s has been deactivated.', $policy->getVersion()));
+        $this->notificationHandler->success(sprintf('Policy version %s has been deactivated.', $policy->getVersion()));
 
         return $this->redirectToRoute('masilia_consent_admin_policy_list');
     }
@@ -142,7 +149,7 @@ class PolicyAdminController extends AbstractController
             }
 
             $this->policyRepository->save($policy, true);
-            $this->addFlash('success', sprintf('Policy version %s has been created.', $policy->getVersion()));
+            $this->notificationHandler->success(sprintf('Policy version %s has been created.', $policy->getVersion()));
 
             return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
         }
@@ -167,7 +174,7 @@ class PolicyAdminController extends AbstractController
             }
 
             $this->policyRepository->save($policy, true);
-            $this->addFlash('success', sprintf('Policy version %s has been updated.', $policy->getVersion()));
+            $this->notificationHandler->success(sprintf('Policy version %s has been updated.', $policy->getVersion()));
 
             return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
         }
@@ -182,14 +189,14 @@ class PolicyAdminController extends AbstractController
     public function delete(Request $request, CookiePolicy $policy): Response
     {
         if ($policy->isActive()) {
-            $this->addFlash('error', 'Cannot delete an active policy. Deactivate it first.');
+            $this->notificationHandler->error('Cannot delete an active policy. Deactivate it first.');
             return $this->redirectToRoute('masilia_consent_admin_policy_list');
         }
 
         if ($this->isCsrfTokenValid('delete' . $policy->getId(), $request->request->get('_token'))) {
             $version = $policy->getVersion();
             $this->policyRepository->remove($policy, true);
-            $this->addFlash('success', sprintf('Policy version %s has been deleted.', $version));
+            $this->notificationHandler->success(sprintf('Policy version %s has been deleted.', $version));
         }
 
         return $this->redirectToRoute('masilia_consent_admin_policy_list');

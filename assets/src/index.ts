@@ -1,26 +1,26 @@
 // Components
-export { ConsentBanner } from './components/ConsentBanner';
-export { PreferencesModal } from './components/PreferencesModal';
-export type { ConsentBannerProps } from './components/ConsentBanner';
-export type { PreferencesModalProps } from './components/PreferencesModal';
+export {ConsentBanner} from './components/ConsentBanner';
+export {PreferencesModal} from './components/PreferencesModal';
+export type {ConsentBannerProps} from './components/ConsentBanner';
+export type {PreferencesModalProps} from './components/PreferencesModal';
 
 // Initialization
-export { initConsentBanner } from './init';
+export {initConsentBanner} from './init';
 
 // Services
-export { ConsentApi, consentApi } from './services/consentApi';
+export {ConsentApi, consentApi} from './services/consentApi';
 
 // Hooks
-export { useConsent } from './hooks/useConsent';
-export { useConsentPolicy } from './hooks/useConsentPolicy';
+export {useConsent} from './hooks/useConsent';
+export {useConsentPolicy} from './hooks/useConsentPolicy';
 
 // Types
 export type {
-  CookiePolicy,
-  CookieCategory,
-  Cookie,
-  ThirdPartyService,
-  ConsentPreferences,
-  ConsentStatus,
-  ConsentApiResponse,
+    CookiePolicy,
+    CookieCategory,
+    Cookie,
+    ThirdPartyService,
+    ConsentPreferences,
+    ConsentStatus,
+    ConsentApiResponse,
 } from './types/consent.types';

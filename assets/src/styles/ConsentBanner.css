@@ -1,184 +1,184 @@
 /* Consent Banner Styles */
 .masilia-consent-banner {
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  background: #ffffff;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-  animation: slideIn 0.3s ease-out;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: #ffffff;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease-out;
 }
 
 .masilia-consent-banner--bottom {
-  bottom: 0;
+    bottom: 0;
 }
 
 .masilia-consent-banner--top {
-  top: 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    top: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .masilia-consent-banner--dark {
-  background: #1a1a1a;
-  color: #ffffff;
+    background: #1a1a1a;
+    color: #ffffff;
 }
 
 .masilia-consent-banner__container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 @media (min-width: 768px) {
-  .masilia-consent-banner__container {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
+    .masilia-consent-banner__container {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
 }
 
 .masilia-consent-banner__content {
-  display: flex;
-  gap: 1rem;
-  flex: 1;
+    display: flex;
+    gap: 1rem;
+    flex: 1;
 }
 
 .masilia-consent-banner__icon {
-  flex-shrink: 0;
-  color: var(--primary-color, #007bff);
+    flex-shrink: 0;
+    color: var(--primary-color, #007bff);
 }
 
 .masilia-consent-banner__icon svg {
-  width: 24px;
-  height: 24px;
+    width: 24px;
+    height: 24px;
 }
 
 .masilia-consent-banner__text {
-  flex: 1;
+    flex: 1;
 }
 
 .masilia-consent-banner__title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.4;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.4;
 }
 
 .masilia-consent-banner__description {
-  margin: 0;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  opacity: 0.9;
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    opacity: 0.9;
 }
 
 .masilia-consent-banner__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
 }
 
 @media (max-width: 767px) {
-  .masilia-consent-banner__actions {
-    width: 100%;
-  }
-  
-  .masilia-consent-banner__button {
-    flex: 1;
-    min-width: 0;
-  }
+    .masilia-consent-banner__actions {
+        width: 100%;
+    }
+
+    .masilia-consent-banner__button {
+        flex: 1;
+        min-width: 0;
+    }
 }
 
 .masilia-consent-banner__button {
-  padding: 0.625rem 1.25rem;
-  border: none;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
 }
 
 .masilia-consent-banner__button:focus {
-  outline: 2px solid var(--primary-color, #007bff);
-  outline-offset: 2px;
+    outline: 2px solid var(--primary-color, #007bff);
+    outline-offset: 2px;
 }
 
 .masilia-consent-banner__button--primary {
-  background: var(--primary-color, #007bff);
-  color: #ffffff;
+    background: var(--primary-color, #007bff);
+    color: #ffffff;
 }
 
 .masilia-consent-banner__button--primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+    opacity: 0.9;
+    transform: translateY(-1px);
 }
 
 .masilia-consent-banner__button--secondary {
-  background: transparent;
-  color: currentColor;
-  border: 1px solid currentColor;
+    background: transparent;
+    color: currentColor;
+    border: 1px solid currentColor;
 }
 
 .masilia-consent-banner__button--secondary:hover {
-  background: rgba(0, 0, 0, 0.05);
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .masilia-consent-banner--dark .masilia-consent-banner__button--secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .masilia-consent-banner__button--tertiary {
-  background: transparent;
-  color: var(--primary-color, #007bff);
-  text-decoration: underline;
+    background: transparent;
+    color: var(--primary-color, #007bff);
+    text-decoration: underline;
 }
 
 .masilia-consent-banner__button--tertiary:hover {
-  opacity: 0.8;
+    opacity: 0.8;
 }
 
 /* Animations */
 @keyframes slideIn {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .masilia-consent-banner--top {
-  animation: slideInTop 0.3s ease-out;
+    animation: slideInTop 0.3s ease-out;
 }
 
 @keyframes slideInTop {
-  from {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* Accessibility */
 @media (prefers-reduced-motion: reduce) {
-  .masilia-consent-banner {
-    animation: none;
-  }
+    .masilia-consent-banner {
+        animation: none;
+    }
 }
 
 /* Print */
 @media print {
-  .masilia-consent-banner {
-    display: none;
-  }
+    .masilia-consent-banner {
+        display: none;
+    }
 }
