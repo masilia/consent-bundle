@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Masilia\ConsentBundle\Controller\Admin;
 
-use Ibexa\Contracts\AdminUi\Notification\NotificationHandlerInterface;
+use Ibexa\Contracts\AdminUi\Notification\TranslatableNotificationHandlerInterface;
+use JMS\TranslationBundle\Annotation\Desc;
 use Masilia\ConsentBundle\Entity\Cookie;
 use Masilia\ConsentBundle\Entity\CookieCategory;
 use Masilia\ConsentBundle\Form\Type\CookieType;
@@ -20,7 +21,7 @@ class CookieAdminController extends AbstractController
 {
     public function __construct(
         private readonly CookieRepository $cookieRepository,
-        private readonly NotificationHandlerInterface $notificationHandler
+        private readonly TranslatableNotificationHandlerInterface $notificationHandler
     ) {
     }
 
