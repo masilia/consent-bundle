@@ -34,6 +34,9 @@ class CookiePolicy
     #[ORM\Column(type: 'boolean')]
     private bool $isActive = false;
 
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $siteAccess = null;
+
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $createdAt;
 
@@ -119,6 +122,17 @@ class CookiePolicy
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+        return $this;
+    }
+
+    public function getSiteAccess(): ?string
+    {
+        return $this->siteAccess;
+    }
+
+    public function setSiteAccess(?string $siteAccess): self
+    {
+        $this->siteAccess = $siteAccess;
         return $this;
     }
 

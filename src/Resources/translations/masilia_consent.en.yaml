@@ -50,6 +50,9 @@ policy:
     expiration_days_placeholder: 'e.g., 365'
     expiration_days_required: 'Expiration days is required'
     expiration_days_range: 'Expiration days must be between 1 and 365'
+    site_access: 'Site Access'
+    site_access_placeholder: 'Select a site access (optional)'
+    site_access_help: 'Restrict this policy to a specific site access. Leave empty to apply to all sites.'
     is_active: 'Active'
   list:
     title: 'Cookie Policies'
@@ -66,6 +69,8 @@ policy:
     version: 'Version'
     cookie_prefix: 'Cookie Prefix'
     expiration_days: 'Expiration Days'
+    site_access: 'Site Access'
+    all_sites: 'All Sites'
     status: 'Status'
     created_at: 'Created At'
     updated_at: 'Updated At'

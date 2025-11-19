@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Masilia\ConsentBundle\Form\Type;
 
 use Masilia\ConsentBundle\Entity\CookiePolicy;
+use Masilia\ConsentBundle\Service\SiteAccessProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,6 +17,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class PolicyType extends AbstractType
 {
+    public function __construct(
+        private readonly SiteAccessProvider $siteAccessProvider
+    ) {
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -78,6 +85,17 @@ class PolicyType extends AbstractType
                         'notInRangeMessage' => 'policy.form.expiration_days_range',
                     ]),
                 ],
+                'translation_domain' => 'masilia_consent',
+            ])
+            ->add('siteAccess', ChoiceType::class, [
+                'label' => 'policy.form.site_access',
+                'choices' => $this->siteAccessProvider->getSiteAccessChoices(),
+                'required' => false,
+                'placeholder' => 'policy.form.site_access_placeholder',
+                'attr' => [
+                    'class' => 'ibexa-input ibexa-input--select',
+                ],
+                'help' => 'policy.form.site_access_help',
                 'translation_domain' => 'masilia_consent',
             ])
             ->add('isActive', CheckboxType::class, [

@@ -111,6 +111,10 @@
                     label: 'policy.expiration_days'|trans|desc('Expiration Days'),
                     content: policy.expirationDays ~ ' ' ~ ('policy.days'|trans|desc('days')),
                 },
+                {
+                    label: 'policy.site_access'|trans|desc('Site Access'),
+                    content: policy.siteAccess ?: ('policy.all_sites'|trans|desc('All Sites')),
+                },
             ] %}
 
 
