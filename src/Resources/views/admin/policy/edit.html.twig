@@ -1,64 +1,36 @@
-{% extends '@ibexadesign/language/base.html.twig' %}
+{% extends '@ibexadesign/ui/layout.html.twig' %}
 
 {% form_theme form '@ibexadesign/ui/form_fields.html.twig' %}
 
 {% trans_default_domain 'masilia_consent' %}
 
-{% block header_admin %}
+{% block header %}
+    {% set policy_edit_sidebar_right = knp_menu_get('masilia_consent.menu.policy_sidebar', [], {
+        save_id: form.save.vars.id,
+        cancel_url: path('masilia_consent_admin_policy_view', {id: policy.id}),
+    }) %}
+
     {% include '@ibexadesign/ui/edit_header.html.twig' with {
         action_name: 'policy.editing'|trans|desc('Editing'),
-        title: 'policy.edit.title'|trans({'%version%': policy.version})|desc('Editing policy version %version%'),
+        title: 'policy.edit.title'|trans({'%version%': policy.version})|desc('Policy %version%'),
+        subtitle: 'policy.subtitle'|trans|desc('Cookie Policies'),
+        context_actions: knp_menu_render(policy_edit_sidebar_right, {'template': '@ibexadesign/ui/menu/context_menu.html.twig'})
     } %}
 {% endblock %}
 
-{% block form %}
+{% block content %}
     {{ form_start(form, {'action': path('masilia_consent_admin_policy_edit', {id: policy.id})}) }}
         <section>
             <div class="card ibexa-card ibexa-card--light">
-                <div class="card-header ibexa-card__header">
-                    <h3 class="ibexa-card__title">
-                        {{ 'policy.form.basic_information'|trans|desc('Basic Information') }}
-                    </h3>
-                </div>
                 <div class="card-body ibexa-card__body ibexa-form-block">
-                    {{ form_row(form.version, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.version, { row_attr: { class: 'ibexa-form-field' }, attr: {'autofocus': 'autofocus'} }) }}
                     {{ form_row(form.cookiePrefix, { row_attr: { class: 'ibexa-form-field' } }) }}
                     {{ form_row(form.expirationDays, { row_attr: { class: 'ibexa-form-field' } }) }}
-                    {{ form_row(form.isActive, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                    {{ form_row(form.siteAccess, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.isActive, { row_attr: { class: 'ibexa-form-field' }, label_attr: { class: 'checkbox-inline' } }) }}
                 </div>
             </div>
         </section>
-
-        <section class="mt-4">
-            <div class="card ibexa-card ibexa-card--light">
-                <div class="card-header ibexa-card__header">
-                    <h3 class="ibexa-card__title">
-                        {{ 'policy.form.categories'|trans|desc('Categories') }}
-                    </h3>
-                </div>
-                <div class="card-body ibexa-card__body">
-                    <p class="text-muted">
-                        {{ 'policy.form.categories_edit_help'|trans|desc('Manage categories from the policy view page.') }}
-                    </p>
-                    <a href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}" class="btn ibexa-btn ibexa-btn--ghost ibexa-btn--small">
-                        {{ 'policy.form.view_categories'|trans|desc('View categories') }}
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <div class="mt-4">
-            <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
-                <svg class="ibexa-icon ibexa-icon--small">
-                    <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
-                </svg>
-                <span class="ibexa-btn__label">
-                    {{ 'policy.form.save'|trans|desc('Save changes') }}
-                </span>
-            </button>
-            <a href="{{ path('masilia_consent_admin_policy_view', {id: policy.id}) }}" class="btn ibexa-btn ibexa-btn--ghost">
-                {{ 'policy.form.cancel'|trans|desc('Cancel') }}
-            </a>
-        </div>
+        {{ form_widget(form.save, {'attr': {'hidden': 'hidden'}}) }}
     {{ form_end(form) }}
 {% endblock %}

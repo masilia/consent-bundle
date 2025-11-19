@@ -34,6 +34,9 @@ modal:
 
 # Policy Form
 policy:
+  subtitle: 'Cookie Policies'
+  creating: 'Creating'
+  editing: 'Editing'
   third_party_services: 'Third-Party Services (%count%)'
   form:
     version: 'Version'
@@ -54,6 +57,9 @@ policy:
     site_access_placeholder: 'Select a site access (optional)'
     site_access_help: 'Restrict this policy to a specific site access. Leave empty to apply to all sites.'
     is_active: 'Active'
+    save: 'Save'
+    save_and_close: 'Save and close'
+    create: 'Create'
   list:
     title: 'Cookie Policies'
     create: 'Create Policy'

@@ -43,3 +43,8 @@ services:
     Masilia\ConsentBundle\Form\Type\:
         resource: '../../Form/Type/*'
         tags: ['form.type']
+
+    # Menu Builders
+    Masilia\ConsentBundle\Menu\PolicyMenuBuilder:
+        tags:
+            - { name: knp_menu.menu_builder, method: createPolicySidebarMenu, alias: masilia_consent.menu.policy_sidebar }
