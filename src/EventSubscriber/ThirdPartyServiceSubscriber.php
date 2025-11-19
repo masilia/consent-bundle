@@ -54,7 +54,6 @@ readonly class ThirdPartyServiceSubscriber implements EventSubscriberInterface
     public function postUpdate(PostUpdateEventArgs $args): void
     {
         $entity = $args->getObject();
-        dump($entity); die;
 
         if (!$entity instanceof ThirdPartyService) {
             return;

@@ -49,7 +49,7 @@ class ThirdPartyService
     #[ORM\Column(type: 'boolean')]
     private bool $enabled = true;
 
-    #[ORM\OneToOne(targetEntity: CookieCategory::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'thirdPartyService', targetEntity: CookieCategory::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     private ?CookieCategory $cookieCategory = null;
 
