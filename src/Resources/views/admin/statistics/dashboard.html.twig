@@ -111,7 +111,7 @@
                             <div class="progress" style="min-width: 150px;">
                                 <div class="progress-bar {% if acceptance_rate >= 70 %}bg-success{% elseif acceptance_rate >= 40 %}bg-warning{% else %}bg-danger{% endif %}" 
                                      role="progressbar" 
-                                     style="width: {{ acceptance_rate }}%"
+                                     style="width: {{ acceptance_rate }}%; --bs-success-rgb: 102, 200, 128;"
                                      aria-valuenow="{{ acceptance_rate }}" 
                                      aria-valuemin="0" 
                                      aria-valuemax="100">
@@ -185,13 +185,13 @@
                                 <div class="progress" style="height: 30px;">
                                     <div class="progress-bar bg-success" 
                                          role="progressbar" 
-                                         style="width: {{ acceptance_rate }}%"
+                                         style="width: {{ acceptance_rate }}%; --bs-success-rgb: 102, 200, 128;"
                                          title="{{ 'statistics.accepted'|trans|desc('Accepted') }}: {{ acceptance_rate }}%">
                                         {% if acceptance_rate > 15 %}{{ acceptance_rate }}%{% endif %}
                                     </div>
                                     <div class="progress-bar bg-danger" 
                                          role="progressbar" 
-                                         style="width: {{ (100 - acceptance_rate) }}%"
+                                         style="width: {{ (100 - acceptance_rate) }}%; --bs-success-rgb: 102, 200, 128;"
                                          title="{{ 'statistics.rejected'|trans|desc('Rejected') }}: {{ (100 - acceptance_rate)|round(1) }}%">
                                         {% if (100 - acceptance_rate) > 15 %}{{ (100 - acceptance_rate)|round(1) }}%{% endif %}
                                     </div>

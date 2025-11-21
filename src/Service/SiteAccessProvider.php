@@ -6,16 +6,16 @@ namespace Masilia\ConsentBundle\Service;
 
 use Ibexa\Core\MVC\Symfony\SiteAccess\SiteAccessServiceInterface;
 
-class SiteAccessProvider
+readonly class SiteAccessProvider
 {
     public function __construct(
-        private readonly SiteAccessServiceInterface $siteAccessService
+        private SiteAccessServiceInterface $siteAccessService,
     ) {
     }
 
     /**
      * Get all available siteaccesses as choices for form dropdown
-     * 
+     *
      * @return array<string, string> Array with siteaccess name as both key and value
      */
     public function getSiteAccessChoices(): array

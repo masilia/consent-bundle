@@ -37,6 +37,28 @@ class CookiePolicy
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $siteAccess = null;
 
+    // Storage Configuration
+    #[ORM\Column(type: 'string', length: 100)]
+    private string $cookieName = 'imal_consent';
+
+    #[ORM\Column(type: 'integer')]
+    private int $cookieLifetime = 365;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $cookiePath = '/';
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $cookieDomain = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $cookieSecure = true;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $cookieHttpOnly = true;
+
+    #[ORM\Column(type: 'string', length: 20)]
+    private string $cookieSameSite = 'lax';
+
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $createdAt;
 
@@ -133,6 +155,83 @@ class CookiePolicy
     public function setSiteAccess(?string $siteAccess): self
     {
         $this->siteAccess = $siteAccess;
+        return $this;
+    }
+
+    public function getCookieName(): string
+    {
+        return $this->cookieName;
+    }
+
+    public function setCookieName(string $cookieName): self
+    {
+        $this->cookieName = $cookieName;
+        return $this;
+    }
+
+    public function getCookieLifetime(): int
+    {
+        return $this->cookieLifetime;
+    }
+
+    public function setCookieLifetime(int $cookieLifetime): self
+    {
+        $this->cookieLifetime = $cookieLifetime;
+        return $this;
+    }
+
+    public function getCookiePath(): string
+    {
+        return $this->cookiePath;
+    }
+
+    public function setCookiePath(string $cookiePath): self
+    {
+        $this->cookiePath = $cookiePath;
+        return $this;
+    }
+
+    public function getCookieDomain(): ?string
+    {
+        return $this->cookieDomain;
+    }
+
+    public function setCookieDomain(?string $cookieDomain): self
+    {
+        $this->cookieDomain = $cookieDomain;
+        return $this;
+    }
+
+    public function isCookieSecure(): bool
+    {
+        return $this->cookieSecure;
+    }
+
+    public function setCookieSecure(bool $cookieSecure): self
+    {
+        $this->cookieSecure = $cookieSecure;
+        return $this;
+    }
+
+    public function isCookieHttpOnly(): bool
+    {
+        return $this->cookieHttpOnly;
+    }
+
+    public function setCookieHttpOnly(bool $cookieHttpOnly): self
+    {
+        $this->cookieHttpOnly = $cookieHttpOnly;
+        return $this;
+    }
+
+    public function getCookieSameSite(): string
+    {
+        return $this->cookieSameSite;
+    }
+
+    public function setCookieSameSite(string $cookieSameSite): self
+    {
+        $this->cookieSameSite = $cookieSameSite;
         return $this;
     }
 

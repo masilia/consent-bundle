@@ -1,10 +1,10 @@
-{% extends '@ibexadesign/ui/layout.html.twig' %}
+{% extends '@ibexadesign/language/base.html.twig' %}
 
 {% form_theme form '@ibexadesign/ui/form_fields.html.twig' %}
 
 {% trans_default_domain 'masilia_consent' %}
 
-{% block header %}
+{% block header_admin %}
     {% set policy_edit_sidebar_right = knp_menu_get('masilia_consent.menu.policy_sidebar', [], {
         save_id: form.save.vars.id,
         cancel_url: path('masilia_consent_admin_policy_view', {id: policy.id}),
@@ -22,12 +22,31 @@
     {{ form_start(form, {'action': path('masilia_consent_admin_policy_edit', {id: policy.id})}) }}
         <section>
             <div class="card ibexa-card ibexa-card--light">
+                    <h3 class="ibexa-card__title">
+                        {{ 'policy.form.basic_information'|trans|desc('Basic Information') }}
+                    </h3>
                 <div class="card-body ibexa-card__body ibexa-form-block">
                     {{ form_row(form.version, { row_attr: { class: 'ibexa-form-field' }, attr: {'autofocus': 'autofocus'} }) }}
                     {{ form_row(form.cookiePrefix, { row_attr: { class: 'ibexa-form-field' } }) }}
                     {{ form_row(form.expirationDays, { row_attr: { class: 'ibexa-form-field' } }) }}
                     {{ form_row(form.siteAccess, { row_attr: { class: 'ibexa-form-field' } }) }}
                     {{ form_row(form.isActive, { row_attr: { class: 'ibexa-form-field' }, label_attr: { class: 'checkbox-inline' } }) }}
+                </div>
+            </div>
+        </section>
+        <section class="mt-4">
+            <div class="card ibexa-card ibexa-card--light">
+                <h3 class="ibexa-card__title">
+                    {{ 'policy.form.storage_configuration'|trans|desc('Cookie Storage Configuration') }}
+                </h3>
+                <div class="card-body ibexa-card__body ibexa-form-block">
+                    {{ form_row(form.cookieName, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.cookieLifetime, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.cookiePath, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.cookieDomain, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.cookieSecure, { row_attr: { class: 'ibexa-form-field' }, label_attr: { class: 'checkbox-inline' } }) }}
+                    {{ form_row(form.cookieHttpOnly, { row_attr: { class: 'ibexa-form-field' }, label_attr: { class: 'checkbox-inline' } }) }}
+                    {{ form_row(form.cookieSameSite, { row_attr: { class: 'ibexa-form-field' } }) }}
                 </div>
             </div>
         </section>

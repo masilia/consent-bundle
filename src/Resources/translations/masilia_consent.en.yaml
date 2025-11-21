@@ -89,6 +89,8 @@ policy:
     activated: 'Policy activated successfully'
     deactivated: 'Policy deactivated successfully'
     delete_confirm: 'Are you sure you want to delete this policy?'
+  create:
+    title: 'masilia_consent'
 
 # Category Form
 category:

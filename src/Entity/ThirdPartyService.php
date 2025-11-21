@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Masilia\ConsentBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Masilia\ConsentBundle\Repository\ThirdPartyServiceRepository;
 
@@ -59,8 +61,12 @@ class ThirdPartyService
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $updatedAt;
 
+    #[ORM\OneToMany(targetEntity: ThirdPartyServiceTranslation::class, mappedBy: 'service', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $translations;
+
     public function __construct()
     {
+        $this->translations = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -205,5 +211,48 @@ class ThirdPartyService
     {
         $this->cookieCategory = $cookieCategory;
         return $this;
+    }
+
+    /**
+     * @return Collection<int, ThirdPartyServiceTranslation>
+     */
+    public function getTranslations(): Collection
+    {
+        return $this->translations;
+    }
+
+    public function addTranslation(ThirdPartyServiceTranslation $translation): self
+    {
+        if (!$this->translations->contains($translation)) {
+            $this->translations->add($translation);
+            $translation->setService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTranslation(ThirdPartyServiceTranslation $translation): self
+    {
+        if ($this->translations->removeElement($translation)) {
+            if ($translation->getService() === $this) {
+                $translation->setService(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get translation for specific language code
+     */
+    public function getTranslation(string $languageCode): ?ThirdPartyServiceTranslation
+    {
+        foreach ($this->translations as $translation) {
+            if ($translation->getLanguageCode() === $languageCode) {
+                return $translation;
+            }
+        }
+
+        return null;
     }
 }

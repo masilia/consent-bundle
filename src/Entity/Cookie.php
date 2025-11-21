@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Masilia\ConsentBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Masilia\ConsentBundle\Repository\CookieRepository;
 
@@ -51,8 +53,12 @@ class Cookie
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface $updatedAt;
 
+    #[ORM\OneToMany(targetEntity: CookieTranslation::class, mappedBy: 'cookie', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $translations;
+
     public function __construct()
     {
+        $this->translations = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -185,5 +191,48 @@ class Cookie
     public function hasScript(): bool
     {
         return $this->scriptSrc !== null || $this->initCode !== null;
+    }
+
+    /**
+     * @return Collection<int, CookieTranslation>
+     */
+    public function getTranslations(): Collection
+    {
+        return $this->translations;
+    }
+
+    public function addTranslation(CookieTranslation $translation): self
+    {
+        if (!$this->translations->contains($translation)) {
+            $this->translations->add($translation);
+            $translation->setCookie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTranslation(CookieTranslation $translation): self
+    {
+        if ($this->translations->removeElement($translation)) {
+            if ($translation->getCookie() === $this) {
+                $translation->setCookie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get translation for specific language code
+     */
+    public function getTranslation(string $languageCode): ?CookieTranslation
+    {
+        foreach ($this->translations as $translation) {
+            if ($translation->getLanguageCode() === $languageCode) {
+                return $translation;
+            }
+        }
+
+        return null;
     }
 }

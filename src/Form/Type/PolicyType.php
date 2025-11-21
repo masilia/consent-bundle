@@ -99,6 +99,97 @@ class PolicyType extends AbstractType
                 'help' => 'policy.form.site_access_help',
                 'translation_domain' => 'masilia_consent',
             ])
+            ->add('cookieName', TextType::class, [
+                'label' => 'policy.form.cookie_name',
+                'required' => true,
+                'attr' => [
+                    'class' => 'ibexa-input ibexa-input--text',
+                    'placeholder' => 'policy.form.cookie_name_placeholder',
+                ],
+                'help' => 'policy.form.cookie_name_help',
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'policy.form.cookie_name_required']),
+                    new Assert\Length([
+                        'max' => 100,
+                        'maxMessage' => 'policy.form.cookie_name_max_length',
+                    ]),
+                    new Assert\Regex([
+                        'pattern' => '/^[a-z_]+$/',
+                        'message' => 'policy.form.cookie_name_format',
+                    ]),
+                ],
+                'translation_domain' => 'masilia_consent',
+            ])
+            ->add('cookieLifetime', IntegerType::class, [
+                'label' => 'policy.form.cookie_lifetime',
+                'required' => true,
+                'attr' => [
+                    'class' => 'ibexa-input ibexa-input--text',
+                    'placeholder' => 'policy.form.cookie_lifetime_placeholder',
+                ],
+                'help' => 'policy.form.cookie_lifetime_help',
+                'constraints' => [
+                    new Assert\NotBlank(['message' => 'policy.form.cookie_lifetime_required']),
+                    new Assert\Range([
+                        'min' => 1,
+                        'max' => 3650,
+                        'notInRangeMessage' => 'policy.form.cookie_lifetime_range',
+                    ]),
+                ],
+                'translation_domain' => 'masilia_consent',
+            ])
+            ->add('cookiePath', TextType::class, [
+                'label' => 'policy.form.cookie_path',
+                'required' => true,
+                'attr' => [
+                    'class' => 'ibexa-input ibexa-input--text',
+                    'placeholder' => 'policy.form.cookie_path_placeholder',
+                ],
+                'help' => 'policy.form.cookie_path_help',
+                'translation_domain' => 'masilia_consent',
+            ])
+            ->add('cookieDomain', TextType::class, [
+                'label' => 'policy.form.cookie_domain',
+                'required' => false,
+                'attr' => [
+                    'class' => 'ibexa-input ibexa-input--text',
+                    'placeholder' => 'policy.form.cookie_domain_placeholder',
+                ],
+                'help' => 'policy.form.cookie_domain_help',
+                'translation_domain' => 'masilia_consent',
+            ])
+            ->add('cookieSecure', CheckboxType::class, [
+                'label' => 'policy.form.cookie_secure',
+                'required' => false,
+                'attr' => [
+                    'class' => 'ibexa-input ibexa-input--checkbox',
+                ],
+                'help' => 'policy.form.cookie_secure_help',
+                'translation_domain' => 'masilia_consent',
+            ])
+            ->add('cookieHttpOnly', CheckboxType::class, [
+                'label' => 'policy.form.cookie_http_only',
+                'required' => false,
+                'attr' => [
+                    'class' => 'ibexa-input ibexa-input--checkbox',
+                ],
+                'help' => 'policy.form.cookie_http_only_help',
+                'translation_domain' => 'masilia_consent',
+            ])
+            ->add('cookieSameSite', ChoiceType::class, [
+                'label' => 'policy.form.cookie_same_site',
+                'choices' => [
+                    'policy.form.cookie_same_site_lax' => 'lax',
+                    'policy.form.cookie_same_site_strict' => 'strict',
+                    'policy.form.cookie_same_site_none' => 'none',
+                ],
+                'required' => true,
+                'attr' => [
+                    'class' => 'ibexa-input ibexa-input--select',
+                ],
+                'help' => 'policy.form.cookie_same_site_help',
+                'translation_domain' => 'masilia_consent',
+            ])
             ->add('isActive', CheckboxType::class, [
                 'label' => 'policy.form.is_active',
                 'required' => false,

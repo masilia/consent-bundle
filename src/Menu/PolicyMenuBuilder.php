@@ -7,10 +7,10 @@ namespace Masilia\ConsentBundle\Menu;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
 
-class PolicyMenuBuilder
+readonly class PolicyMenuBuilder
 {
     public function __construct(
-        private readonly FactoryInterface $factory
+        private FactoryInterface $factory
     ) {
     }
 
