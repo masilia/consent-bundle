@@ -9,6 +9,7 @@ use Masilia\ConsentBundle\Service\CookiePresetService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -172,6 +173,10 @@ class ThirdPartyServiceType extends AbstractType
                     'class' => 'ibexa-input ibexa-input--checkbox',
                 ],
                 'help' => 'third_party_service.form.enabled_help',
+                'translation_domain' => 'masilia_consent',
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'third_party_service.form.save',
                 'translation_domain' => 'masilia_consent',
             ]);
     }

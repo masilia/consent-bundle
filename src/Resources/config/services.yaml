@@ -48,3 +48,15 @@ services:
     Masilia\ConsentBundle\Menu\PolicyMenuBuilder:
         tags:
             - { name: knp_menu.menu_builder, method: createPolicySidebarMenu, alias: masilia_consent.menu.policy_sidebar }
+    
+    Masilia\ConsentBundle\Menu\CategoryMenuBuilder:
+        tags:
+            - { name: knp_menu.menu_builder, method: createCategorySidebarMenu, alias: masilia_consent.menu.category_sidebar }
+    
+    Masilia\ConsentBundle\Menu\ServiceMenuBuilder:
+        tags:
+            - { name: knp_menu.menu_builder, method: createServiceSidebarMenu, alias: masilia_consent.menu.service_sidebar }
+    
+    Masilia\ConsentBundle\Menu\CookieMenuBuilder:
+        tags:
+            - { name: knp_menu.menu_builder, method: createCookieSidebarMenu, alias: masilia_consent.menu.cookie_sidebar }

@@ -48,7 +48,7 @@ class ThirdPartyServiceController extends AbstractController
         ]);
     }
 
-    #[Route('/policy/{policyId}/create', name: 'create', requirements: ['policyId' => '\d+'], methods: ['POST'])]
+    #[Route('/policy/{policyId}/create', name: 'create', requirements: ['policyId' => '\d+'], methods: ['GET', 'POST'])]
     #[ParamConverter('policy', options: ['id' => 'policyId'])]
     public function create(Request $request, CookiePolicy $policy): Response
     {
@@ -66,20 +66,17 @@ class ThirdPartyServiceController extends AbstractController
                 ['%name%' => $service->getName()],
                 'masilia_consent'
             );
-        } else {
-            foreach ($form->getErrors(true) as $error) {
-                $this->notificationHandler->error(
-                    $error->getMessage(),
-                    [],
-                    'masilia_consent'
-                );
-            }
+            
+            return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
         }
 
-        return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $policy->getId()]);
+        return $this->render('@MasiliaConsent/admin/service/create.html.twig', [
+            'form' => $form->createView(),
+            'policy' => $policy,
+        ]);
     }
 
-    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, ThirdPartyService $service): Response
     {
         $form = $this->createForm(ThirdPartyServiceType::class, $service);
@@ -93,17 +90,14 @@ class ThirdPartyServiceController extends AbstractController
                 ['%name%' => $service->getName()],
                 'masilia_consent'
             );
-        } else {
-            foreach ($form->getErrors(true) as $error) {
-                $this->notificationHandler->error(
-                    $error->getMessage(),
-                    [],
-                    'masilia_consent'
-                );
-            }
+            
+            return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $service->getPolicy()->getId()]);
         }
 
-        return $this->redirectToRoute('masilia_consent_admin_policy_view', ['id' => $service->getPolicy()->getId()]);
+        return $this->render('@MasiliaConsent/admin/service/edit.html.twig', [
+            'form' => $form->createView(),
+            'service' => $service,
+        ]);
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'], methods: ['POST'])]

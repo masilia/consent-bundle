@@ -94,6 +94,13 @@ policy:
 
 # Category Form
 category:
+  creating: 'Creating'
+  editing: 'Editing'
+  subtitle: 'Cookie Categories'
+  create:
+    title: 'Create new category'
+  edit:
+    title: 'Editing category "%name%"'
   form:
     identifier: 'Identifier'
     identifier_placeholder: 'e.g., analytics'
@@ -115,6 +122,13 @@ category:
     position: 'Position'
     position_placeholder: 'e.g., 1'
     position_help: 'Display order (lower numbers appear first)'
+    position_required: 'Position is required'
+    position_positive: 'Position must be zero or a positive number'
+    basic_information: 'Basic Information'
+    settings: 'Settings'
+    save: 'Save'
+    create: 'Create category'
+    cancel: 'Cancel'
   list:
     title: 'Cookie Categories'
     create: 'Create Category'
@@ -140,7 +154,16 @@ category:
 
 # Cookie Form
 cookie:
+  creating: 'Creating'
+  editing: 'Editing'
+  create:
+    title: 'Create cookie in %category%'
+  edit:
+    title: 'Edit cookie: %name%'
   form:
+    basic_information: 'Basic Information'
+    script_configuration: 'Script Configuration (Optional)'
+    save: 'Save'
     name: 'Cookie Name'
     name_placeholder: 'e.g., _ga'
     name_required: 'Cookie name is required'
@@ -180,6 +203,7 @@ cookie:
 # Third-Party Service Form
 
 third_party_service:
+  subtitle: 'Third-Party Services'
   form:
     preset_section: 'Service Preset'
     preset_info: 'Select a preset to automatically configure cookies and scripts for popular services like Google Analytics, Facebook Pixel, etc.'

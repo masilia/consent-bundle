@@ -1,0 +1,52 @@
+{% extends '@ibexadesign/language/base.html.twig' %}
+
+{% form_theme form '@ibexadesign/ui/form_fields.html.twig' %}
+
+{% trans_default_domain 'masilia_consent' %}
+
+{% block header_admin %}
+    {% set cookie_edit_sidebar_right = knp_menu_get('masilia_consent.menu.cookie_sidebar', [], {
+        save_id: form.save.vars.id,
+        cancel_url: path('masilia_consent_admin_policy_view', {id: cookie.category.policy.id}),
+    }) %}
+
+    {% include '@ibexadesign/ui/edit_header.html.twig' with {
+        action_name: 'cookie.editing'|trans|desc('Editing'),
+        title: 'cookie.edit.title'|trans({'%name%': cookie.name})|desc('Edit cookie: %name%'),
+        subtitle: 'policy.subtitle'|trans|desc('Cookie Policies'),
+        context_actions: knp_menu_render(cookie_edit_sidebar_right, {'template': '@ibexadesign/ui/menu/context_menu.html.twig'})
+    } %}
+{% endblock %}
+
+{% block content %}
+    {{ form_start(form, {'action': path('masilia_consent_admin_cookie_edit', {id: cookie.id})}) }}
+        <section>
+            <div class="card ibexa-card ibexa-card--light">
+                <h3 class="ibexa-card__title">
+                    {{ 'cookie.form.basic_information'|trans|desc('Basic Information') }}
+                </h3>
+                <div class="card-body ibexa-card__body ibexa-form-block">
+                    {{ form_row(form.name, { row_attr: { class: 'ibexa-form-field' }, attr: {'autofocus': 'autofocus'} }) }}
+                    {{ form_row(form.provider, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.purpose, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.expiry, { row_attr: { class: 'ibexa-form-field' } }) }}
+                </div>
+            </div>
+        </section>
+
+        <section class="mt-4">
+            <div class="card ibexa-card ibexa-card--light">
+                <h3 class="ibexa-card__title">
+                    {{ 'cookie.form.script_configuration'|trans|desc('Script Configuration (Optional)') }}
+                </h3>
+                <div class="card-body ibexa-card__body ibexa-form-block">
+                    {{ form_row(form.scriptSrc, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.scriptAsync, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
+                    {{ form_row(form.initCode, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.position, { row_attr: { class: 'ibexa-form-field' } }) }}
+                </div>
+            </div>
+        </section>
+        {{ form_widget(form.save, {'attr': {'hidden': 'hidden'}}) }}
+    {{ form_end(form) }}
+{% endblock %}

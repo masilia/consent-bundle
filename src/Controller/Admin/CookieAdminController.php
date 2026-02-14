@@ -25,7 +25,7 @@ class CookieAdminController extends AbstractController
     ) {
     }
 
-    #[Route('/category/{categoryId}/create', name: 'create', requirements: ['categoryId' => '\d+'], methods: ['POST'])]
+    #[Route('/category/{categoryId}/create', name: 'create', requirements: ['categoryId' => '\d+'], methods: ['GET', 'POST'])]
     #[ParamConverter('category', options: ['id' => 'categoryId'])]
     public function create(Request $request, CookieCategory $category): Response
     {
@@ -43,22 +43,19 @@ class CookieAdminController extends AbstractController
                 ['%name%' => $cookie->getName()],
                 'masilia_consent'
             );
-        } else {
-            foreach ($form->getErrors(true) as $error) {
-                $this->notificationHandler->error(
-                    $error->getMessage(),
-                    [],
-                    'masilia_consent'
-                );
-            }
+            
+            return $this->redirectToRoute('masilia_consent_admin_policy_view', [
+                'id' => $category->getPolicy()->getId()
+            ]);
         }
 
-        return $this->redirectToRoute('masilia_consent_admin_policy_view', [
-            'id' => $category->getPolicy()->getId()
+        return $this->render('@MasiliaConsent/admin/cookie/create.html.twig', [
+            'form' => $form->createView(),
+            'category' => $category,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(Request $request, Cookie $cookie): Response
     {
         // Prevent editing auto-generated cookies
@@ -85,18 +82,15 @@ class CookieAdminController extends AbstractController
                 ['%name%' => $cookie->getName()],
                 'masilia_consent'
             );
-        } else {
-            foreach ($form->getErrors(true) as $error) {
-                $this->notificationHandler->error(
-                    $error->getMessage(),
-                    [],
-                    'masilia_consent'
-                );
-            }
+            
+            return $this->redirectToRoute('masilia_consent_admin_policy_view', [
+                'id' => $cookie->getCategory()->getPolicy()->getId()
+            ]);
         }
 
-        return $this->redirectToRoute('masilia_consent_admin_policy_view', [
-            'id' => $cookie->getCategory()->getPolicy()->getId()
+        return $this->render('@MasiliaConsent/admin/cookie/edit.html.twig', [
+            'form' => $form->createView(),
+            'cookie' => $cookie,
         ]);
     }
 

@@ -8,6 +8,7 @@ use Masilia\ConsentBundle\Entity\Cookie;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
@@ -140,6 +141,10 @@ class CookieType extends AbstractType
                         'message' => 'cookie.form.position_positive',
                     ]),
                 ],
+                'translation_domain' => 'masilia_consent',
+            ])
+            ->add('save', SubmitType::class, [
+                'label' => 'cookie.form.save',
                 'translation_domain' => 'masilia_consent',
             ]);
     }

@@ -5,21 +5,26 @@
 {% trans_default_domain 'masilia_consent' %}
 
 {% block header_admin %}
+    {% set service_edit_sidebar_right = knp_menu_get('masilia_consent.menu.service_sidebar', [], {
+        save_id: form.save.vars.id,
+        cancel_url: path('masilia_consent_admin_policy_view', {id: service.policy.id}),
+    }) %}
+
     {% include '@ibexadesign/ui/edit_header.html.twig' with {
         action_name: 'third_party_service.editing'|trans|desc('Editing'),
         title: 'third_party_service.edit.title'|trans({'%name%': service.name})|desc('Edit service: %name%'),
+        subtitle: 'policy.subtitle'|trans|desc('Cookie Policies'),
+        context_actions: knp_menu_render(service_edit_sidebar_right, {'template': '@ibexadesign/ui/menu/context_menu.html.twig'})
     } %}
 {% endblock %}
 
-{% block form %}
+{% block content %}
     {{ form_start(form, {'action': path('masilia_consent_admin_service_edit', {id: service.id})}) }}
         <section>
             <div class="card ibexa-card ibexa-card--light">
-                <div class="card-header ibexa-card__header">
-                    <h3 class="ibexa-card__title">
-                        {{ 'third_party_service.form.preset_section'|trans|desc('Service Preset') }}
-                    </h3>
-                </div>
+                <h3 class="ibexa-card__title">
+                    {{ 'third_party_service.form.preset_section'|trans|desc('Service Preset') }}
+                </h3>
                 <div class="card-body ibexa-card__body ibexa-form-block">
                     {% if service.presetType %}
                         {% include '@ibexadesign/ui/component/alert/alert.html.twig' with {
@@ -27,18 +32,16 @@
                             title: 'third_party_service.form.preset_warning'|trans|desc('This service uses a preset. Changing the preset type may affect auto-generated cookies.'),
                         } only %}
                     {% endif %}
-                    {{ form_row(form.presetType, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.presetType, { row_attr: { class: 'ibexa-form-field' }, attr: {'autofocus': 'autofocus'} }) }}
                 </div>
             </div>
         </section>
 
         <section class="mt-4">
             <div class="card ibexa-card ibexa-card--light">
-                <div class="card-header ibexa-card__header">
-                    <h3 class="ibexa-card__title">
-                        {{ 'third_party_service.form.basic_information'|trans|desc('Basic Information') }}
-                    </h3>
-                </div>
+                <h3 class="ibexa-card__title">
+                    {{ 'third_party_service.form.basic_information'|trans|desc('Basic Information') }}
+                </h3>
                 <div class="card-body ibexa-card__body ibexa-form-block">
                     {{ form_row(form.identifier, { row_attr: { class: 'ibexa-form-field' } }) }}
                     {{ form_row(form.name, { row_attr: { class: 'ibexa-form-field' } }) }}
@@ -51,11 +54,9 @@
 
         <section class="mt-4">
             <div class="card ibexa-card ibexa-card--light">
-                <div class="card-header ibexa-card__header">
-                    <h3 class="ibexa-card__title">
-                        {{ 'third_party_service.form.configuration'|trans|desc('Configuration') }}
-                    </h3>
-                </div>
+                <h3 class="ibexa-card__title">
+                    {{ 'third_party_service.form.configuration'|trans|desc('Configuration') }}
+                </h3>
                 <div class="card-body ibexa-card__body ibexa-form-block">
                     {{ form_row(form.configKey, { row_attr: { class: 'ibexa-form-field' } }) }}
                     {{ form_row(form.configValue, { row_attr: { class: 'ibexa-form-field' } }) }}
@@ -63,19 +64,6 @@
                 </div>
             </div>
         </section>
-
-        <div class="mt-4">
-            <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
-                <svg class="ibexa-icon ibexa-icon--small">
-                    <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
-                </svg>
-                <span class="ibexa-btn__label">
-                    {{ 'third_party_service.form.save'|trans|desc('Save changes') }}
-                </span>
-            </button>
-            <a href="{{ path('masilia_consent_admin_policy_view', {id: service.policy.id}) }}" class="btn ibexa-btn ibexa-btn--ghost">
-                {{ 'third_party_service.form.cancel'|trans|desc('Cancel') }}
-            </a>
-        </div>
+        {{ form_widget(form.save, {'attr': {'hidden': 'hidden'}}) }}
     {{ form_end(form) }}
 {% endblock %}

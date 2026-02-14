@@ -5,23 +5,28 @@
 {% trans_default_domain 'masilia_consent' %}
 
 {% block header_admin %}
+    {% set category_edit_sidebar_right = knp_menu_get('masilia_consent.menu.category_sidebar', [], {
+        save_id: form.save.vars.id,
+        cancel_url: path('masilia_consent_admin_category_view', {id: category.id}),
+    }) %}
+
     {% include '@ibexadesign/ui/edit_header.html.twig' with {
         action_name: 'category.editing'|trans|desc('Editing'),
         title: 'category.edit.title'|trans({'%name%': category.name})|desc('Editing category "%name%"'),
+        subtitle: 'policy.subtitle'|trans|desc('Cookie Policies'),
+        context_actions: knp_menu_render(category_edit_sidebar_right, {'template': '@ibexadesign/ui/menu/context_menu.html.twig'})
     } %}
 {% endblock %}
 
-{% block form %}
+{% block content %}
     {{ form_start(form, {'action': path('masilia_consent_admin_category_edit', {id: category.id})}) }}
         <section>
             <div class="card ibexa-card ibexa-card--light">
-                <div class="card-header ibexa-card__header">
-                    <h3 class="ibexa-card__title">
-                        {{ 'category.form.basic_information'|trans|desc('Basic Information') }}
-                    </h3>
-                </div>
+                <h3 class="ibexa-card__title">
+                    {{ 'category.form.basic_information'|trans|desc('Basic Information') }}
+                </h3>
                 <div class="card-body ibexa-card__body ibexa-form-block">
-                    {{ form_row(form.identifier, { row_attr: { class: 'ibexa-form-field' } }) }}
+                    {{ form_row(form.identifier, { row_attr: { class: 'ibexa-form-field' }, attr: {'autofocus': 'autofocus'} }) }}
                     {{ form_row(form.name, { row_attr: { class: 'ibexa-form-field' } }) }}
                     {{ form_row(form.description, { row_attr: { class: 'ibexa-form-field' } }) }}
                     {{ form_row(form.position, { row_attr: { class: 'ibexa-form-field' } }) }}
@@ -31,30 +36,15 @@
 
         <section class="mt-4">
             <div class="card ibexa-card ibexa-card--light">
-                <div class="card-header ibexa-card__header">
-                    <h3 class="ibexa-card__title">
-                        {{ 'category.form.settings'|trans|desc('Settings') }}
-                    </h3>
-                </div>
+                <h3 class="ibexa-card__title">
+                    {{ 'category.form.settings'|trans|desc('Settings') }}
+                </h3>
                 <div class="card-body ibexa-card__body ibexa-form-block">
                     {{ form_row(form.required, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
                     {{ form_row(form.defaultEnabled, { row_attr: { class: 'ibexa-form-field' }, label_attr: {'class': 'checkbox-inline'}}) }}
                 </div>
             </div>
         </section>
-
-        <div class="mt-4">
-            <button type="submit" class="btn ibexa-btn ibexa-btn--primary">
-                <svg class="ibexa-icon ibexa-icon--small">
-                    <use xlink:href="{{ ibexa_icon_path('checkmark') }}"></use>
-                </svg>
-                <span class="ibexa-btn__label">
-                    {{ 'category.form.save'|trans|desc('Save changes') }}
-                </span>
-            </button>
-            <a href="{{ path('masilia_consent_admin_category_view', {id: category.id}) }}" class="btn ibexa-btn ibexa-btn--ghost">
-                {{ 'category.form.cancel'|trans|desc('Cancel') }}
-            </a>
-        </div>
+        {{ form_widget(form.save, {'attr': {'hidden': 'hidden'}}) }}
     {{ form_end(form) }}
 {% endblock %}
