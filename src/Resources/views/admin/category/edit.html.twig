@@ -7,7 +7,7 @@
 {% block header_admin %}
     {% set category_edit_sidebar_right = knp_menu_get('masilia_consent.menu.category_sidebar', [], {
         save_id: form.save.vars.id,
-        cancel_url: path('masilia_consent_admin_category_view', {id: category.id}),
+        cancel_url: path('masilia_consent_admin_policy_view', {id: category.policy.id}),
     }) %}
 
     {% include '@ibexadesign/ui/edit_header.html.twig' with {
