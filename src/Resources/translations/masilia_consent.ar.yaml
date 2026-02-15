@@ -46,7 +46,6 @@ policy:
   days: 'أيام'
   all_sites: 'جميع المواقع'
   information: 'معلومات السياسة'
-  status: 'الحالة'
   last_updated: 'آخر تحديث'
   cancel: 'إلغاء'
   version: 'الإصدار'
@@ -54,14 +53,15 @@ policy:
   expiration_days: 'أيام انتهاء الصلاحية'
   site_access: 'الوصول للموقع'
   status:
+    label: 'الحالة'
     active: 'نشط'
     inactive: 'غير نشط'
-  activate: 'تفعيل'
-  deactivate: 'إلغاء التفعيل'
   activate:
+    label: 'تفعيل'
     confirm: 'تفعيل السياسة'
     message: 'تفعيل السياسة "%version%"؟ سيؤدي هذا إلى إلغاء تفعيل جميع السياسات الأخرى لهذا الوصول للموقع.'
   deactivate:
+    label: 'إلغاء التفعيل'
     confirm: 'إلغاء تفعيل السياسة'
     message: 'إلغاء تفعيل السياسة "%version%"؟'
   delete:

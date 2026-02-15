@@ -46,18 +46,18 @@ policy:
   days: 'days'
   all_sites: 'All Sites'
   information: 'Policy Information'
-  status: 'Status'
   last_updated: 'Last Updated'
   cancel: 'Cancel'
   status:
+    label: 'Status'
     active: 'Active'
     inactive: 'Inactive'
-  activate: 'Activate'
-  deactivate: 'Deactivate'
   activate:
+    label: 'Activate'
     confirm: 'Activate Policy'
     message: 'Activate policy "%version%"? This will deactivate all other policies for this site access.'
   deactivate:
+    label: 'Deactivate'
     confirm: 'Deactivate Policy'
     message: 'Deactivate policy "%version%"?'
   delete:

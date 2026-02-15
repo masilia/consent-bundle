@@ -46,7 +46,6 @@ policy:
   days: 'jours'
   all_sites: 'Tous les Sites'
   information: 'Informations de la Politique'
-  status: 'Statut'
   last_updated: 'Dernière Mise à Jour'
   cancel: 'Annuler'
   version: 'Version'
@@ -54,14 +53,15 @@ policy:
   expiration_days: 'Jours d''Expiration'
   site_access: 'Accès au Site'
   status:
+    label: 'Statut'
     active: 'Active'
     inactive: 'Inactive'
-  activate: 'Activer'
-  deactivate: 'Désactiver'
   activate:
+    label: 'Activer'
     confirm: 'Activer la Politique'
     message: 'Activer la politique "%version%" ? Cela désactivera toutes les autres politiques pour cet accès au site.'
   deactivate:
+    label: 'Désactiver'
     confirm: 'Désactiver la Politique'
     message: 'Désactiver la politique "%version%" ?'
   delete:
