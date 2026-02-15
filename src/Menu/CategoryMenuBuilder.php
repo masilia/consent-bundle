@@ -27,6 +27,7 @@ readonly class CategoryMenuBuilder
         if ($saveId) {
             $menu->addChild('save', [
                 'label' => 'category.form.save',
+                'translation_domain' => 'masilia_consent',
                 'extras' => [
                     'icon' => 'checkmark',
                     'orderNumber' => 10,
@@ -41,6 +42,7 @@ readonly class CategoryMenuBuilder
         if ($cancelUrl) {
             $menu->addChild('cancel', [
                 'label' => 'common.cancel',
+                'translation_domain' => 'masilia_consent',
                 'uri' => $cancelUrl,
                 'extras' => [
                     'icon' => 'circle-close',
