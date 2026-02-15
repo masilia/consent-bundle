@@ -38,7 +38,38 @@ policy:
   creating: 'Creating'
   editing: 'Editing'
   third_party_services: 'Third-Party Services (%count%)'
+  categories: 'Categories'
+  no_categories: 'No categories defined yet. Add a category to get started.'
+  back_to_list: 'Back to List'
+  view: 'View Policy'
+  statistics: 'Statistics'
+  days: 'days'
+  all_sites: 'All Sites'
+  information: 'Policy Information'
+  status: 'Status'
+  last_updated: 'Last Updated'
+  cancel: 'Cancel'
+  status:
+    active: 'Active'
+    inactive: 'Inactive'
+  activate: 'Activate'
+  deactivate: 'Deactivate'
+  activate:
+    confirm: 'Activate Policy'
+    message: 'Activate policy "%version%"? This will deactivate all other policies for this site access.'
+  deactivate:
+    confirm: 'Deactivate Policy'
+    message: 'Deactivate policy "%version%"?'
+  delete:
+    confirm: 'Delete Policy'
+    message: 'Delete policy "%version%"? This will also delete all associated categories, cookies, and services. This action cannot be undone.'
+  create:
+    title: 'Create new cookie policy'
+  edit:
+    title: 'Edit policy: %version%'
   form:
+    basic_information: 'Basic Information'
+    storage_configuration: 'Cookie Storage Configuration'
     version: 'Version'
     version_placeholder: 'e.g., 1.0.0'
     version_required: 'Version is required'
@@ -56,6 +87,32 @@ policy:
     site_access: 'Site Access'
     site_access_placeholder: 'Select a site access (optional)'
     site_access_help: 'Restrict this policy to a specific site access. Leave empty to apply to all sites.'
+    cookie_name: 'Cookie Name'
+    cookie_name_placeholder: 'consent'
+    cookie_name_required: 'Cookie name is required'
+    cookie_name_max_length: 'Cookie name must not exceed 100 characters'
+    cookie_name_format: 'Cookie name must contain only lowercase letters and underscores'
+    cookie_name_help: 'The name of the consent cookie (without prefix)'
+    cookie_lifetime: 'Cookie Lifetime (days)'
+    cookie_lifetime_placeholder: '365'
+    cookie_lifetime_required: 'Cookie lifetime is required'
+    cookie_lifetime_range: 'Cookie lifetime must be between 1 and 3650 days'
+    cookie_lifetime_help: 'How long the consent cookie should be stored (in days)'
+    cookie_path: 'Cookie Path'
+    cookie_path_placeholder: '/'
+    cookie_path_help: 'URL path where the cookie is accessible'
+    cookie_domain: 'Cookie Domain'
+    cookie_domain_placeholder: '.example.com'
+    cookie_domain_help: 'Domain for the cookie (leave empty for current domain)'
+    cookie_secure: 'Secure Cookie'
+    cookie_secure_help: 'Only send cookie over HTTPS connections'
+    cookie_http_only: 'HTTP Only'
+    cookie_http_only_help: 'Prevent JavaScript access to the cookie'
+    cookie_same_site: 'SameSite Attribute'
+    cookie_same_site_lax: 'Lax'
+    cookie_same_site_strict: 'Strict'
+    cookie_same_site_none: 'None'
+    cookie_same_site_help: 'Control when cookies are sent with cross-site requests'
     is_active: 'Active'
     save: 'Save'
     save_and_close: 'Save and close'
@@ -89,18 +146,37 @@ policy:
     activated: 'Policy activated successfully'
     deactivated: 'Policy deactivated successfully'
     delete_confirm: 'Are you sure you want to delete this policy?'
-  create:
-    title: 'masilia_consent'
 
 # Category Form
 category:
   creating: 'Creating'
   editing: 'Editing'
   subtitle: 'Cookie Categories'
+  add: 'Add Category'
+  back_to_policy: 'Back to Policy'
+  view: 'View Category'
+  yes: 'Yes'
+  no: 'No'
+  enabled: 'Enabled'
+  disabled: 'Disabled'
+  optional: 'Optional'
+  read_only: 'Read-only'
+  information: 'Category Information'
+  cookies: 'Cookies'
+  cookies_count: '%count% cookie(s)'
+  no_cookies: 'No cookies in this category'
+  auto_generated: 'Auto-generated'
+  auto_generated.tooltip: 'This category is automatically managed by a third-party service'
+  auto_generated.read_only: 'This category is managed by the third-party service'
+  list:
+    title: 'Cookie Categories'
+    no_categories: 'No categories found'
   create:
     title: 'Create new category'
   edit:
     title: 'Editing category "%name%"'
+  delete:
+    message: 'Delete category "%name%"? This will also delete all associated cookies. This action cannot be undone.'
   form:
     identifier: 'Identifier'
     identifier_placeholder: 'e.g., analytics'
@@ -129,23 +205,6 @@ category:
     save: 'Save'
     create: 'Create category'
     cancel: 'Cancel'
-  list:
-    title: 'Cookie Categories'
-    create: 'Create Category'
-    edit: 'Edit'
-    delete: 'Delete'
-    no_categories: 'No categories found'
-    required_badge: 'Required'
-    optional_badge: 'Optional'
-  show:
-    title: 'Category Details'
-    identifier: 'Identifier'
-    name: 'Name'
-    description: 'Description'
-    required: 'Required'
-    default_enabled: 'Enabled by Default'
-    position: 'Position'
-    cookies: 'Cookies'
   messages:
     created: 'Category created successfully'
     updated: 'Category updated successfully'
@@ -156,10 +215,13 @@ category:
 cookie:
   creating: 'Creating'
   editing: 'Editing'
+  add: 'Add Cookie'
   create:
     title: 'Create cookie in %category%'
   edit:
     title: 'Edit cookie: %name%'
+  delete:
+    message: 'Delete cookie "%name%"? This action cannot be undone.'
   form:
     basic_information: 'Basic Information'
     script_configuration: 'Script Configuration (Optional)'
@@ -181,19 +243,26 @@ cookie:
     expiry_max_length: 'Expiry must not exceed 50 characters'
     category: 'Category'
     category_required: 'Category is required'
-  list:
-    title: 'Cookies'
-    create: 'Create Cookie'
-    edit: 'Edit'
-    delete: 'Delete'
-    no_cookies: 'No cookies found'
-  show:
-    title: 'Cookie Details'
-    name: 'Name'
-    provider: 'Provider'
-    purpose: 'Purpose'
-    expiry: 'Expiry'
-    category: 'Category'
+    script_src: 'Script Source URL'
+    script_src_placeholder: 'https://...'
+    async: 'Load Asynchronously'
+    init_code: 'Initialization Code'
+    init_code_placeholder: 'JavaScript initialization code...'
+    position: 'Position'
+    position_placeholder: '0'
+    position_required: 'Position is required'
+    position_positive: 'Position must be zero or positive'
+  cookie_details: 'Cookie Details'
+  information: 'Cookie Information'
+  features: 'Features'
+  script: 'Script'
+  has_script: 'Has Script'
+  no_cookies: 'No cookies in this category'
+  cookies: 'Cookies'
+  cookies_count: '%count% cookie(s)'
+  auto_generated: 'Auto-generated'
+  auto_generated.tooltip: 'This cookie is automatically managed by a third-party service'
+  auto_generated.read_only: 'This cookie is managed by the third-party service'
   messages:
     created: 'Cookie created successfully'
     updated: 'Cookie updated successfully'
@@ -273,7 +342,6 @@ third_party_service:
     identifier: 'Identifier'
     status: 'Status'
     manual: 'Manual'
-  no_services: 'No third-party services configured. Add services like Google Analytics, Facebook Pixel, etc. to automatically manage cookies and scripts.'
   show:
     title: 'Service Details'
     details: 'Service Details'
@@ -294,17 +362,14 @@ third_party_service:
     auto_cookies: 'Auto-Generated Cookies'
     auto_cookies_info: 'This service uses a preset. Cookies are automatically created and managed based on the preset configuration.'
     view_cookies: 'View Cookies'
+  no_services: 'No third-party services configured. Add services like Google Analytics, Facebook Pixel, etc. to automatically manage cookies and scripts.'
+  creating: 'Creating'
+  editing: 'Editing'
   messages:
     created: 'Service created successfully'
     updated: 'Service updated successfully'
     deleted: 'Service deleted successfully'
     delete_confirm: 'Are you sure you want to delete this service?'
-  actions:
-    cancel: 'Cancel'
-  creating: 'Creating'
-  editing: 'Editing'
-  create:
-    title: 'Create new third-party service'
 
 # Admin Menu
 menu:
@@ -337,6 +402,32 @@ common:
   view: 'View'
   edit: 'Edit'
   delete: 'Delete'
+
+# Statistics
+statistics:
+  title: 'Consent Statistics'
+  back_to_policies: 'Back to Policies'
+  date_range: 'Showing statistics from %from% to %to%'
+  total_consents: 'Total Consents'
+  categories_tracked: 'Categories Tracked'
+  period: 'Period'
+  days: 'days'
+  by_category: 'Consent by Category'
+  category: 'Category'
+  accepted: 'Accepted'
+  rejected: 'Rejected'
+  total: 'Total'
+  acceptance_rate: 'Acceptance Rate'
+  no_data: 'No consent data available for the selected period'
+  export: 'Export Data'
+  export_description: 'Export consent statistics for further analysis or reporting.'
+  export_csv: 'Export as CSV'
+  export_json: 'Export as JSON'
+  export_coming_soon: 'Coming Soon'
+
+# Breadcrumbs
+breadcrumb:
+  admin: 'Admin'
 
 # Errors
 error:
