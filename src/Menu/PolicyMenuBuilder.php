@@ -27,8 +27,8 @@ readonly class PolicyMenuBuilder
         if ($saveId) {
             $menu->addChild('save', [
                 'label' => 'policy.form.save',
-                'translation_domain' => 'masilia_consent',
                 'extras' => [
+                    'translation_domain' => 'masilia_consent',
                     'icon' => 'checkmark',
                     'orderNumber' => 10,
                 ],
@@ -42,9 +42,9 @@ readonly class PolicyMenuBuilder
         if ($cancelUrl) {
             $menu->addChild('cancel', [
                 'label' => 'common.cancel',
-                'translation_domain' => 'masilia_consent',
                 'uri' => $cancelUrl,
                 'extras' => [
+                    'translation_domain' => 'masilia_consent',
                     'icon' => 'circle-close',
                     'orderNumber' => 20,
                 ],
